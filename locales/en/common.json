@@ -1,0 +1,14 @@
+{
+  "home": {
+    "title": "Welcome to Ai-Agent!",
+    "content": "Start a new article",
+    "counter": "Counter"
+  },
+  "announcementBar": {
+    "shipping": "💙 Free international shipping.",
+    "learnMore": "LEARN MORE",
+    "newProduct": "New! Meet The Espadrille Mary Jane. 👟",
+    "shopNow": "SHOP NOW",
+    "freeShipping": "Free Shipping &"
+  }
+}

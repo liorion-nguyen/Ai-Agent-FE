@@ -1,0 +1,7 @@
+node_modules
+.next
+.github
+.husky
+.yarn
+.env
+.env.example

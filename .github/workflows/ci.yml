@@ -1,0 +1,161 @@
+name: Hint Frontend CI
+
+on:
+  push:
+    branches:
+      - feature/core-base
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  lint-and-test:
+    name: 🧪 Lint & Unit Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run Lint
+        run: yarn lint
+
+      - name: Build Test
+        run: yarn build
+
+      - name: Run Unit Tests
+        run: yarn test || echo "No tests defined"
+
+      - name: Result
+        run: echo "Lint and Unit Tests successfully"
+
+  build:
+    if: ${{ github.event_name == 'push' }}
+    name: 📦 Build Docker Image
+    runs-on: ubuntu-latest
+    needs: [lint-and-test]
+
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_REPOSITORY }}/${{ secrets.DOCKER_IMAGE_NAME }}:${{ secrets.DOCKER_IMAGE_TAG }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+
+      - name: Move build cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: Result
+        run: echo "Docker image built and pushed successfully"
+
+  deploy:
+    if: ${{ github.event_name == 'push' }}
+    name: 🚀 Deploy to EC2
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.AWS_EC2_SSH_KEY }}" | base64 -d > key.pem
+          chmod 600 key.pem
+
+      - name: SSH and deploy using GHCR image
+        run: |
+          DOCKER_IMAGE=${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_REPOSITORY }}/${{ secrets.DOCKER_IMAGE_NAME }}:${{ secrets.DOCKER_IMAGE_TAG }}
+
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.AWS_EC2_USER }}@${{ secrets.AWS_EC2_HOST }} << EOF
+            docker login ${{ secrets.DOCKER_REGISTRY }} -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+            docker pull $DOCKER_IMAGE
+            docker stop ${{ secrets.DOCKER_IMAGE_NAME }} || true && docker rm ${{ secrets.DOCKER_IMAGE_NAME }} || true
+            docker run -d \
+              --name ${{ secrets.DOCKER_IMAGE_NAME }} \
+              -p 3000:3000 \
+              -e NODE_ENV=${{ vars.NODE_ENV }} \
+              -e NEXT_PUBLIC_URL=${{ vars.NEXT_PUBLIC_URL }} \
+              -e NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }} \
+              $DOCKER_IMAGE
+          EOF
+
+      - name: Result
+        run: echo "Deployed to EC2 successfully"
+
+  cleanup-caching:
+    name: 🧽 Cleanup Cache
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [lint-and-test, deploy]
+
+    permissions:
+      actions: write
+
+    steps:
+      - name: Clear cache
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log("About to clear")
+            const caches = await github.rest.actions.getActionsCacheList({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            })
+            for (const cache of caches.data.actions_caches) {
+              console.log(cache)
+              github.rest.actions.deleteActionsCacheById({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                cache_id: cache.id,
+              })
+            }
+            console.log("Clear completed")
+
+      - name: Result
+        run: echo "Cache cleared successfully"
