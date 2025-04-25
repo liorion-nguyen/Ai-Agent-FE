@@ -30,8 +30,8 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.PRIVATE_KEY_EC2 }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ secrets.PRIVATE_KEY_EC2 }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.HOST_EC2 }} >> ~/.ssh/known_hosts
       - name: Test SSH connection
         run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} "echo ✅ SSH connected"
