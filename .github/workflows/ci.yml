@@ -21,8 +21,10 @@ jobs:
           ssh-keyscan -H ${{ secrets.HOST_EC2 }} >> ~/.ssh/known_hosts
 
       - name: Test SSH connection
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} "echo ✅ SSH connected"
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} "echo ✅ SSH connected"
+      
+      - name: Debug SSH
+        run: ssh -vvv -i ~/.ssh/id_ed25519 ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} "echo ✅ Connected"
 
       - name: Deploy Frontend
         run: |
