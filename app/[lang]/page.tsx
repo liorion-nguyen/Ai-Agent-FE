@@ -1,11 +1,10 @@
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
-import HeroSection from './components/sections/HeroSection';
 import CaseStudiesSection from './components/sections/CaseStudiesSection';
-import ReasonsSection from './components/sections/ReasonsSection';
+import ConsultationFormSection from './components/sections/ConsultationFormSection';
+import HeroSection from './components/sections/HeroSection';
 import PlatformsSection from './components/sections/PlatformsSection';
 import PricingSection from './components/sections/PricingSection';
-import ConsultationFormSection from './components/sections/ConsultationFormSection';
-import CompanyInfoSection from './components/sections/CompanyInfoSection';
+import ReasonsSection from './components/sections/ReasonsSection';
 const HomePage = () => {
   return (
     <DashboardLayout>
@@ -15,7 +14,6 @@ const HomePage = () => {
       <PlatformsSection />
       <PricingSection />
       <ConsultationFormSection />
-      <CompanyInfoSection />
     </DashboardLayout>
   );
 };

@@ -1,17 +1,21 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useIsMobile } from '@/shared/hooks/useMobile';
-import SearchIcon from '@/public/icons/search-icon.svg';
-import LogoAgent from '@/public/icons/ic_logo-agent.webp';
-import MenuIcon from '@/public/icons/menu-icon.svg';
-import HeartIcon from '@/public/icons/heart-icon.svg';
+import { useSignOut } from '@/app/[lang]/(user)/(auth)/hooks';
 import AccountCircleIcon from '@/public/icons/account-circle-icon.svg';
 import CartIcon from '@/public/icons/cart-icon.svg';
-import { navigationItems } from '@/shared/constants/navigation';
+import HeartIcon from '@/public/icons/heart-icon.svg';
+import LogoAgent from '@/public/icons/ic_logo-agent.webp';
+import MenuIcon from '@/public/icons/menu-icon.svg';
+import SearchIcon from '@/public/icons/search-icon.svg';
 import { ROUTES } from '@/shared/constants';
+import { navigationItems } from '@/shared/constants/navigation';
+import { useIsMobile } from '@/shared/hooks/useMobile';
+import useUserStore from '@/store/user';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import SectionDashboardLayout from '../layout/section-landing-page-layout';
+import { Button } from './Button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,10 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './DropdownMenu';
-import { useSignOut } from '@/app/[lang]/(user)/(auth)/hooks';
-import useUserStore from '@/store/user';
-import { Button } from './Button';
-import SectionDashboardLayout from '../layout/section-landing-page-layout';
+import Img from './Image';
 
 const DashboardHeader = () => {
   const pathname = usePathname();
@@ -60,7 +61,7 @@ const DashboardHeader = () => {
         <div className="absolute top-0 left-0 z-10 h-full flex items-center">
           <div className="flex items-center">
             <Link href="/" className="block">
-              <img src={LogoAgent.src} alt="Logo Agent" className="w-24 h-12" />
+              <Img src={LogoAgent.src} alt="Logo Agent" className="w-24 h-12" />
             </Link>
           </div>
         </div>
@@ -79,27 +80,27 @@ const DashboardHeader = () => {
                     <Link
                       href={item.href}
                       className={`px-3 md:px-5 flex items-center h-full font-medium text-[18px] md:text-[22px] tracking-wider font-road ${
-                        item.label === activeLabel
+                        item.label === activeLabel ||
+                        (item.label === 'Trang chủ' && activeLabel === '')
                           ? 'text-white border-l-[3px] border-r-[3px] border-solid border-border bg-active'
                           : 'text-foreground hover:text-hover hover:bg-blue-100'
                       }`}
                     >
                       {item.label}
-                      {item.label === activeLabel && (
+                      {/* {item.label === activeLabel && (
                         <div className="absolute left-1/2 transform -translate-x-1/2 mt-7">
-                          <img
+                          <Img
                             src={'/images/line_text_inactive.png'}
                             alt={`${item.label} image`}
                             className="w-24 h-12"
                           />
                         </div>
-                      )}
+                      )} */}
                     </Link>
                   </div>
                 ))}
               </div>
             </nav>
-
             {/* Mobile Menu - Slide down when open */}
             {mobileMenuOpen && (
               <div
@@ -152,19 +153,19 @@ const DashboardHeader = () => {
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     aria-label="Toggle menu"
                   >
-                    <img src={MenuIcon.src} alt="menu" className="w-6 h-6" />
+                    <Img src={MenuIcon.src} alt="menu" className="w-6 h-6" />
                   </button>
                 )}
                 <button aria-label="Search" className="p-1">
-                  <img src={SearchIcon.src} alt="Search" className="w-6 h-6" />
+                  <Img src={SearchIcon.src} alt="Search" className="w-6 h-6" />
                 </button>
                 <button aria-label="Wishlist" className="hidden sm:block p-1">
-                  <img src={HeartIcon.src} alt="Wishlist" className="w-6 h-6" />
+                  <Img src={HeartIcon.src} alt="Wishlist" className="w-6 h-6" />
                 </button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button aria-label="Account" className="p-1">
-                      <img
+                      <Img
                         src={AccountCircleIcon.src}
                         alt="Account"
                         className="w-6 h-6"
@@ -194,7 +195,7 @@ const DashboardHeader = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
                 <button aria-label="Cart" className="p-1 relative">
-                  <img src={CartIcon.src} alt="Cart" className="w-6 h-6" />
+                  <Img src={CartIcon.src} alt="Cart" className="w-6 h-6" />
                   <span className="absolute -top-1 -right-1 bg-secondary text-foreground rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
                     1
                   </span>

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-const AuthLayout = ({ children }: { children: ReactNode }) => {
+const PriceLayout = ({ children }: { children: ReactNode }) => {
   return (
     <section>
       <nav></nav>
@@ -9,4 +9,4 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default AuthLayout;
+export default PriceLayout;

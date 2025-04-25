@@ -1,4 +1,3 @@
-import { useMutation } from '@tanstack/react-query';
 import { authAPI } from '@/services/endpoints';
 import {
   APIErrorHandler,
@@ -6,19 +5,21 @@ import {
   SignInResponse,
   SignUpParams,
 } from '@/services/types';
-import { toast, useToast } from '@/shared/hooks';
-import { ROUTES } from '@/shared/constants';
-import { useRouter } from 'next/navigation';
 import {
   ForgotPasswordParams,
-  VerifyOtpParams,
   NewPasswordParams,
+  VerifyOtpParams,
 } from '@/services/types/user';
+import { ROUTES } from '@/shared/constants';
+import { toast, useToast } from '@/shared/hooks';
 import useForgotPasswordStore from '@/store/forgot-password';
 import useUserStore from '@/store/user';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useMe } from './useUser';
 export const useSignIn = () => {
   const { toast } = useToast();
+  const router = useRouter();
   const { me } = useMe();
   const {
     mutate,
@@ -30,6 +31,12 @@ export const useSignIn = () => {
       document.cookie = `access_token=${data.token.access_token}; path=/; max-age=${60 * 60 * 24 * 7}`;
       document.cookie = `refresh_token=${data.token.refresh_token}; path=/; max-age=${60 * 60 * 24 * 7}`;
       me();
+      toast({
+        title: 'Đăng nhập thành công',
+        description: 'Đăng nhập thành công',
+        variant: 'default',
+      });
+      router.push(ROUTES.HOME);
     },
     onError: (err) => {
       toast({

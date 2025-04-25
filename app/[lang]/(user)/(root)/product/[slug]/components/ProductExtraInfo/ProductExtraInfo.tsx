@@ -1,12 +1,13 @@
 'use client';
 
+import Img from '@/components/ui/Image';
 import Link from 'next/link';
 
 const ProductExtraInfo = () => {
   return (
     <div className="flex justify-center md:gap-[32px] md:mt-[24px]">
       <div className="flex justify-center md:gap-[16px] md:w-[421px]">
-        <img
+        <Img
           src="/images/product-extra-tag-1.png"
           alt="This is extra tag info 1"
           className="row-span-2 md:w-[98.13px] md:h-[85.2px] self-center"
@@ -22,7 +23,7 @@ const ProductExtraInfo = () => {
       </div>
 
       <div className="flex justify-center md:gap-[16px] md:w-[421px]">
-        <img
+        <Img
           src="/images/product-extra-tag-2.png"
           alt="This is extra tag info 2"
           className="row-span-2 md:w-[98.13px] md:h-[85.2px] self-center"
@@ -38,7 +39,7 @@ const ProductExtraInfo = () => {
       </div>
 
       <div className="flex justify-center md:gap-[16px] md:w-[421px]">
-        <img
+        <Img
           src="/images/product-extra-tag-3.png"
           alt="This is extra tag info 3"
           className="row-span-2 md:w-[98.13px] md:h-[85.2px] self-center"

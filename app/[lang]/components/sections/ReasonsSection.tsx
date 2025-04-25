@@ -1,4 +1,5 @@
 import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
+import Img from '@/components/ui/Image';
 
 const ReasonsSection = () => {
   const reasons = [
@@ -64,7 +65,7 @@ const ReasonsSection = () => {
 
           {/* Right Image */}
           <div className="w-full lg:w-2/3 mt-8 md:mt-0 flex justify-center">
-            <img
+            <Img
               src="https://preny.ai/_next/image?url=%2Fimages%2Fimg_banner-reason.png&w=1920&q=75"
               alt="AI Chatbot Freny Illustration"
               className="w-full rounded-lg shadow-lg"

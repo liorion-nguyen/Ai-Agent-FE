@@ -1,4 +1,5 @@
 import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
+import Img from '@/components/ui/Image';
 
 const PlatformsSection = () => {
   const platforms = [
@@ -42,7 +43,7 @@ const PlatformsSection = () => {
             >
               {/* Image with dimming effect on hover */}
               <div className="absolute inset-0">
-                <img
+                <Img
                   src={platform.image}
                   alt={platform.name}
                   className="w-full h-64 object-cover transition-opacity duration-300 group-hover:opacity-50"
