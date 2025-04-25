@@ -10,18 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Lấy mã nguồn từ GitHub
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Cài SSH Key
-        uses: webfactory/ssh-agent@v0.8.1
-        with:
-          ssh-private-key: ${{ secrets.PRIVATE_KEY_EC2 }}
-
-      - name: Deploy lên EC2
+      - name: Setup SSH
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} << 'EOF'
-            cd ~/ai-chatbot-dashboard
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PRIVATE_KEY_EC2 }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.HOST_EC2 }} >> ~/.ssh/known_hosts
+
+      - name: Debug SSH connection (check login)
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} "echo ✅ SSH connected"
+
+      - name: Deploy Frontend to EC2
+        run: |
+          ssh ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} << 'EOF'
+            cd /home/ec2-user/ai-chatbot-dashboard
             git pull origin version2
             pnpm install
             pnpm build
