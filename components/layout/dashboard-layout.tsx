@@ -12,7 +12,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <div className="flex min-h-screen flex-col">
       <DashboardHeader />
-      <main className="flex-grow pt-20">{children}</main>
+      <main className="flex-grow" style={{ paddingTop: '70px' }}>
+        {children}
+      </main>
       <DashboardFooter />
     </div>
   );

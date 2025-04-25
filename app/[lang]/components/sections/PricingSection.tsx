@@ -82,7 +82,7 @@ const PricingSection = () => {
   ];
 
   return (
-    <SectionDashboardLayout className="bg-white py-16">
+    <SectionDashboardLayout className="py-16">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-4">Báo giá dịch vụ</h2>
         <p className="text-center text-gray-600 mb-12">
