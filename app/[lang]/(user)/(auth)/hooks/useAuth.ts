@@ -15,11 +15,11 @@ import {
   NewPasswordParams,
 } from '@/services/types/user';
 import useForgotPasswordStore from '@/store/forgot-password';
-
+import useUserStore from '@/store/user';
+import { useMe } from './useUser';
 export const useSignIn = () => {
   const { toast } = useToast();
-  const router = useRouter();
-
+  const { me } = useMe();
   const {
     mutate,
     isPending: loading,
@@ -29,7 +29,7 @@ export const useSignIn = () => {
     onSuccess: (data) => {
       document.cookie = `access_token=${data.token.access_token}; path=/; max-age=${60 * 60 * 24 * 7}`;
       document.cookie = `refresh_token=${data.token.refresh_token}; path=/; max-age=${60 * 60 * 24 * 7}`;
-      router.push(ROUTES.HOME);
+      me();
     },
     onError: (err) => {
       toast({
@@ -89,6 +89,7 @@ export const useSignOut = () => {
       document.cookie = `access_token=; path=/; max-age=0`;
       document.cookie = `refresh_token=; path=/; max-age=0`;
       router.push(ROUTES.SIGNIN);
+      useUserStore.setState({ user: undefined });
     },
     onError: (err) => {
       toast({
@@ -149,23 +150,28 @@ export const useVerifyOtp = () => {
     error,
   } = useMutation({
     mutationFn: (params: VerifyOtpParams) => authAPI.postVerifyOtp(params),
-    onSuccess: () => {
-      toast({
-        title: 'Xác thực OTP thành công',
-        description: 'Xác thực OTP thành công',
-      });
-      useForgotPasswordStore.setState({ step: 3 });
-    },
-    onError: (err) => {
-      toast({
-        title: 'Xác thực OTP thất bại',
-        description: err?.message,
-      });
-    },
   });
+  const verifyOtp = (params: VerifyOtpParams) => {
+    mutate(params, {
+      onSuccess: () => {
+        toast({
+          title: 'Xác thực OTP thành công',
+          description: 'Xác thực OTP thành công',
+        });
+        useForgotPasswordStore.setState({ otp: params.otp });
+        useForgotPasswordStore.setState({ step: 3 });
+      },
+      onError: (err) => {
+        toast({
+          title: 'Xác thực OTP thất bại',
+          description: err?.message,
+        });
+      },
+    });
+  };
 
   return {
-    verifyOtp: mutate,
+    verifyOtp,
     loading,
     error,
   };

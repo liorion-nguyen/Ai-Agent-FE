@@ -1,4 +1,4 @@
-import { TypeUser } from '@/shared/constants';
+import { User } from '@/shared/types';
 
 export interface SignInParams {
   email: string;
@@ -19,10 +19,15 @@ export interface SignUpParams {
   email: string;
   password: string;
   fullname?: string;
-  type?: TypeUser;
   domain?: string;
   address?: string;
   business_name?: string;
   confirmPassword?: string;
   policy?: boolean;
+}
+
+export interface GetMeResponse {
+  success: boolean;
+  message: string;
+  user: User;
 }

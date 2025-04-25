@@ -6,11 +6,6 @@ export enum AUTH_ACTIONS {
   HOME = 'HOME',
 }
 
-export enum TypeUser {
-  PERSONAL = 'personal',
-  BUSINESS = 'business',
-}
-
 export enum UserRole {
   ADMIN = 'admin',
   EDITOR = 'editor',
