@@ -13,6 +13,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup Node and install deps
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build project
+        run: pnpm build
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -20,18 +34,20 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.HOST_EC2 }} >> ~/.ssh/known_hosts
 
-      - name: Test SSH connection
-        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} "echo ✅ SSH connected"
-      
-      - name: Debug SSH
-        run: ssh -vvv -i ~/.ssh/id_ed25519 ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} "echo ✅ Connected"
-
-      - name: Deploy Frontend
+      - name: Upload build files to EC2
         run: |
-          ssh ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} << 'EOF'
+          scp -i ~/.ssh/id_ed25519 -r \
+            .next public package.json pnpm-lock.yaml \
+            ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }}:/home/ec2-user/ai-agent-fe/
+
+      - name: Upload .env file to EC2
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+          scp -i ~/.ssh/id_ed25519 .env ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }}:/home/ec2-user/ai-agent-fe/.env
+
+      - name: Restart frontend on EC2
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} << 'EOF'
             cd /home/ec2-user/ai-agent-fe
-            git pull origin version2
-            pnpm install
-            pnpm build
-            pm2 restart ai-agent-fe || pm2 start pnpm --name ai-agent-fe -- start
+            pm2 restart ai-agent-fe || pm2 start "pnpm start" --name ai-agent-fe
           EOF
