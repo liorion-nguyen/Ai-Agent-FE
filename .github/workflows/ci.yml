@@ -33,26 +33,24 @@ jobs:
           echo "${{ secrets.PRIVATE_KEY_EC2 }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.HOST_EC2 }} >> ~/.ssh/known_hosts
+
       - name: Test SSH connection
-        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} "echo ✅ SSH connected"
-      
-      - name: Debug SSH
-        run: ssh -vvv -i ~/.ssh/id_ed25519 ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} "echo ✅ Connected"
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} "echo ✅ SSH connected"
 
       - name: Upload build files to EC2
         run: |
-          scp -i ~/.ssh/id_ed25519 -r \
+          scp -i ~/.ssh/id_rsa -r \
             .next public package.json pnpm-lock.yaml \
             ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }}:/home/ec2-user/ai-agent-fe/
 
       - name: Upload .env file to EC2
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
-          scp -i ~/.ssh/id_ed25519 .env ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }}:/home/ec2-user/ai-agent-fe/.env
+          scp -i ~/.ssh/id_rsa .env ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }}:/home/ec2-user/ai-agent-fe/.env
 
       - name: Restart frontend on EC2
         run: |
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} << 'EOF'
+          ssh -i ~/.ssh/id_rsa ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} << 'EOF'
             cd /home/ec2-user/ai-agent-fe
             pm2 restart ai-agent-fe || pm2 start "pnpm start" --name ai-agent-fe
           EOF
