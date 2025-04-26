@@ -16,9 +16,11 @@ const UserDashBoardLayout = async ({ children }: { children: ReactNode }) => {
 
   return (
     <SidebarProvider>
-      <SidebarNav />
-      <main className="flex-1 min-h-screen flex flex-col bg-muted p-4 md:p-4">
+      <div className="flex relative">
+        <SidebarNav />
         <SidebarTrigger />
+      </div>
+      <main className="flex-1 max-h-screen overflow-y-hidden flex flex-col bg-muted">
         {children}
       </main>
     </SidebarProvider>

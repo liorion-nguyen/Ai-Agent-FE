@@ -2,9 +2,9 @@
 
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
+import Img from '@/components/ui/Image';
 import { Separator } from '@/components/ui/Separator';
 import { useState } from 'react';
-
 const FeaturesPage = () => {
   const data = [
     {
@@ -191,7 +191,7 @@ const FeaturesPage = () => {
                       key={idx}
                       className="w-full h-auto rounded-lg bg-slate-300 flex justify-center items-center"
                     >
-                      <img
+                      <Img
                         src={image}
                         alt={`${item.title}-${idx}`}
                         className="w-1/3 h-full object-cover"

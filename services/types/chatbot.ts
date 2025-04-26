@@ -1,9 +1,15 @@
 import { Chatbot } from '@/shared/types/chatbot';
 
+export interface ChatbotsResponse {
+  success: boolean;
+  message: string;
+  chatbots: Chatbot[];
+}
+
 export interface ChatbotResponse {
   success: boolean;
   message: string;
-  data: Chatbot[];
+  chatbot: Chatbot;
 }
 
 export interface CreateChatbotInParams {
@@ -13,6 +19,12 @@ export interface CreateChatbotInParams {
   description?: string;
   user_id: string;
   chatbot_id?: string;
+}
+
+export interface CreateChatbotResponse {
+  success: boolean;
+  message: string;
+  chatbot: Chatbot;
 }
 
 export interface PublishChatbotParams {

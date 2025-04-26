@@ -1,10 +1,12 @@
 import { GET, PATCH, POST } from '@/services/api';
 import { API_ENDPOINTS } from '@/shared/constants';
-import { Chatbot } from '@/shared/types/chatbot';
 import {
+  ChatbotResponse,
+  ChatbotsResponse,
   CreateChatbotInParams,
   CreateChatbotOnboardingParams,
   CreateChatbotPromptParams,
+  CreateChatbotResponse,
   PublishChatbotParams,
   UpdateChatbotConfigParams,
   UpdateChatbotDocumentsParams,
@@ -12,13 +14,13 @@ import {
   UpdateChatbotPromptParams,
 } from '../types/chatbot';
 export const chatbotApi = {
-  getAllChatbots: () => GET<Chatbot[]>(API_ENDPOINTS.GET_ALL_CHATBOTS),
+  getAllChatbots: () => GET<ChatbotsResponse>(API_ENDPOINTS.GET_ALL_CHATBOTS),
 
   getChatbotById: (id: string) =>
-    GET<Chatbot>(API_ENDPOINTS.GET_CHATBOT_BY_ID.replace(':id', id)),
+    GET<ChatbotResponse>(API_ENDPOINTS.GET_CHATBOT_BY_ID.replace(':id', id)),
 
   createChatbot: (params: CreateChatbotInParams) =>
-    POST(
+    POST<CreateChatbotResponse>(
       API_ENDPOINTS.CREATE_CHATBOT.replace(':user_id', params.user_id),
       params,
     ),

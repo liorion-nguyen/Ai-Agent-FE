@@ -1,5 +1,6 @@
 'use client';
 
+import Img from '@/components/ui/Image';
 import { UserStatus } from '@/shared/constants';
 import useUserStore from '@/store/user';
 import { useState } from 'react';
@@ -30,7 +31,7 @@ const ProfilePage = () => {
         <div className="flex items-center gap-4">
           <div className="w-24 h-24 rounded-lg bg-gray-200 flex items-center justify-center">
             {avatar ? (
-              <img
+              <Img
                 src={user?.thumbnail ? user?.thumbnail : avatar}
                 alt="Avatar"
                 className="w-full h-full object-cover rounded-lg"
