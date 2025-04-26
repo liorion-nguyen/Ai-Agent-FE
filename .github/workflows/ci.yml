@@ -37,12 +37,6 @@ jobs:
       - name: Test SSH connection
         run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }} "echo ✅ SSH connected"
 
-      - name: Upload build files to EC2
-        run: |
-          scp -i ~/.ssh/id_rsa -r \
-            .next public package.json pnpm-lock.yaml \
-            ${{ secrets.USERNAME_EC2 }}@${{ secrets.HOST_EC2 }}:/home/ec2-user/ai-agent-fe/
-
       - name: Upload .env file to EC2
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
