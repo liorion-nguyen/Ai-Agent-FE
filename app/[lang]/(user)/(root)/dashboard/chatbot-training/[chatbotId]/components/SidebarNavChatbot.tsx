@@ -74,8 +74,8 @@ const sidebarGroups: SidebarGroup[] = [
         icon: Code,
       },
       {
-        title: 'Website',
-        url: '/dashboard/chatbot-training/[chatbotId]/website',
+        title: 'Tích hợp Website',
+        url: '/dashboard/chatbot-training/[chatbotId]/iframe-website',
         icon: Globe,
       },
       {
@@ -93,7 +93,7 @@ const CustomChatbotSidebar = () => {
   const pathname = usePathname();
   const chatbotId = params.chatbotId || 'bot-demo';
   const { hydrated, chatbot } = useChatbotStore();
-  const { getChatbot } = useGetChatbot(chatbotId as string);
+  const { getChatbot } = useGetChatbot();
   useEffect(() => {
     if (!hydrated) return;
 

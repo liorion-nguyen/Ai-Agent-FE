@@ -19,24 +19,21 @@ const ChatbotItem = ({
   onDeleteClick,
   onClick,
 }: ChatbotItemProps) => {
-  // Hàm xử lý click cho Settings, ngăn sự kiện lan truyền lên container cha
   const handleSettingsClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Ngăn sự kiện click lan truyền
-    onSettingsClick(); // Gọi hàm xử lý Settings
+    e.stopPropagation();
+    onSettingsClick();
   };
 
-  // Hàm xử lý click cho Delete, ngăn sự kiện lan truyền lên container cha
   const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Ngăn sự kiện click lan truyền
-    onDeleteClick(); // Gọi hàm xử lý Delete
+    e.stopPropagation();
+    onDeleteClick();
   };
 
   return (
     <div
       className="flex flex-col border rounded-xl border-gray-200 mb-4 cursor-pointer"
-      onClick={onClick} // Sự kiện click chính của container
+      onClick={onClick}
     >
-      {/* Thông tin chatbot */}
       <div className="flex items-center gap-3 p-4 border-b border-gray-200">
         <Img
           src="/icons/admin_icon.png"
@@ -45,20 +42,16 @@ const ChatbotItem = ({
         />
         <h3 className="text-base font-medium">{name}</h3>
       </div>
-      {/* Nút hành động */}
       <div className="flex gap-2 p-4 items-end justify-between">
         <div>
           <p className="text-sm text-gray-500 mb-2">Cập nhật</p>
           <p>{formatDateTime(lastUpdated)}</p>
         </div>
         <div className="flex items-center gap-2">
-          <Settings
-            onClick={handleSettingsClick} // Gắn hàm xử lý click cho Settings
-            className="cursor-pointer"
-          />
+          <Settings onClick={handleSettingsClick} className="cursor-pointer" />
           <Trash2
             color="#db1a1a"
-            onClick={handleDeleteClick} // Gắn hàm xử lý click cho Delete
+            onClick={handleDeleteClick}
             className="cursor-pointer"
           />
         </div>

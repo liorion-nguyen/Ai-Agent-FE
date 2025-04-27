@@ -12,16 +12,48 @@ export interface ChatbotResponse {
   chatbot: Chatbot;
 }
 
-export interface CreateChatbotInParams {
+export interface CreateChatbotDbInParams {
   chatbot_name: string;
   thumbnail?: string;
   prompt_info?: string;
   description?: string;
-  user_id: string;
   chatbot_id?: string;
+  user_id?: string;
 }
 
-export interface CreateChatbotResponse {
+export interface CreateChatbotDbResponse {
+  success: boolean;
+  message: string;
+  chatbot_name: string;
+  connector_id: string;
+  created_at: string;
+  description: string;
+  external_bot_id: string | null;
+  icon_url: string | null;
+  id: string;
+  model: {
+    id: string;
+    model_name: string;
+    description: string;
+    icon_url: string;
+    context_length: string | null;
+  };
+  prompt_info: string | null;
+  status: string;
+  updated_at: string;
+}
+
+export interface CreateChatbotCozeInParams {
+  chatbot_id: string;
+  chatbot_name: string;
+  thumbnail?: string;
+  prompt_info?: string;
+  description?: string;
+  user_id?: string;
+  api_token: string;
+}
+
+export interface CreateChatbotCozeResponse {
   success: boolean;
   message: string;
   chatbot: Chatbot;

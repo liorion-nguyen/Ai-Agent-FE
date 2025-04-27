@@ -3,12 +3,14 @@ import { APIErrorHandler } from '@/services/types';
 import {
   ChatbotResponse,
   ChatbotsResponse,
-  CreateChatbotInParams,
-  CreateChatbotResponse,
+  CreateChatbotDbInParams,
+  CreateChatbotDbResponse,
 } from '@/services/types/chatbot';
 import { useToast } from '@/shared/hooks';
 import useChatbotStore from '@/store/chatbot';
+import useUserStore from '@/store/user';
 import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 export const useGetChatbots = () => {
   const { toast } = useToast();
@@ -38,11 +40,9 @@ export const useGetChatbots = () => {
   };
 };
 
-export const useGetChatbot = (chatbotId: string) => {
+export const useGetChatbot = () => {
   const { toast } = useToast();
   const { setChatbot } = useChatbotStore();
-  console.log(chatbotId);
-
   const {
     mutate,
     isPending: loading,
@@ -70,22 +70,38 @@ export const useGetChatbot = (chatbotId: string) => {
 
 export const useCreateChatbot = () => {
   const { toast } = useToast();
+  const { apiToken, user } = useUserStore();
+  const router = useRouter();
   const {
     mutate,
     isPending: loading,
     error,
   } = useMutation<
-    CreateChatbotResponse,
+    CreateChatbotDbResponse,
     APIErrorHandler,
-    CreateChatbotInParams
+    CreateChatbotDbInParams
   >({
-    mutationFn: (data) => chatbotApi.createChatbot(data),
+    mutationFn: async (data) => {
+      const dbResponse = await chatbotApi.createChatbotDb({
+        ...data,
+        user_id: user?.id || '',
+      });
+
+      await chatbotApi.createChatbotCoze({
+        ...data,
+        chatbot_id: dbResponse.id,
+        api_token: apiToken || '',
+        user_id: user?.id || '',
+      });
+      return dbResponse;
+    },
     onSuccess: (data) => {
       toast({
         title: 'Tạo chatbot thành công',
         description: data.message,
         variant: 'default',
       });
+      router.push(`/dashboard/chatbot-training/${data.id}`);
     },
     onError: (err) => {
       toast({

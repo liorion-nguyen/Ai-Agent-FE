@@ -18,7 +18,8 @@ export const API_ENDPOINTS = {
   // Chatbots
   GET_ALL_CHATBOTS: '/users/profile/chatbots',
   GET_CHATBOT_BY_ID: '/users/profile/chatbots/:id',
-  CREATE_CHATBOT: '/users/:user_id/chatbots',
+  CREATE_CHATBOT_DB: '/users/:user_id/chatbots',
+  CREATE_CHATBOT_COZE: '/users/:user_id/chatbots/:chatbot_id',
   UPDATE_CHATBOT_CONFIG_BASIC:
     '/users/:user_id/chatbots/:chatbot_id/config-basic',
   UPDATE_CHATBOT_PROMPT: '/users/:user_id/chatbots/:chatbot_id/import-prompts',
@@ -42,7 +43,8 @@ export const API_ENDPOINTS = {
   GET_RESOURCE_BY_ID: '/users/profile/resources/:id',
   CREATE_RESOURCE: '/users/:user_id/resources',
   CREATE_PROMPT: '/users/:user_id/prompts',
-  UPLOAD_FILE: '/users/:user_id/endcode-files',
+  ENCODE_FILE: '/users/:user_id/endcode-files',
+  UPLOAD_FILE: '/users/:user_id/resources/:resource_id/documents/files',
   ADD_DOCUMENT_TO_RESOURCE:
     '/users/:user_id/resources/:resource_id/documents/files',
 

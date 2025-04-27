@@ -18,7 +18,16 @@ export const POST = async <T = unknown, D = unknown>(
   data?: D,
   config?: AxiosRequestConfig,
 ): Promise<T> => {
-  const response: AxiosResponse<T> = await apiClient.post(url, data, config);
+  const headers =
+    data instanceof FormData ? {} : { 'Content-Type': 'application/json' };
+
+  const response: AxiosResponse<T> = await apiClient.post(url, data, {
+    ...config,
+    headers: {
+      ...config?.headers,
+      ...headers,
+    },
+  });
   return response.data;
 };
 

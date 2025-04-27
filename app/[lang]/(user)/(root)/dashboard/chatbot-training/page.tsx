@@ -26,9 +26,9 @@ const ChatbotTrainingPage = () => {
   useEffect(() => {
     if (!hydrated) return;
 
-    if (chatbots.length === 0) {
-      getChatbots();
-    }
+    getChatbots();
+    // if (chatbots.length === 0) {
+    // }
   }, [hydrated, getChatbots]);
   const handleSettingsClick = (name: string) => {
     console.log(`Mở cài đặt cho chatbot: ${name}`);

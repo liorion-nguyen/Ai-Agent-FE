@@ -15,8 +15,9 @@ import {
 import { useZodForm } from '@/shared/hooks';
 import { createChatbotSchema } from '@/shared/validations/chatbot/chatbot.schema';
 import { ImagePlus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { z } from 'zod';
+import { useCreateChatbot } from '../hooks/useChatbot';
 
 const CreateChatbotModal = ({
   isOpen,
@@ -26,7 +27,8 @@ const CreateChatbotModal = ({
   setIsOpen: (isOpen: boolean) => void;
 }) => {
   //   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  const router = useRouter();
+  // const router = useRouter();
+  const { createChatbot, loading } = useCreateChatbot();
 
   const {
     register,
@@ -36,11 +38,10 @@ const CreateChatbotModal = ({
     reset,
   } = useZodForm(createChatbotSchema, {
     defaultValues: {
-      name: '',
-      prompt: '',
+      chatbot_name: '',
       industry: '',
-      greeting: '',
-      avatar: '',
+      description: '',
+      thumbnail: '',
     },
   });
 
@@ -57,11 +58,17 @@ const CreateChatbotModal = ({
 
   const onSubmit = async (data: z.infer<typeof createChatbotSchema>) => {
     try {
-      // Giả lập API call để tạo chatbot
-      console.log('Creating chatbot with data:', data);
-      // Sau khi tạo thành công, đóng modal và redirect
-      closeModal();
-      router.push('/chatbot-success'); // Điều hướng sau khi tạo thành công
+      const newData: z.infer<typeof createChatbotSchema> = {
+        chatbot_name: data.chatbot_name || '',
+      };
+      for (const key in data) {
+        if (data[key as keyof typeof data]) {
+          newData[key as keyof typeof data] =
+            data[key as keyof typeof data] || '';
+        }
+      }
+      await createChatbot(newData);
+      // closeModal();
     } catch (error) {
       console.error('Error creating chatbot:', error);
     }
@@ -83,12 +90,15 @@ const CreateChatbotModal = ({
             {/* Tên bot */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Tên bot
+                Tên bot <span className="text-red-500">*</span>
               </label>
-              <ModalInput placeholder="Chọn tên bot" {...register('name')} />
-              {errors.name && (
+              <ModalInput
+                placeholder="Chọn tên bot"
+                {...register('chatbot_name')}
+              />
+              {errors.chatbot_name && (
                 <p className="text-sm text-red-500 mt-1">
-                  {errors.name.message}
+                  {errors.chatbot_name.message}
                 </p>
               )}
             </div>
@@ -111,9 +121,9 @@ const CreateChatbotModal = ({
                 />
               </div>
             </div>
-            {errors.avatar && (
+            {errors.thumbnail && (
               <p className="text-sm text-red-500 mt-1">
-                {errors.avatar.message}
+                {errors.thumbnail.message}
               </p>
             )}
           </div>
@@ -136,19 +146,17 @@ const CreateChatbotModal = ({
             )}
           </div>
 
-          {/* Câu chào hỏi */}
+          {/* Mô tả */}
           <div className="mb-4">
-            <h4 className="text-sm font-medium text-gray-900 mb-2">
-              Câu chào hỏi
-            </h4>
+            <h4 className="text-sm font-medium text-gray-900 mb-2">Mô tả</h4>
             <textarea
-              placeholder="Hello! How can I help you today?"
+              placeholder="Mô tả thêm về chatbot"
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none h-24"
-              {...register('greeting')}
+              {...register('description')}
             />
-            {errors.greeting && (
+            {errors.description && (
               <p className="text-sm text-red-500 mt-1">
-                {errors.greeting.message}
+                {errors.description.message}
               </p>
             )}
           </div>
@@ -171,8 +179,12 @@ const CreateChatbotModal = ({
         <ModalButton variant="secondary" onClick={closeModal}>
           Thoát
         </ModalButton>
-        <ModalButton type="submit" onClick={handleSubmit(onSubmit)}>
-          Tạo chatbot
+        <ModalButton
+          type="submit"
+          onClick={handleSubmit(onSubmit)}
+          disabled={loading}
+        >
+          {loading ? 'Đang tạo...' : 'Tạo chatbot'}
         </ModalButton>
       </ModalFooter>
     </Modal>

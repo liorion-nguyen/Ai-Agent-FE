@@ -16,11 +16,15 @@ import useForgotPasswordStore from '@/store/forgot-password';
 import useUserStore from '@/store/user';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useMe } from './useUser';
+import { useMe, useSetApiToken } from './useUser';
+import { useSetWorkspace } from './useWorkspace';
 export const useSignIn = () => {
   const { toast } = useToast();
   const router = useRouter();
   const { me } = useMe();
+  const { setApiToken } = useSetApiToken();
+  const { setWorkspace } = useSetWorkspace();
+
   const {
     mutate,
     isPending: loading,
@@ -31,6 +35,8 @@ export const useSignIn = () => {
       document.cookie = `access_token=${data.token.access_token}; path=/; max-age=${60 * 60 * 24 * 7}`;
       document.cookie = `refresh_token=${data.token.refresh_token}; path=/; max-age=${60 * 60 * 24 * 7}`;
       me();
+      setApiToken();
+      setWorkspace();
       toast({
         title: 'Đăng nhập thành công',
         description: 'Đăng nhập thành công',
@@ -97,6 +103,7 @@ export const useSignOut = () => {
       document.cookie = `refresh_token=; path=/; max-age=0`;
       router.push(ROUTES.SIGNIN);
       useUserStore.setState({ user: undefined });
+      useUserStore.setState({ apiToken: undefined });
     },
     onError: (err) => {
       toast({

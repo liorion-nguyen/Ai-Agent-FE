@@ -8,6 +8,9 @@ export interface Resource {
   name: string;
   description: string;
   status: string;
+  created_at?: string;
+  updated_at?: string;
+  documents?: Document[];
 }
 
 export interface Document {
@@ -21,4 +24,6 @@ export interface Document {
   web_url: string;
   type: string;
   icon_url: string;
+  created_at?: string;
+  updated_at?: string;
 }

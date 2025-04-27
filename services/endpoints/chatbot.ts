@@ -3,10 +3,12 @@ import { API_ENDPOINTS } from '@/shared/constants';
 import {
   ChatbotResponse,
   ChatbotsResponse,
-  CreateChatbotInParams,
+  CreateChatbotCozeInParams,
+  CreateChatbotCozeResponse,
+  CreateChatbotDbInParams,
+  CreateChatbotDbResponse,
   CreateChatbotOnboardingParams,
   CreateChatbotPromptParams,
-  CreateChatbotResponse,
   PublishChatbotParams,
   UpdateChatbotConfigParams,
   UpdateChatbotDocumentsParams,
@@ -19,11 +21,22 @@ export const chatbotApi = {
   getChatbotById: (id: string) =>
     GET<ChatbotResponse>(API_ENDPOINTS.GET_CHATBOT_BY_ID.replace(':id', id)),
 
-  createChatbot: (params: CreateChatbotInParams) =>
-    POST<CreateChatbotResponse>(
-      API_ENDPOINTS.CREATE_CHATBOT.replace(':user_id', params.user_id),
+  createChatbotDb: (params: CreateChatbotDbInParams) =>
+    POST<CreateChatbotDbResponse>(
+      API_ENDPOINTS.CREATE_CHATBOT_DB.replace(':user_id', params.user_id || ''),
       params,
     ),
+
+  createChatbotCoze: (params: CreateChatbotCozeInParams) => {
+    const { chatbot_id, ...rest } = params;
+    return PATCH<CreateChatbotCozeResponse>(
+      API_ENDPOINTS.CREATE_CHATBOT_COZE.replace(
+        ':user_id',
+        params.user_id || '',
+      ).replace(':chatbot_id', chatbot_id),
+      rest,
+    );
+  },
 
   updateChatbotConfig: (params: UpdateChatbotConfigParams) =>
     PATCH(

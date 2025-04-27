@@ -11,9 +11,9 @@ export const updateChatbotSchema = z.object({
 });
 
 export const createChatbotSchema = z.object({
-  name: z.string().min(1, 'Vui lòng nhập tên bot'),
-  prompt: z.string().min(1, 'Vui lòng nhập kích bản mẫu'),
-  industry: z.string().min(1, 'Vui lòng chọn ngành nghề'),
-  greeting: z.string().min(1, 'Vui lòng nhập câu chào hỏi'),
-  avatar: z.string().optional(),
+  chatbot_name: z.string().min(1, 'Vui lòng nhập tên bot'),
+  industry: z.string().optional(),
+  thumbnail: z.string().optional(),
+  description: z.string().optional(),
+  // prompt: z.string().min(1, 'Vui lòng nhập kích bản mẫu'),
 });
