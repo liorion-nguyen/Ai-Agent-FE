@@ -11,9 +11,8 @@ import {
   CreateChatbotPromptParams,
   PublishChatbotParams,
   UpdateChatbotConfigParams,
-  UpdateChatbotDocumentsParams,
   UpdateChatbotOnboardingParams,
-  UpdateChatbotPromptParams,
+  UpdateChatbotPromptParams
 } from '../types/chatbot';
 export const chatbotApi = {
   getAllChatbots: () => GET<ChatbotsResponse>(API_ENDPOINTS.GET_ALL_CHATBOTS),
@@ -56,14 +55,14 @@ export const chatbotApi = {
       params,
     ),
 
-  updateChatbotDocuments: (params: UpdateChatbotDocumentsParams) =>
-    PATCH(
-      API_ENDPOINTS.UPDATE_CHATBOT_DOCUMENTS.replace(
-        ':user_id',
-        params.user_id,
-      ).replace(':chatbot_id', params.chatbot_id),
-      params,
-    ),
+  // updateChatbotDocuments: (params: UpdateChatbotDocumentsParams) =>
+  //   PATCH(
+  //     API_ENDPOINTS.UPDATE_CHATBOT_DOCUMENTS.replace(
+  //       ':user_id',
+  //       params.user_id,
+  //     ).replace(':chatbot_id', params.chatbot_id),
+  //     params,
+  //   ),
 
   updateChatbotOnboarding: (params: UpdateChatbotOnboardingParams) =>
     PATCH(

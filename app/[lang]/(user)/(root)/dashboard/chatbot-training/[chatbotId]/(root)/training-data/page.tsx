@@ -4,30 +4,37 @@ import Empty from '@/components/ui/Empty';
 import { ModalButton } from '@/components/ui/Modal';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { ToolbarButton } from '@/components/ui/ToolbarButton';
-import useResourceStore from '@/store/resource';
+import { Chatbot } from '@/shared/types/chatbot';
+import useChatbotStore from '@/store/chatbot';
 import {
   ArrowDownUp,
   Download,
   HelpCircle,
   Inbox,
   Plus,
-  Upload,
+  Upload
 } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useGetChatbot } from '../../../hooks/useChatbot';
+import ModalAddKnowledge from './components/ModalAddKnowledge';
 import ModalCreateKnowledge from './components/ModalCreateKnowledge';
 import ResourceItem from './components/ResourceItem';
-import { useGetResources } from './hooks/useResource';
 
 export default function TrainingDataPage() {
-  const { resources, hydrated } = useResourceStore();
-  const { getAllResources, loading } = useGetResources();
+  const params = useParams();
+  const router = useRouter();
+  const chatbotId = params.chatbotId || 'bot-demo';
+  const { hydrated, chatbot } = useChatbotStore();
+  const { getChatbot, loading } = useGetChatbot();
   const [isOpenImportModal, setIsOpenImportModal] = useState(false);
+  const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   useEffect(() => {
     if (!hydrated) return;
-    getAllResources();
-    // if (resources.length === 0) {
-    // }
-  }, [hydrated, getAllResources]);
+    if (!chatbot) {
+      getChatbot(chatbotId as string);
+    }
+  }, [hydrated, chatbot, chatbotId, getChatbot]);
 
   const handleHowToClick = () => {
     console.log('Clicked: How to add questions');
@@ -42,11 +49,11 @@ export default function TrainingDataPage() {
   };
 
   const handleAddClick = () => {
-    console.log('Clicked: Add FAQs');
+    setIsOpenAddModal(true);
   };
 
   const handleClick = (resourceId: string) => {
-    console.log('Clicked: Resource ID', resourceId);
+    router.push(`/dashboard/resource/${resourceId}`);
   };
 
   const handleSettingsClick = (resourceName: string) => {
@@ -77,11 +84,11 @@ export default function TrainingDataPage() {
       </div>
 
       {/* Main Content */}
-      <div className="p-6">
+      <div className="p-6 max-h-[calc(100vh-65px)] overflow-y-auto">
         {/* Toolbar */}
         <div className="flex items-center justify-between mb-6">
           <span className="text-md font-medium text-gray-900">
-            FAQs ({resources.length})
+            FAQs ({chatbot?.chatbot_resources.length})
           </span>
           <div className="flex items-center gap-3">
             <ToolbarButton
@@ -102,11 +109,11 @@ export default function TrainingDataPage() {
             >
               <Upload className="w-4 h-4" />
               Import FAQs
-              <ModalCreateKnowledge
-                isOpen={isOpenImportModal}
-                setIsOpen={setIsOpenImportModal}
-              />
             </ModalButton>
+            <ModalCreateKnowledge
+              isOpen={isOpenImportModal}
+              setIsOpen={setIsOpenImportModal}
+            />
             <ModalButton
               variant="primary"
               size="sm"
@@ -116,6 +123,11 @@ export default function TrainingDataPage() {
               <Plus className="w-4 h-4" />
               Add FAQs
             </ModalButton>
+            <ModalAddKnowledge
+              chatbot={chatbot as Chatbot}
+              isOpen={isOpenAddModal}
+              onClose={() => setIsOpenAddModal(false)}
+            />
           </div>
         </div>
 
@@ -125,18 +137,19 @@ export default function TrainingDataPage() {
             Array.from({ length: 6 }).map((_, index) => (
               <Skeleton key={index} className="h-32 w-full rounded-lg" />
             ))
-          ) : resources.length > 0 ? (
-            resources.map((resource) => (
+          ) : chatbot?.chatbot_resources.length &&
+            chatbot?.chatbot_resources.length > 0 ? (
+            chatbot?.chatbot_resources.map((resource) => (
               <ResourceItem
-                key={resource.id}
-                id={resource.id}
-                name={resource.name}
-                description={resource.description}
-                lastUpdated={resource.updated_at || ''}
-                status={resource.status}
-                externalTypeName={resource.external_type_name}
-                onClick={() => handleClick(resource.id)}
-                onSettingsClick={() => handleSettingsClick(resource.name)}
+                key={resource.resource.id}
+                id={resource.resource.id}
+                name={resource.resource.name}
+                description={resource.resource.description}
+                lastUpdated={resource.resource.updated_at || ''}
+                status={resource.resource.status}
+                externalTypeName={resource.resource.external_type_name}
+                onClick={() => handleClick(resource.resource.id)}
+                onSettingsClick={() => handleSettingsClick(resource.resource.name)}
                 onDeleteClick={() => handleDeleteClick(resource.id)}
               />
             ))

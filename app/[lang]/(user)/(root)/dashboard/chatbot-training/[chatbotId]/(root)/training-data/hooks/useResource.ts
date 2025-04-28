@@ -1,11 +1,13 @@
 import { resourceApi } from '@/services/endpoints';
 import { APIErrorHandler } from '@/services/types';
 import {
-  CreateResourceParams,
-  CreateResourceResponse,
-  GetAllResourcesResponse,
-  GetResourceResponse,
-  UploadFileKnowledgeResponse,
+    AddResourceToChatbotParams,
+    AddResourceToChatbotResponse,
+    CreateResourceParams,
+    CreateResourceResponse,
+    GetAllResourcesResponse,
+    GetResourceResponse,
+    UploadFileKnowledgeResponse,
 } from '@/services/types/resource';
 import { useToast } from '@/shared/hooks';
 import useResourceStore from '@/store/resource';
@@ -173,3 +175,41 @@ export const useUploadFile = () => {
     error,
   };
 };
+
+export const useAddResourceToChatbot = () => {
+  const { toast } = useToast();
+  const { user, apiToken } = useUserStore();
+
+  const {
+    mutateAsync,
+    isPending: loading,
+    error,
+  } = useMutation<AddResourceToChatbotResponse, APIErrorHandler, AddResourceToChatbotParams>({
+    mutationFn: (data) => resourceApi.addResourceToChatbot({
+        ...data,
+        user_id: user?.id || '',
+        api_token: apiToken || '',
+    }),
+    onSuccess: (data) => {
+      toast({
+        title: 'Thêm tài nguyên vào chatbot thành công',
+        description: data.message,
+        variant: 'default',
+      });
+    },
+    onError: (err) => {
+      toast({
+        title: 'Thêm tài nguyên vào chatbot thất bại',
+        description: err?.message.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  return {
+    addResourceToChatbot: mutateAsync,
+    loading,
+    error,
+  };
+};
+

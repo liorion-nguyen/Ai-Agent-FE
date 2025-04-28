@@ -17,6 +17,7 @@ import {
   BarChart,
   BotMessageSquare,
   Calendar,
+  FileText,
   HelpCircle,
   Link,
   LogOut,
@@ -39,6 +40,12 @@ const items = [
     url: '/dashboard/chatbot-training',
     icon: BotMessageSquare,
     tooltip: 'Đào tạo chatbot',
+  },
+  {
+    title: 'Quản lý resource',
+    url: '/dashboard/resource',
+    icon: FileText,
+    tooltip: 'Quản lý resource',
   },
   {
     title: 'Quản lý tín nhắn',
@@ -113,9 +120,9 @@ const SidebarNav = () => {
         <div className="mt-3 group-data-[collapsible=icon]:hidden">
           <div className="flex justify-between text-sm text-gray-400">
             <span>Document</span>
-            <span>0 / 20</span>
+            <span>2 / 20</span>
           </div>
-          <Progress value={0} className="h-2 mt-1" />
+          <Progress value={20} className="h-2 mt-1" />
         </div>
       </SidebarHeader>
 

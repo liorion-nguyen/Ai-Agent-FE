@@ -76,16 +76,17 @@ const DashboardHeader = () => {
             <nav className="hidden lg:flex flex-1 justify-center h-full">
               <div className="flex h-full">
                 {navigationItems.map((item, index) => (
-                  <div key={index} className="relative">
-                    <Link
-                      href={item.href}
+                  (item.label !== "Quản lý chatbot" || (item.label === "Quản lý chatbot" && user)) && (
+                    <div key={index} className="relative">
+                      <Link
+                        href={item.href}
                       className={`px-3 md:px-5 flex items-center h-full font-medium text-[18px] md:text-[22px] tracking-wider font-road ${
                         item.label === activeLabel ||
                         (item.label === 'Trang chủ' && activeLabel === '')
                           ? 'text-white border-l-[3px] border-r-[3px] border-solid border-border bg-active'
                           : 'text-foreground hover:text-hover hover:bg-blue-100'
                       }`}
-                    >
+                    > 
                       {item.label}
                       {/* {item.label === activeLabel && (
                         <div className="absolute left-1/2 transform -translate-x-1/2 mt-7">
@@ -97,7 +98,8 @@ const DashboardHeader = () => {
                         </div>
                       )} */}
                     </Link>
-                  </div>
+                  </div> 
+                  )
                 ))}
               </div>
             </nav>
@@ -108,19 +110,16 @@ const DashboardHeader = () => {
                 className="lg:hidden absolute top-[70px] left-0 right-0 bg-white z-20 border-t-2 border-border shadow-md"
               >
                 {navigationItems.map((item, index) => (
-                  <div key={index}>
-                    <Link
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`block px-4 py-3 font-medium text-[18px] tracking-wider font-road ${
-                        item.label === activeLabel
-                          ? 'text-white bg-active'
-                          : 'text-foreground'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  </div>
+                  (item.label !== "Quản lý chatbot" || (item.label === "Quản lý chatbot" && user)) && (
+                    <div key={index}>
+                      <Link
+                        href={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                      > 
+                        {item.label}
+                      </Link>
+                    </div>
+                  )
                 ))}
               </div>
             )}

@@ -18,7 +18,6 @@ const ChatbotInfoForm = () => {
   const { error, success } = useUpdateChatbot();
   const inpRef = useRef<HTMLInputElement>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
-
   const {
     register,
     formState: { errors },

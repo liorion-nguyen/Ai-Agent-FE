@@ -1,12 +1,12 @@
 'use client';
 
+import { useUploadFile } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/[chatbotId]/(root)/training-data/hooks/useResource';
 import { Modal, ModalButton } from '@/components/ui/Modal';
 import { toast, useZodForm } from '@/shared/hooks';
 import { uploadFileSchema } from '@/shared/validations/resource/resource.schema';
 import { FileText, Upload } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useUploadFile } from '../../hooks/useResource';
 
 interface ModalUploadKnowledgeProps {
   isOpen: boolean;

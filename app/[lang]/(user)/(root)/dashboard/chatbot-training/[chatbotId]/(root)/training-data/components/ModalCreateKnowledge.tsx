@@ -1,6 +1,6 @@
 'use client';
 
-import { Modal, ModalButton } from '@/components/ui/Modal'; // Import Modal
+import { Modal, ModalBody, ModalButton, ModalCloseButton, ModalHeader, ModalTitle } from '@/components/ui/Modal'; // Import Modal
 import { useZodForm } from '@/shared/hooks';
 import { createResourceSchema } from '@/shared/validations/resource/resource.schema';
 import {
@@ -127,11 +127,14 @@ const ModalCreateKnowledge = ({
     <Modal
       isOpen={isOpen}
       onClose={() => setIsOpen(false)}
-      title="Create Knowledge"
-      className="max-w-lg"
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Format Selection */}
+      <ModalHeader>
+        <ModalTitle>Create Knowledge</ModalTitle>
+        <ModalCloseButton onClick={() => setIsOpen(false)} />
+      </ModalHeader>
+      <ModalBody>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Format Selection */}
         <div>
           <label className="block text-sm font-medium mb-2">Format</label>
           <div className="grid grid-cols-2 gap-4">
@@ -291,8 +294,9 @@ const ModalCreateKnowledge = ({
           >
             {loading ? 'Creating...' : 'Create and Import'}
           </ModalButton>
-        </div>
-      </form>
+          </div>
+        </form>
+      </ModalBody>
     </Modal>
   );
 };

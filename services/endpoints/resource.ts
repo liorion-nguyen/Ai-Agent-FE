@@ -1,6 +1,8 @@
-import { GET, POST } from '@/services/api';
+import { GET, PATCH, POST } from '@/services/api';
 import { API_ENDPOINTS } from '@/shared/constants';
 import {
+  AddResourceToChatbotParams,
+  AddResourceToChatbotResponse,
   CreateResourceParams,
   CreateResourceResponse,
   EncodeFileParams,
@@ -39,5 +41,16 @@ export const resourceApi = {
     POST<EncodeFileResponse>(
       API_ENDPOINTS.ENCODE_FILE.replace(':user_id', params.user_id || ''),
       params.file,
+    ),
+
+  addResourceToChatbot: (params: AddResourceToChatbotParams) =>
+    PATCH<AddResourceToChatbotResponse>(
+      API_ENDPOINTS.ADD_RESOURCE_TO_CHATBOT.replace(':user_id', params.user_id || '').replace(':chatbot_id', params.chatbot_id || ''),
+      {
+        api_token: params.api_token,
+        dataset_ids: params.dataset_ids,
+        auto_call: params.auto_call,
+        search_strategy: params.search_strategy,
+      },
     ),
 };

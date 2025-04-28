@@ -3,4 +3,5 @@ export const navigationItems = [
   { label: 'Hướng dẫn', href: '/guide' },
   { label: 'Tính năng', href: '/features' },
   { label: 'Báo giá', href: '/price' },
+  { label: 'Quản lý chatbot', href: '/dashboard' },
 ];

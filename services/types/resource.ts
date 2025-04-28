@@ -82,3 +82,19 @@ export interface GetResourceResponse {
     documents: Document[];
   };
 }
+
+export interface AddResourceToChatbotParams {
+  chatbot_id?: string;
+  user_id?: string;
+  api_token?: string;
+  dataset_ids: string[];
+  auto_call?: boolean;
+  search_strategy?: number;
+}
+export interface AddResourceToChatbotResponse {
+  success: boolean;
+  message: string;
+  data: {
+    id: string;
+  };
+}

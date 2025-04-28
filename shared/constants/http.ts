@@ -23,7 +23,7 @@ export const API_ENDPOINTS = {
   UPDATE_CHATBOT_CONFIG_BASIC:
     '/users/:user_id/chatbots/:chatbot_id/config-basic',
   UPDATE_CHATBOT_PROMPT: '/users/:user_id/chatbots/:chatbot_id/import-prompts',
-  UPDATE_CHATBOT_DOCUMENTS:
+  ADD_RESOURCE_TO_CHATBOT:
     '/users/:user_id/chatbots/:chatbot_id/import-documents',
   PUBLISH_CHATBOT: '/users/:user_id/chatbots/:chatbot_id/publish',
   CREATE_ONBOARDING_CHATBOT: '/users/:user_id/chatbots/:chatbot_id/onboarding',

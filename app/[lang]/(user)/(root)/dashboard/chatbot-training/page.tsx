@@ -77,7 +77,7 @@ const ChatbotTrainingPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 space-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 space-4  max-h-[calc(100vh-65px)] overflow-y-auto">
         {loading ? (
           Array.from({ length: 6 }).map((_, index) => (
             <Skeleton key={index} className="h-[150px] w-full" />
