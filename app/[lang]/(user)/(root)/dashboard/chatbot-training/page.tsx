@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import useChatbotStore from '@/store/chatbot';
 import { Bot } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import ChatbotItem from './components/ChatbotItem';
 import CreateChatbotModal from './components/CreateChatbotModal';
 import DeleteChatbotModal from './components/DeleteChatbotModal';
@@ -20,16 +20,12 @@ interface ChatbotDeleteParams {
 
 const ChatbotTrainingPage = () => {
   const router = useRouter();
-  const { chatbots, hydrated } = useChatbotStore();
+  const { chatbots } = useChatbotStore();
   const { getChatbots, loading } = useGetChatbots();
 
-  useEffect(() => {
-    if (!hydrated) return;
-
+  useLayoutEffect(() => {
     getChatbots();
-    // if (chatbots.length === 0) {
-    // }
-  }, [hydrated, getChatbots]);
+  }, [getChatbots]);
   const handleSettingsClick = (name: string) => {
     console.log(`Mở cài đặt cho chatbot: ${name}`);
   };
@@ -73,6 +69,9 @@ const ChatbotTrainingPage = () => {
           <CreateChatbotModal
             isOpen={isOpenCreate}
             setIsOpen={setIsOpenCreate}
+            onSuccess={() => {
+              getChatbots();
+            }}
           />
         </div>
       </div>

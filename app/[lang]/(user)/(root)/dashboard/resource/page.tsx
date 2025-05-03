@@ -5,13 +5,20 @@ import { ModalButton } from '@/components/ui/Modal';
 import { Skeleton } from '@/components/ui/Skeleton';
 import useResourceStore from '@/store/resource';
 import { Inbox, Plus, Search } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import ModalCreateKnowledge from '../chatbot-training/[chatbotId]/(root)/training-data/components/ModalCreateKnowledge';
+import { useLayoutEffect, useState } from 'react';
 import ResourceItem from '../chatbot-training/[chatbotId]/(root)/training-data/components/ResourceItem';
 import { useGetResources } from '../chatbot-training/[chatbotId]/(root)/training-data/hooks/useResource';
+const ModalCreateKnowledge = dynamic(
+  () =>
+    import(
+      '../chatbot-training/[chatbotId]/(root)/training-data/components/ModalCreateKnowledge'
+    ),
+  { ssr: false },
+);
 export default function WorkspaceLibraryPage() {
-  const { resources, hydrated } = useResourceStore();
+  const { resources } = useResourceStore();
   const { getAllResources, loading: resourcesLoading } = useGetResources();
 
   const [typeFilter, setTypeFilter] = useState<string>('All Types');
@@ -19,12 +26,9 @@ export default function WorkspaceLibraryPage() {
   const [searchText, setSearchText] = useState<string>('');
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
 
-  useEffect(() => {
-    if (!hydrated) return;
+  useLayoutEffect(() => {
     getAllResources();
-    // if (!resources.length) {
-    // }
-  }, [hydrated, resources, getAllResources]);
+  }, [getAllResources]);
 
   const handleTypeFilterChange = (value: string) => {
     setTypeFilter(value);
@@ -43,19 +47,20 @@ export default function WorkspaceLibraryPage() {
   };
 
   const filteredResources = [
-    ...resources,
     ...resources.map((resource) => ({
       id: resource.id,
       name: resource.name,
       external_type_name: resource.external_type_name,
       updated_at: resource.updated_at,
       status: 'active',
-      description: '', // Add description if available
+      description: '',
     })),
   ].filter((resource) => {
-    const matchesType = typeFilter === 'All Types' || resource.external_type_name === typeFilter;
-    const matchesSearch = resource.name.toLowerCase().includes(searchText.toLowerCase());
-    // Add time filter logic if needed (e.g., Last 7 days, Last 30 days)
+    const matchesType =
+      typeFilter === 'All Types' || resource.external_type_name === typeFilter;
+    const matchesSearch = resource.name
+      .toLowerCase()
+      .includes(searchText.toLowerCase());
     return matchesType && matchesSearch;
   });
 
@@ -141,11 +146,13 @@ export default function WorkspaceLibraryPage() {
                 externalTypeName={resource.external_type_name}
                 onClick={() =>
                   // resource.external_type_name === 'Prompt'
-                  //   ? console.log('View Prompt:', resource.id) 
+                  //   ? console.log('View Prompt:', resource.id)
                   //   : console.log('View Resource:', resource.id)
                   router.push(`/dashboard/resource/${resource.id}`)
                 }
-                onSettingsClick={() => console.log('Settings for:', resource.name)}
+                onSettingsClick={() =>
+                  console.log('Settings for:', resource.name)
+                }
                 onDeleteClick={() => console.log('Delete:', resource.id)}
               />
             ))

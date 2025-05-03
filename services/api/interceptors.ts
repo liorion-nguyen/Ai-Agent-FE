@@ -1,6 +1,6 @@
-import { AxiosInstance, AxiosResponse } from 'axios';
 import { APIErrorHandler } from '@/services/types';
-import { ACCESS_TOKEN, HTTP_CODE } from '@/shared/constants';
+import { ACCESS_TOKEN, HTTP_CODE, REFRESH_TOKEN } from '@/shared/constants';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 function getTokenFromCookie(name: string) {
   const cookies = document.cookie.split('; ');
@@ -29,21 +29,29 @@ export const setupInterceptors = (axiosInstance: AxiosInstance): void => {
 
       if (
         error.response?.status === HTTP_CODE.UNAUTHORIZED &&
-        !originalRequest._retry
+        !originalRequest._retry &&
+        !originalRequest.url?.includes('/refresh-token')
       ) {
         originalRequest._retry = true;
 
         try {
-          // const newToken = await refreshToken();
-          // if (newToken) {
-          //   axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-          //   if (originalRequest.headers) {
-          //     originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
-          //   }
-          //   return axiosInstance(originalRequest);
-          // }
+          const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`,
+            {
+              refreshToken: getTokenFromCookie(REFRESH_TOKEN),
+            },
+          );
+
+          const newToken = response.data.access_token;
+          // axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+          if (originalRequest.headers) {
+            document.cookie = `access_token=${newToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
+          }
+          return axiosInstance(originalRequest);
         } catch (refreshError) {
           console.error('Token refresh failed:', refreshError);
+          document.cookie = `access_token=; path=/; max-age=0`;
+          document.cookie = `refresh_token=; path=/; max-age=0`;
           window.location.href = '/sign-in';
         }
       }

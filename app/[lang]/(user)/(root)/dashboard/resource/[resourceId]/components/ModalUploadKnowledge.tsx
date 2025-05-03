@@ -5,20 +5,21 @@ import { Modal, ModalButton } from '@/components/ui/Modal';
 import { toast, useZodForm } from '@/shared/hooks';
 import { uploadFileSchema } from '@/shared/validations/resource/resource.schema';
 import { FileText, Upload } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
 interface ModalUploadKnowledgeProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
 }
 
 const ModalUploadKnowledge = ({
   isOpen,
   setIsOpen,
+  onSuccess,
 }: ModalUploadKnowledgeProps) => {
   const { resourceId } = useParams();
-  const router = useRouter();
   const { uploadFile, loading } = useUploadFile();
 
   const [fileName, setFileName] = useState<string>('');
@@ -33,13 +34,20 @@ const ModalUploadKnowledge = ({
     },
   });
 
-  const onSubmit = async (data: { file: File }) => {
+  const onSubmit = async (data: { file: File | undefined }) => {
+    if (!data.file) {
+      toast({
+        title: 'Error',
+        description: 'No file selected.',
+        variant: 'destructive',
+      });
+      return;
+    }
     try {
       const res = await uploadFile({
         file: data.file,
         resource_id: resourceId as string,
       });
-
       if (res.success) {
         toast({
           title: 'Success',
@@ -47,14 +55,17 @@ const ModalUploadKnowledge = ({
           variant: 'default',
         });
         setIsOpen(false);
-        router.back();
+        onSuccess();
       } else {
         throw new Error('Upload failed.');
       }
-    } catch {
+    } catch (err) {
       toast({
         title: 'Error',
-        description: 'Failed to upload file. Please try again.',
+        description:
+          err instanceof Error
+            ? err.message
+            : 'Failed to upload file. Please try again.',
         variant: 'destructive',
       });
     }
@@ -62,8 +73,35 @@ const ModalUploadKnowledge = ({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    console.log('Selected file:', file);
+    const allowedFormats = ['.pdf', '.txt', '.doc', '.docx', '.md'];
+    const maxSize = 100 * 1024 * 1024;
+
     if (file) {
-      setValue('file', file, { shouldValidate: true }); // Trigger validation
+      const fileExtension = file.name
+        .slice(file.name.lastIndexOf('.'))
+        .toLowerCase();
+      if (!allowedFormats.includes(fileExtension)) {
+        toast({
+          title: 'Invalid file format',
+          description: 'Only PDF, TXT, DOC, DOCX, or MD files are allowed.',
+          variant: 'destructive',
+        });
+        setValue('file', null as unknown as File, { shouldValidate: true });
+        setFileName('');
+        return;
+      }
+      if (file.size > maxSize) {
+        toast({
+          title: 'File too large',
+          description: 'File size must not exceed 100MB.',
+          variant: 'destructive',
+        });
+        setValue('file', null as unknown as File, { shouldValidate: true });
+        setFileName('');
+        return;
+      }
+      setValue('file', file, { shouldValidate: true });
       setFileName(file.name);
     } else {
       setValue('file', null as unknown as File, { shouldValidate: true });

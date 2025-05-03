@@ -1,10 +1,13 @@
 'use client';
 
+import ModalUpdateName from '@/app/[lang]/(user)/(root)/dashboard/profile/components/ModalUpdateName';
+import ModalUpdatePassword from '@/app/[lang]/(user)/(root)/dashboard/profile/components/ModalUpdatePassword';
+import ModalUpdatePhoneNumber from '@/app/[lang]/(user)/(root)/dashboard/profile/components/ModalUpdatePhone';
 import Img from '@/components/ui/Image';
 import { UserStatus } from '@/shared/constants';
 import useUserStore from '@/store/user';
+import { UserRound } from 'lucide-react';
 import { useState } from 'react';
-
 const ProfilePage = () => {
   // State để lưu trữ ảnh đại diện (nếu có)
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -22,6 +25,11 @@ const ProfilePage = () => {
   };
 
   const { user } = useUserStore();
+  const [isOpenModalUpdateName, setIsOpenModalUpdateName] = useState(false);
+  const [isOpenModalUpdatePhone, setIsOpenModalUpdatePhone] = useState(false);
+  const [isOpenModalUpdatePassword, setIsOpenModalUpdatePassword] =
+    useState(false);
+
   return (
     <div className="max-w-3xl w-2/3 mx-auto p-6">
       <h3 className="text-2xl font-bold mb-6">Thông tin cá nhân</h3>
@@ -37,20 +45,7 @@ const ProfilePage = () => {
                 className="w-full h-full object-cover rounded-lg"
               />
             ) : (
-              <svg
-                className="w-12 h-12 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
-                />
-              </svg>
+              <UserRound className="w-12 h-12 text-gray-400" />
             )}
           </div>
           <div>
@@ -64,9 +59,9 @@ const ProfilePage = () => {
                 className="hidden"
                 onChange={handleAvatarChange}
               />
-              <span className="bg-purple-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-purple-600">
+              <button className="bg-purple-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-purple-600">
                 Lưu thay đổi
-              </span>
+              </button>
             </label>
           </div>
         </div>
@@ -83,9 +78,17 @@ const ProfilePage = () => {
               {user?.fullname || 'Chưa có thông tin'}
             </div>
             <div className="w-auto">
-              <a href="#" className="text-purple-500 hover:underline">
+              <button
+                onClick={() => setIsOpenModalUpdateName(true)}
+                className="text-purple-500 hover:underline bg-transparent border-none"
+              >
                 Chỉnh sửa
-              </a>
+              </button>
+              <ModalUpdateName
+                isOpen={isOpenModalUpdateName}
+                onClose={() => setIsOpenModalUpdateName(false)}
+                fullName={user?.fullname || ''}
+              />
             </div>
           </div>
 
@@ -124,9 +127,16 @@ const ProfilePage = () => {
               <p className="text-base font-medium">************</p>
             </div>
             <div className="w-auto">
-              <a href="#" className="text-purple-500 hover:underline">
+              <button
+                onClick={() => setIsOpenModalUpdatePassword(true)}
+                className="text-purple-500 hover:underline bg-transparent border-none"
+              >
                 Chỉnh sửa
-              </a>
+              </button>
+              <ModalUpdatePassword
+                isOpen={isOpenModalUpdatePassword}
+                onClose={() => setIsOpenModalUpdatePassword(false)}
+              />
             </div>
           </div>
 
@@ -145,9 +155,17 @@ const ProfilePage = () => {
               {user?.phone || 'Chưa có thông tin'}
             </div>
             <div className="w-auto">
-              <a href="#" className="text-purple-500 hover:underline">
+              <button
+                onClick={() => setIsOpenModalUpdatePhone(true)}
+                className="text-purple-500 hover:underline bg-transparent border-none"
+              >
                 Chỉnh sửa
-              </a>
+              </button>
+              <ModalUpdatePhoneNumber
+                isOpen={isOpenModalUpdatePhone}
+                onClose={() => setIsOpenModalUpdatePhone(false)}
+                phone={user?.phone || ''}
+              />
             </div>
           </div>
         </div>

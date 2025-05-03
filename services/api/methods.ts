@@ -18,15 +18,26 @@ export const POST = async <T = unknown, D = unknown>(
   data?: D,
   config?: AxiosRequestConfig,
 ): Promise<T> => {
-  const headers =
-    data instanceof FormData ? {} : { 'Content-Type': 'application/json' };
+  const response: AxiosResponse<T> = await apiClient.post(url, data, config);
+  return response.data;
+};
 
-  const response: AxiosResponse<T> = await apiClient.post(url, data, {
-    ...config,
+export const POST_FORMDATA = async <T = unknown>(
+  url: string,
+  formData: FormData,
+  config?: AxiosRequestConfig,
+): Promise<T> => {
+  // Debug FormData trước khi gửi
+  for (const [key, value] of Array.from(formData.entries())) {
+    console.log(`POST_FORMDATA - ${key}:`, value);
+  }
+
+  const response: AxiosResponse<T> = await apiClient.post(url, formData, {
     headers: {
-      ...config?.headers,
-      ...headers,
+      'Content-Type': 'multipart/form-data', // Thêm rõ ràng để đảm bảo
+      ...(config?.headers || {}),
     },
+    ...config,
   });
   return response.data;
 };

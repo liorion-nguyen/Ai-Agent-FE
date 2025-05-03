@@ -1,12 +1,24 @@
-import { API_ENDPOINTS } from '@/shared/constants';
-import { POST } from '../api';
-import { MessageParams, MessagePreviewParams } from '../types/message';
-import {} from '../types/message';
+import { MessageParams } from '../types/message';
 
 export const messageApi = {
-  postMessagePreview: (params: MessagePreviewParams) =>
-    POST(API_ENDPOINTS.SEND_MESSAGE_REVIEW, params),
+  sendMessage: async (
+    messageData: MessageParams,
+  ): Promise<ReadableStream<Uint8Array>> => {
+    const { userId, chatbotId, message } = messageData;
+    const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}/chatbots/${chatbotId}/iframe/chat`;
 
-  postMessage: (params: MessageParams) =>
-    POST(API_ENDPOINTS.SEND_MESSAGE, params),
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message }),
+    });
+
+    if (!response.body) {
+      throw new Error('Response body is null');
+    }
+
+    return response.body;
+  },
 };

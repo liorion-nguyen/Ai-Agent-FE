@@ -50,6 +50,10 @@ export const API_ENDPOINTS = {
 
   // Workspaces
   GET_WORKSPACE: '/users/profile/workspaces',
+
+  // Subscriptions
+  GET_SUBSCRIPTIONS: '/subscriptions',
+  GET_SUBSCRIPTION: '/users/profile/subscription',
 };
 
 export const HTTP_CODE = {

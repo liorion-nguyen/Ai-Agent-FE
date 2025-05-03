@@ -40,9 +40,9 @@ const ChatbotInfoForm = () => {
   useEffect(() => {
     if (!hydrated) return;
 
-    if (!chatbot || chatbot.id !== chatbotId) {
-      getChatbot(chatbotId as string);
-    }
+    getChatbot(chatbotId as string);
+    // if (!chatbot || chatbot.id !== chatbotId) {
+    // }
 
     if (chatbot) {
       setValue('name', chatbot.chatbot_name || '');
@@ -52,7 +52,7 @@ const ChatbotInfoForm = () => {
       setValue('thumbnail', chatbot.thumbnail || '');
       setThumbnailPreview(chatbot.thumbnail || null);
     }
-  }, [hydrated, chatbot, chatbotId, setValue, getChatbot]);
+  }, [hydrated, chatbotId, getChatbot, chatbot?.id, chatbot, setValue]);
 
   // Xử lý upload avatar
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {

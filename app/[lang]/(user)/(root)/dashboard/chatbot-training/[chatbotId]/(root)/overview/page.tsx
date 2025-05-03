@@ -11,10 +11,10 @@ export default function OverviewPage() {
         </button>
       </div>
       <div className="flex h-[calc(100vh-65px)]">
-        <div className="w-3/5 p-4 h-full overflow-y-auto">
+        <div className="w-1/2 p-4 h-full overflow-y-auto">
           <ChatbotInfoForm />
         </div>
-        <div className="w-2/5 flex justify-center bg-gray-100 p-4 h-full">
+        <div className="w-1/2 flex justify-center bg-gray-100 p-4 h-full">
           <PreviewChat />
         </div>
       </div>

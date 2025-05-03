@@ -75,20 +75,22 @@ const DashboardHeader = () => {
             {/* Main Navigation - Desktop */}
             <nav className="hidden lg:flex flex-1 justify-center h-full">
               <div className="flex h-full">
-                {navigationItems.map((item, index) => (
-                  (item.label !== "Quản lý chatbot" || (item.label === "Quản lý chatbot" && user)) && (
-                    <div key={index} className="relative">
-                      <Link
-                        href={item.href}
-                      className={`px-3 md:px-5 flex items-center h-full font-medium text-[18px] md:text-[22px] tracking-wider font-road ${
-                        item.label === activeLabel ||
-                        (item.label === 'Trang chủ' && activeLabel === '')
-                          ? 'text-white border-l-[3px] border-r-[3px] border-solid border-border bg-active'
-                          : 'text-foreground hover:text-hover hover:bg-blue-100'
-                      }`}
-                    > 
-                      {item.label}
-                      {/* {item.label === activeLabel && (
+                {navigationItems.map(
+                  (item, index) =>
+                    (item.label !== 'Quản lý chatbot' ||
+                      (item.label === 'Quản lý chatbot' && user)) && (
+                      <div key={index} className="relative">
+                        <Link
+                          href={item.href}
+                          className={`px-3 md:px-5 flex items-center h-full font-medium text-[18px] md:text-[22px] tracking-wider font-road ${
+                            item.label === activeLabel ||
+                            (item.label === 'Trang chủ' && activeLabel === '')
+                              ? 'text-white border-l-[3px] border-r-[3px] border-solid border-border bg-active'
+                              : 'text-foreground hover:text-hover hover:bg-blue-100'
+                          }`}
+                        >
+                          {item.label}
+                          {/* {item.label === activeLabel && (
                         <div className="absolute left-1/2 transform -translate-x-1/2 mt-7">
                           <Img
                             src={'/images/line_text_inactive.png'}
@@ -97,10 +99,10 @@ const DashboardHeader = () => {
                           />
                         </div>
                       )} */}
-                    </Link>
-                  </div> 
-                  )
-                ))}
+                        </Link>
+                      </div>
+                    ),
+                )}
               </div>
             </nav>
             {/* Mobile Menu - Slide down when open */}
@@ -109,18 +111,20 @@ const DashboardHeader = () => {
                 ref={mobileMenuRef}
                 className="lg:hidden absolute top-[70px] left-0 right-0 bg-white z-20 border-t-2 border-border shadow-md"
               >
-                {navigationItems.map((item, index) => (
-                  (item.label !== "Quản lý chatbot" || (item.label === "Quản lý chatbot" && user)) && (
-                    <div key={index}>
-                      <Link
-                        href={item.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                      > 
-                        {item.label}
-                      </Link>
-                    </div>
-                  )
-                ))}
+                {navigationItems.map(
+                  (item, index) =>
+                    (item.label !== 'Quản lý chatbot' ||
+                      (item.label === 'Quản lý chatbot' && user)) && (
+                      <div key={index}>
+                        <Link
+                          href={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      </div>
+                    ),
+                )}
               </div>
             )}
 
@@ -176,7 +180,9 @@ const DashboardHeader = () => {
                     <DropdownMenuLabel>
                       {user.fullname || user.username || user.email}
                     </DropdownMenuLabel>
-                    <DropdownMenuItem onSelect={() => alert('Profile')}>
+                    <DropdownMenuItem
+                      onSelect={() => router.push(ROUTES.PROFILE)}
+                    >
                       Profile
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => alert('Settings')}>

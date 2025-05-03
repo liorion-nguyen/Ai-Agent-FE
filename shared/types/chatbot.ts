@@ -49,3 +49,11 @@ export interface ChatbotPrompt {
   prompt_info: string;
   description: string;
 }
+
+export interface MessageType {
+  id: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  sender: string;
+}

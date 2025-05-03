@@ -17,3 +17,9 @@ export const createChatbotSchema = z.object({
   description: z.string().optional(),
   // prompt: z.string().min(1, 'Vui lòng nhập kích bản mẫu'),
 });
+
+export const purchaseSchema = z.object({
+  name: z.string().min(1, 'Vui lòng nhập họ tên!'),
+  phone: z.string().min(1, 'Vui lòng nhập số điện thoại!'),
+  note: z.string().optional(),
+});

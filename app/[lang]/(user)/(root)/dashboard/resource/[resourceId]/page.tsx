@@ -13,35 +13,31 @@ import ModalUploadKnowledge from './components/ModalUploadKnowledge';
 export default function TrainingDataDetailPage() {
   const router = useRouter();
   const { resourceId } = useParams();
-  const { hydrated, resource } = useResourceStore();
+  const { resource } = useResourceStore();
   const { getResource } = useGetResource();
   const [isOpenUploadKnowledge, setIsOpenUploadKnowledge] = useState(false);
   const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
-    if (!hydrated) return;
-
-    if (!resource || resource.id !== resourceId) {
-      getResource(resourceId as string);
-    }
+    getResource(resourceId as string);
     if (resource) {
       setSelectedDocument(resource.documents?.[0] || null);
     }
-  }, [hydrated, resource, resourceId, getResource]);
+  }, [resourceId, getResource, resource]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
 
-  // Filter documents based on search text
-  const filteredDocuments = resource?.documents?.filter((doc) =>
-    doc.document_name.toLowerCase().includes(searchText.toLowerCase())
-  ) || [];
+  const filteredDocuments =
+    resource?.documents?.filter((doc) =>
+      doc.document_name.toLowerCase().includes(searchText.toLowerCase()),
+    ) || [];
 
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(
+    null,
+  );
   const handleDocumentClick = (document: Document) => {
-    console.log(document);
-    
     setSelectedDocument(document);
   };
 
@@ -54,9 +50,14 @@ export default function TrainingDataDetailPage() {
             className="w-6 h-6 text-gray-600 cursor-pointer"
             onClick={() => router.back()}
           />
-          <BookOpenText className='text-gray-600 bg-gray-100 rounded-md p-1' size={48} />
-          <div className='flex flex-col'>
-            <h3 className="text-xl font-bold text-gray-800">{resource?.name || 'Loading...'}</h3>
+          <BookOpenText
+            className="text-gray-600 bg-gray-100 rounded-md p-1"
+            size={48}
+          />
+          <div className="flex flex-col">
+            <h3 className="text-xl font-bold text-gray-800">
+              {resource?.name || 'Loading...'}
+            </h3>
             <p className="text-sm text-gray-500">
               {resource?.documents?.length || 0} documents
             </p>
@@ -70,6 +71,9 @@ export default function TrainingDataDetailPage() {
         <ModalUploadKnowledge
           isOpen={isOpenUploadKnowledge}
           setIsOpen={setIsOpenUploadKnowledge}
+          onSuccess={() => {
+            getResource(resourceId as string);
+          }}
         />
       </div>
 
@@ -90,7 +94,9 @@ export default function TrainingDataDetailPage() {
           </div>
 
           {/* Document List Header */}
-          <p className="text-sm font-medium text-gray-900 mb-2">Document list</p>
+          <p className="text-sm font-medium text-gray-900 mb-2">
+            Document list
+          </p>
 
           {/* Document List */}
           {filteredDocuments.length > 0 ? (
@@ -102,7 +108,9 @@ export default function TrainingDataDetailPage() {
               >
                 <div className="flex items-center gap-2">
                   <File className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm text-gray-700 truncate">{document.document_name}</span>
+                  <span className="text-sm text-gray-700 truncate">
+                    {document.document_name}
+                  </span>
                 </div>
                 {/* {document.format_type === 'error' && (
                   <AlertCircle className="w-4 h-4 text-red-500" />
@@ -116,10 +124,12 @@ export default function TrainingDataDetailPage() {
 
         {/* Main Content Area */}
         <div className="w-4/5 flex flex-col bg-white">
-          <div className='w-full h-[65px] border-b border-gray-200 flex items-center justify-between'>
-            <div className='flex items-center gap-2 px-4'>
+          <div className="w-full h-[65px] border-b border-gray-200 flex items-center justify-between">
+            <div className="flex items-center gap-2 px-4">
               <File className="w-4 h-4 text-gray-500" />
-              <p className='text-sm text-gray-500'>{selectedDocument?.document_name}</p>
+              <p className="text-sm text-gray-500">
+                {selectedDocument?.document_name}
+              </p>
             </div>
           </div>
           <div className="text-center flex justify-center items-center h-full">

@@ -1,6 +1,7 @@
 'use client';
 
 import { useSignOut } from '@/app/[lang]/admin/hooks/useAuth';
+// import { useSubscription } from '@/app/[lang]/hooks/useSubscription';
 import { Progress } from '@/components/ui/Progress';
 import {
   Sidebar,
@@ -13,6 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/Sidebar';
+import useSubscriptionStore from '@/store/subscription';
 import {
   BarChart,
   BotMessageSquare,
@@ -97,6 +99,11 @@ const SidebarNav = () => {
   const isActive = (url: string) => {
     return pathname.includes(url);
   };
+  const { subscription } = useSubscriptionStore();
+  // const { getSubscription } = useSubscription();
+  // useLayoutEffect(() => {
+  //   getSubscription();
+  // }, []);
   return (
     <Sidebar
       collapsible="icon"
@@ -114,7 +121,7 @@ const SidebarNav = () => {
           />
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
             <span className="font-semibold">Nguyen Quoc Chung</span>
-            <span className="text-sm text-gray-400">gói dùng thử</span>
+            <span className="text-sm text-gray-400">{subscription?.name}</span>
           </div>
         </div>
         <div className="mt-3 group-data-[collapsible=icon]:hidden">

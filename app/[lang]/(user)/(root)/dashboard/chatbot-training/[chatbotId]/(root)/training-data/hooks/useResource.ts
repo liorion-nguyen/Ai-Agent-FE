@@ -1,13 +1,13 @@
 import { resourceApi } from '@/services/endpoints';
 import { APIErrorHandler } from '@/services/types';
 import {
-    AddResourceToChatbotParams,
-    AddResourceToChatbotResponse,
-    CreateResourceParams,
-    CreateResourceResponse,
-    GetAllResourcesResponse,
-    GetResourceResponse,
-    UploadFileKnowledgeResponse,
+  AddResourceToChatbotParams,
+  AddResourceToChatbotResponse,
+  CreateResourceParams,
+  CreateResourceResponse,
+  GetAllResourcesResponse,
+  GetResourceResponse,
+  UploadFileKnowledgeResponse,
 } from '@/services/types/resource';
 import { useToast } from '@/shared/hooks';
 import useResourceStore from '@/store/resource';
@@ -131,26 +131,30 @@ export const useUploadFile = () => {
     FileUploadParams
   >({
     mutationFn: async (data) => {
-      // Create FormData for encodeFile
+      console.log('data.file:', data.file); // Debug
+      if (!data.file || !(data.file instanceof File)) {
+        throw new Error('No valid file selected');
+      }
+      if (!user?.id) {
+        throw new Error('User not authenticated');
+      }
+
       const formData = new FormData();
       formData.append('file', data.file);
 
-      // Call encodeFile to get base64
       const encodeRes = await resourceApi.encodeFile({
-        user_id: user?.id || '',
+        user_id: user.id,
         file: formData,
-        resource_id: data.resource_id,
       });
 
-      // Call uploadFile with base64 data
       return await resourceApi.uploadFile({
-        user_id: user?.id || '',
+        user_id: user.id,
         resource_id: data.resource_id,
         api_token: apiToken || '',
-        format_type: encodeRes.data.mimetype,
-        filebase_64: encodeRes.data.base64,
-        name_document: encodeRes.data.filename,
-        file_type: encodeRes.data.mimetype.split('/')[1],
+        format_type: encodeRes.mimetype,
+        filebase_64: encodeRes.base64,
+        name_document: encodeRes.filename,
+        file_type: encodeRes.mimetype,
       });
     },
     onSuccess: (data) => {
@@ -184,12 +188,17 @@ export const useAddResourceToChatbot = () => {
     mutateAsync,
     isPending: loading,
     error,
-  } = useMutation<AddResourceToChatbotResponse, APIErrorHandler, AddResourceToChatbotParams>({
-    mutationFn: (data) => resourceApi.addResourceToChatbot({
+  } = useMutation<
+    AddResourceToChatbotResponse,
+    APIErrorHandler,
+    AddResourceToChatbotParams
+  >({
+    mutationFn: (data) =>
+      resourceApi.addResourceToChatbot({
         ...data,
         user_id: user?.id || '',
         api_token: apiToken || '',
-    }),
+      }),
     onSuccess: (data) => {
       toast({
         title: 'Thêm tài nguyên vào chatbot thành công',
@@ -212,4 +221,3 @@ export const useAddResourceToChatbot = () => {
     error,
   };
 };
-

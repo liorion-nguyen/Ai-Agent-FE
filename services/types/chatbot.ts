@@ -127,3 +127,10 @@ export interface CreateChatbotPromptParams {
   description: string;
   api_token: string;
 }
+
+export interface SendMessageParams {
+  user_id: string;
+  chatbot_id: string;
+  message: string;
+  api_token: string;
+}

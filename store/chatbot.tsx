@@ -20,6 +20,7 @@ const useChatbotStore = create<ChatbotState>()(
       (set) => ({
         chatbots: [],
         chatbot: undefined,
+        messages: [],
         hydrated: false,
         setChatbots: (newChatbots) => set({ chatbots: newChatbots }),
         setChatbot: (newChatbot) => set({ chatbot: newChatbot }),

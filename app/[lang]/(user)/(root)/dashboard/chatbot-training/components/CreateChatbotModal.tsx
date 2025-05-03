@@ -22,9 +22,11 @@ import { useCreateChatbot } from '../hooks/useChatbot';
 const CreateChatbotModal = ({
   isOpen,
   setIsOpen,
+  onSuccess,
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  onSuccess: () => void;
 }) => {
   //   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   // const router = useRouter();
@@ -68,7 +70,8 @@ const CreateChatbotModal = ({
         }
       }
       await createChatbot(newData);
-      // closeModal();
+      onSuccess();
+      closeModal();
     } catch (error) {
       console.error('Error creating chatbot:', error);
     }

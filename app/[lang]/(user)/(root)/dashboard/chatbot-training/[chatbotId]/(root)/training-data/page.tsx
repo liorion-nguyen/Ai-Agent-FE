@@ -12,10 +12,10 @@ import {
   HelpCircle,
   Inbox,
   Plus,
-  Upload
+  Upload,
 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { useGetChatbot } from '../../../hooks/useChatbot';
 import ModalAddKnowledge from './components/ModalAddKnowledge';
 import ModalCreateKnowledge from './components/ModalCreateKnowledge';
@@ -25,16 +25,13 @@ export default function TrainingDataPage() {
   const params = useParams();
   const router = useRouter();
   const chatbotId = params.chatbotId || 'bot-demo';
-  const { hydrated, chatbot } = useChatbotStore();
+  const { chatbot } = useChatbotStore();
   const { getChatbot, loading } = useGetChatbot();
   const [isOpenImportModal, setIsOpenImportModal] = useState(false);
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
-  useEffect(() => {
-    if (!hydrated) return;
-    if (!chatbot) {
-      getChatbot(chatbotId as string);
-    }
-  }, [hydrated, chatbot, chatbotId, getChatbot]);
+  useLayoutEffect(() => {
+    getChatbot(chatbotId as string);
+  }, [getChatbot, chatbotId]);
 
   const handleHowToClick = () => {
     console.log('Clicked: How to add questions');
@@ -127,6 +124,10 @@ export default function TrainingDataPage() {
               chatbot={chatbot as Chatbot}
               isOpen={isOpenAddModal}
               onClose={() => setIsOpenAddModal(false)}
+              onSuccess={() => {
+                setIsOpenAddModal(false);
+                getChatbot(chatbotId as string);
+              }}
             />
           </div>
         </div>
@@ -149,7 +150,9 @@ export default function TrainingDataPage() {
                 status={resource.resource.status}
                 externalTypeName={resource.resource.external_type_name}
                 onClick={() => handleClick(resource.resource.id)}
-                onSettingsClick={() => handleSettingsClick(resource.resource.name)}
+                onSettingsClick={() =>
+                  handleSettingsClick(resource.resource.name)
+                }
                 onDeleteClick={() => handleDeleteClick(resource.id)}
               />
             ))

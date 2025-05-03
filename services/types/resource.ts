@@ -36,18 +36,14 @@ export interface UploadFileKnowledgeParams {
 
 export interface EncodeFileParams {
   user_id?: string;
-  file: FormData | File;
-  resource_id: string;
+  file: FormData;
 }
 
 export interface EncodeFileResponse {
-  success: boolean;
-  message: string;
-  data: {
-    base64: string;
-    filename: string;
-    mimetype: string;
-  };
+  base64: string;
+  filename: string;
+  mimetype: string;
+  dataUrl: string;
 }
 export interface UploadFileKnowledgeResponse {
   success: boolean;
