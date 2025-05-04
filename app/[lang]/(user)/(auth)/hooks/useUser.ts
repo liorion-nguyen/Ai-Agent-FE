@@ -35,7 +35,7 @@ export const useMe = () => {
 export const useSetApiToken = () => {
   const { toast } = useToast();
   const {
-    mutate,
+    mutateAsync,
     isPending: loading,
     error,
   } = useMutation<ApiTokenResponse, APIErrorHandler>({
@@ -53,7 +53,7 @@ export const useSetApiToken = () => {
   });
 
   return {
-    setApiToken: mutate,
+    setApiToken: mutateAsync,
     loading,
     error,
   };

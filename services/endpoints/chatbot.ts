@@ -2,13 +2,16 @@ import { GET, PATCH, POST } from '@/services/api';
 import {
   ChatbotResponse,
   ChatbotsResponse,
+  ChatbotTokenResponse,
   CreateChatbotCozeInParams,
   CreateChatbotCozeResponse,
   CreateChatbotDbInParams,
   CreateChatbotDbResponse,
   CreateChatbotOnboardingParams,
   CreateChatbotPromptParams,
+  CreateChatbotTokenParams,
   PublishChatbotParams,
+  PublishChatbotResponse,
   SendMessageParams,
   UpdateChatbotConfigParams,
   UpdateChatbotOnboardingParams,
@@ -72,12 +75,15 @@ export const chatbotApi = {
     ),
 
   publishChatbot: (params: PublishChatbotParams) =>
-    POST(
+    POST<PublishChatbotResponse>(
       API_ENDPOINTS.PUBLISH_CHATBOT.replace(':user_id', params.user_id).replace(
         ':chatbot_id',
         params.chatbot_id,
       ),
-      params,
+      {
+        api_token: params.api_token,
+        connector_id: params.connector_id
+      },
     ),
 
   createOnboardingChatbot: (params: CreateChatbotOnboardingParams) =>
@@ -97,4 +103,9 @@ export const chatbotApi = {
       ),
       params,
     ),
+
+  getChatbotTokens: () => GET<ChatbotTokenResponse>(API_ENDPOINTS.GET_CHATBOT_TOKENS),
+
+  createChatbotToken: (chatbot_id: string) =>
+    POST<CreateChatbotTokenParams>(API_ENDPOINTS.CREATE_CHATBOT_TOKEN, { chatbot_id }),
 };

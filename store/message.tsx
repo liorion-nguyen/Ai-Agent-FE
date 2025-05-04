@@ -6,12 +6,14 @@ interface MessageState {
   messages: MessageType[];
   hydrated: boolean;
   isStreaming: boolean;
+  conversationId: string;
   setMessages: (newMessages: MessageType[]) => void;
   setHydrated: (value: boolean) => void;
   addMessage: (newMessage: MessageType) => void;
   updateLastBotMessage: (content: string) => void;
   setStreaming: (value: boolean) => void;
   clearMessages: () => void;
+  setConversationId: (value: string) => void;
 }
 
 const useMessageStore = create<MessageState>()(
@@ -21,6 +23,7 @@ const useMessageStore = create<MessageState>()(
         messages: [],
         hydrated: false,
         isStreaming: false,
+        conversationId: '',
         setMessages: (newMessages) => set({ messages: newMessages }),
         setHydrated: (value) => set({ hydrated: value }),
         addMessage: (newMessage) =>
@@ -57,6 +60,7 @@ const useMessageStore = create<MessageState>()(
           }),
         setStreaming: (value) => set({ isStreaming: value }),
         clearMessages: () => set({ messages: [] }),
+        setConversationId: (value) => set({ conversationId: value }),
       }),
       {
         name: 'message-storage',

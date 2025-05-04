@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const updateChatbotSchema = z.object({
-  name: z.string().min(1, 'Tên chatbot không được để trống'),
+  chatbot_name: z.string().min(1, 'Tên chatbot không được để trống'),
   businessName: z.string().min(1, 'Tên doanh nghiệp không được để trống'),
   language: z.enum(['Tiếng Việt', 'English'], {
     message: 'Vui lòng chọn ngôn ngữ hợp lệ',
@@ -22,4 +22,10 @@ export const purchaseSchema = z.object({
   name: z.string().min(1, 'Vui lòng nhập họ tên!'),
   phone: z.string().min(1, 'Vui lòng nhập số điện thoại!'),
   note: z.string().optional(),
+});
+
+export const tokenSchema = z.object({
+  tokenName: z.string().min(1, 'Tên token là bắt buộc'),
+  expiration: z.string().min(1, 'Hạn sử dụng là bắt buộc'),
+  customDays: z.number().min(1, 'Số ngày phải lớn hơn 0').optional(),
 });

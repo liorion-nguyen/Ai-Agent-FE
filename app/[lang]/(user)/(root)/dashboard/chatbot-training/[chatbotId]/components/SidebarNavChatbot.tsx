@@ -4,6 +4,7 @@ import { useGetChatbot } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-trai
 import useChatbotStore from '@/store/chatbot';
 import {
   BotMessageSquare,
+  Braces,
   ChevronDown,
   ChevronLeft,
   Code,
@@ -69,9 +70,9 @@ const sidebarGroups: SidebarGroup[] = [
     label: 'Development',
     items: [
       {
-        title: 'Tool Ads Facebook',
-        url: '/dashboard/chatbot-training/[chatbotId]/facebook-ads',
-        icon: Code,
+        title: 'Quản lý token',
+        url: '/dashboard/chatbot-training/[chatbotId]/token-management',
+        icon: Braces,
       },
       {
         title: 'Tích hợp Website',

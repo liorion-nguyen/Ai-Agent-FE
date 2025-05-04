@@ -1,14 +1,14 @@
 // store/Subscription.ts
-import { Subscription } from '@/shared/types/subscription';
+import { Subscription, UserSubscription } from '@/shared/types/subscription';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 interface SubscriptionState {
   subscriptions: Subscription[];
-  subscription: Subscription | undefined;
+  subscription: UserSubscription | undefined;
   hydrated: boolean;
   setSubscriptions: (newSubscriptions: Subscription[]) => void;
-  setSubscription: (newSubscription: Subscription) => void;
+  setSubscription: (newSubscription: UserSubscription) => void;
   resetSubscription: () => void;
   resetSubscriptions: () => void;
   setHydrated: (value: boolean) => void;

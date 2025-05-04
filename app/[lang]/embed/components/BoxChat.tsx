@@ -9,11 +9,25 @@ import useMessageStore from '@/store/message';
 import { MessageCircle, MessageSquareOff, Plus, Send, X } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { useInitCheckActiveChatbot } from '../hooks/useMessage';
 
 const BoxChat = () => {
   const searchParams = useSearchParams();
   const chatbotId = searchParams.get('chatbotId');
   const userId = searchParams.get('userId');
+  const token = searchParams.get('token');
+  const { initCheckActiveChatbot } = useInitCheckActiveChatbot();
+  const { conversationId, hydrated } = useMessageStore();
+  useEffect(() => {
+    if (token && chatbotId && userId && !conversationId && hydrated) {
+      initCheckActiveChatbot({
+        user_id: userId,
+        chatbot_id: chatbotId,
+        api_token: token,
+      });
+    }
+  }, [token, chatbotId, userId, conversationId, hydrated, initCheckActiveChatbot]);
+
   const { messages, addMessage, clearMessages, isStreaming } =
     useMessageStore();
   const [isOpen, setIsOpen] = useState(false);
@@ -71,6 +85,7 @@ const BoxChat = () => {
         userId,
         chatbotId,
         message: inputValue,
+        conversationId,
       });
 
       const reader = stream.getReader();

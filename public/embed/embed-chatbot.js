@@ -1,15 +1,16 @@
 (function () {
-    if (document.getElementById("ledu-chatbot-iframe")) {
+    if (document.getElementById("chatbot-iframe")) {
         return;
     }
-    const siteURL = window.LEduChatbotConfig?.siteURL || "http://localhost:3000";
-    const chatbotId = window.LEduChatbotConfig?.chatbotId || "";
-    const userId = window.LEduChatbotConfig?.userId || "";
+    const siteURL = window.ChatbotConfig?.siteURL || "http://localhost:3000";
+    const chatbotId = window.ChatbotConfig?.chatbotId || "";
+    const userId = window.ChatbotConfig?.userId || "";
+    const token = window.ChatbotConfig?.token || "";
     // Tạo iframe
     const iframe = document.createElement("iframe");
-    iframe.id = "ledu-chatbot-iframe";
-    iframe.src = `${siteURL}/vi/embed?chatbotId=${chatbotId}&userId=${userId}`;
-    iframe.title = "L-Edu Chatbot";
+    iframe.id = "chatbot-iframe";
+    iframe.src = `${siteURL}/vi/embed?chatbotId=${chatbotId}&userId=${userId}&token=${token}`;
+    iframe.title = "Chatbot";
     iframe.style.position = "fixed";
     iframe.style.bottom = "0";
     iframe.style.right = "0";

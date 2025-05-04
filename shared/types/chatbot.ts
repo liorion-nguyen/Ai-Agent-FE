@@ -57,3 +57,14 @@ export interface MessageType {
   updatedAt: string;
   sender: string;
 }
+
+
+export interface ChatbotToken {
+  id: string;
+  token: string;
+  status: string;
+  created_by: string;
+  expires_at: string;
+  created_at: string;
+  updated_at: string;
+}

@@ -30,6 +30,8 @@ export const API_ENDPOINTS = {
   UPDATE_ONBOARDING_CHATBOT:
     '/users/:user_id/chatbots/:chatbot_id/onboarding/:onboarding_id',
   CREATE_CHATBOT_PROMPT: '/users/:user_id/prompts',
+  GET_CHATBOT_TOKENS: 'users/profile/chatbot-token',
+  CREATE_CHATBOT_TOKEN: 'chatbot-tokens/generate-chatbot-token',
 
   // Models
   GET_MODELS: '/chatbot-models',
@@ -37,7 +39,8 @@ export const API_ENDPOINTS = {
   // Messages
   SEND_MESSAGE_REVIEW: '/users/:user_id/chatbots/:chatbot_id/chat',
   SEND_MESSAGE: '/users/:user_id/chatbots/:chatbot_id/iframe/chat',
-
+  INIT_CHECK_ACTIVE_CHATBOT: '/chatbot-embed/init?chatbotId=:chatbot_id&userId=:user_id&token=:token',
+  CREATE_CONVERSATION: '/conversations',
   // Resources
   GET_ALL_RESOURCES: '/users/profile/resources',
   GET_RESOURCE_BY_ID: '/users/profile/resources/:id',

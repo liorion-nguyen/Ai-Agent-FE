@@ -25,13 +25,16 @@ export default function TrainingDataPage() {
   const params = useParams();
   const router = useRouter();
   const chatbotId = params.chatbotId || 'bot-demo';
-  const { chatbot } = useChatbotStore();
+  const { hydrated, chatbot } = useChatbotStore();
   const { getChatbot, loading } = useGetChatbot();
   const [isOpenImportModal, setIsOpenImportModal] = useState(false);
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   useLayoutEffect(() => {
-    getChatbot(chatbotId as string);
-  }, [getChatbot, chatbotId]);
+    if (!hydrated) return;
+    if (!chatbotId || chatbot?.id !== chatbotId) {
+      getChatbot(chatbotId as string);
+    }
+  }, [hydrated, getChatbot, chatbotId, chatbot?.id]);
 
   const handleHowToClick = () => {
     console.log('Clicked: How to add questions');

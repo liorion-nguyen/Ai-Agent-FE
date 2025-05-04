@@ -1,7 +1,7 @@
 'use client';
 
 import { useSignOut } from '@/app/[lang]/admin/hooks/useAuth';
-// import { useSubscription } from '@/app/[lang]/hooks/useSubscription';
+import { useSubscription } from '@/app/[lang]/hooks/useSubscription';
 import { Progress } from '@/components/ui/Progress';
 import {
   Sidebar,
@@ -18,17 +18,18 @@ import useSubscriptionStore from '@/store/subscription';
 import {
   BarChart,
   BotMessageSquare,
-  Calendar,
   FileText,
   HelpCircle,
+  Key,
   Link,
   LogOut,
   MessageSquare,
   Settings,
-  User,
+  User
 } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useLayoutEffect } from 'react';
 
 const items = [
   {
@@ -56,10 +57,10 @@ const items = [
     tooltip: 'Quản lý tín nhắn',
   },
   {
-    title: 'Lịch sử giao dịch',
-    url: '/dashboard/transactions',
-    icon: Calendar,
-    tooltip: 'Lịch sử giao dịch',
+    title: 'Quản lý token',
+    url: '/dashboard/token-management',
+    icon: Key,
+    tooltip: 'Quản lý token',
   },
   {
     title: 'Affiliate',
@@ -100,10 +101,10 @@ const SidebarNav = () => {
     return pathname.includes(url);
   };
   const { subscription } = useSubscriptionStore();
-  // const { getSubscription } = useSubscription();
-  // useLayoutEffect(() => {
-  //   getSubscription();
-  // }, []);
+  const { getSubscription } = useSubscription();
+  useLayoutEffect(() => {
+    getSubscription();
+  }, []);
   return (
     <Sidebar
       collapsible="icon"
@@ -121,13 +122,15 @@ const SidebarNav = () => {
           />
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
             <span className="font-semibold">Nguyen Quoc Chung</span>
-            <span className="text-sm text-gray-400">{subscription?.name}</span>
+            <span className="text-sm text-gray-400">
+              {subscription?.subscription.name}
+            </span>
           </div>
         </div>
         <div className="mt-3 group-data-[collapsible=icon]:hidden">
           <div className="flex justify-between text-sm text-gray-400">
             <span>Document</span>
-            <span>2 / 20</span>
+            <span>2 / {subscription?.subscription.knowledge_limit}</span>
           </div>
           <Progress value={20} className="h-2 mt-1" />
         </div>

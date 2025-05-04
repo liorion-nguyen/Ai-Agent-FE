@@ -13,7 +13,8 @@ import { useEffect, useRef, useState } from 'react';
 const ChatbotInfoForm = () => {
   const params = useParams();
   const chatbotId = params.chatbotId || 'bot-demo';
-  const { hydrated, chatbot } = useChatbotStore();
+  const { chatbot } = useChatbotStore();
+  
   const { getChatbot } = useGetChatbot();
   const { error, success } = useUpdateChatbot();
   const inpRef = useRef<HTMLInputElement>(null);
@@ -25,7 +26,7 @@ const ChatbotInfoForm = () => {
     watch,
   } = useZodForm(updateChatbotSchema, {
     defaultValues: {
-      name: (chatbotId as string) || 'bot-demo',
+      chatbot_name: chatbot?.chatbot_name,
       businessName: '',
       language: 'Tiếng Việt',
       theme: '#4C01C4',
@@ -38,21 +39,16 @@ const ChatbotInfoForm = () => {
 
   // Lấy dữ liệu chatbot và cập nhật form
   useEffect(() => {
-    if (!hydrated) return;
-
     getChatbot(chatbotId as string);
-    // if (!chatbot || chatbot.id !== chatbotId) {
-    // }
-
     if (chatbot) {
-      setValue('name', chatbot.chatbot_name || '');
+      setValue('chatbot_name', chatbot.chatbot_name || '');
       //   setValue('businessName', chatbot.businessName || '');
       //   setValue('language', chatbot.language || 'Tiếng Việt');
       //   setValue('theme', chatbot.theme || '#4C01C4');
       setValue('thumbnail', chatbot.thumbnail || '');
       setThumbnailPreview(chatbot.thumbnail || null);
     }
-  }, [hydrated, chatbotId, getChatbot, chatbot?.id, chatbot, setValue]);
+  }, [chatbotId]);
 
   // Xử lý upload avatar
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,11 +81,11 @@ const ChatbotInfoForm = () => {
         </label>
         <input
           type="text"
-          {...register('name')}
+          {...register('chatbot_name')}
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.name && (
-          <p className="text-sm text-red-500">{errors.name.message}</p>
+        {errors.chatbot_name && (
+          <p className="text-sm text-red-500">{errors.chatbot_name.message}</p>
         )}
       </div>
 

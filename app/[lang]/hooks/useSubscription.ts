@@ -36,7 +36,7 @@ export const useSubscriptions = () => {
 
 export const useSubscription = () => {
   const { toast } = useToast();
-  const { subscriptions } = useSubscriptionStore();
+  const { setSubscription } = useSubscriptionStore();
   const {
     mutateAsync: getSubscription,
     isPending: loading,
@@ -44,8 +44,7 @@ export const useSubscription = () => {
   } = useMutation<SubscriptionResponse, APIErrorHandler, void>({
     mutationFn: () => subscriptionApi.getSubscription(),
     onSuccess: (data) => {
-      console.log(data, subscriptions);
-      //   setSubscription(subscriptions.find((subscription) => subscription.id === data.userSubscription.id));
+      setSubscription(data.userSubscription);
     },
     onError: (err) => {
       toast({

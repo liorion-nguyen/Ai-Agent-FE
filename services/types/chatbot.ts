@@ -1,4 +1,4 @@
-import { Chatbot } from '@/shared/types/chatbot';
+import { Chatbot, ChatbotToken } from '@/shared/types/chatbot';
 
 export interface ChatbotsResponse {
   success: boolean;
@@ -64,6 +64,11 @@ export interface PublishChatbotParams {
   connector_id: string;
   api_token: string;
   chatbot_id: string;
+}
+
+export interface PublishChatbotResponse {
+  success: boolean;
+  message: string;
 }
 
 export interface UpdateChatbotConfigParams {
@@ -133,4 +138,14 @@ export interface SendMessageParams {
   chatbot_id: string;
   message: string;
   api_token: string;
+}
+
+export interface ChatbotTokenResponse {
+  success: boolean;
+  message: string;
+  chatbotTokens: ChatbotToken[];
+}
+
+export interface CreateChatbotTokenParams {
+  token: string;
 }

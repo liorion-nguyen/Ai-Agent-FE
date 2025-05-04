@@ -1,6 +1,10 @@
 'use client';
 
-import { UpdateChatbotConfigParams } from '@/services/types/chatbot';
+import { chatbotApi } from '@/services/endpoints';
+import { APIErrorHandler } from '@/services/types';
+import { PublishChatbotParams, PublishChatbotResponse, UpdateChatbotConfigParams } from '@/services/types/chatbot';
+import { useToast } from '@/shared/hooks';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 
 interface UpdateChatbotResponse {
@@ -47,4 +51,39 @@ export const useUpdateChatbot = () => {
   };
 
   return { updateChatbot, loading, error, success };
+};
+
+export const usePublishChatbot = () => {
+  const { toast } = useToast();
+  const {
+    mutate,
+    isPending: loading,
+    error,
+  } = useMutation<
+    PublishChatbotResponse,
+    APIErrorHandler,
+    PublishChatbotParams
+  >({
+    mutationFn: (params) => chatbotApi.publishChatbot(params),
+    onSuccess: (data) => {
+      toast({
+        title: 'Tạo chatbot thành công',
+        description: data.message,
+        variant: 'default',
+      });
+    },
+    onError: (err) => {
+      toast({
+        title: 'Tạo chatbot thất bại',
+        description: err?.message.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  return {
+    publishChatbot: mutate,
+    loading,
+    error,
+  };
 };
