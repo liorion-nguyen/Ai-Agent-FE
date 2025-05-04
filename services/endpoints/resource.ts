@@ -1,4 +1,4 @@
-import { GET, PATCH, POST, POST_FORMDATA } from '@/services/api';
+import { GET, PATCH, POST } from '@/services/api';
 import {
   AddResourceToChatbotParams,
   AddResourceToChatbotResponse,
@@ -38,9 +38,14 @@ export const resourceApi = {
     ),
 
   encodeFile: (params: EncodeFileParams) =>
-    POST_FORMDATA<EncodeFileResponse>(
+    POST<EncodeFileResponse>(
       API_ENDPOINTS.ENCODE_FILE.replace(':user_id', params.user_id || ''),
       params.file,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     ),
 
   addResourceToChatbot: (params: AddResourceToChatbotParams) =>

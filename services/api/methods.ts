@@ -22,26 +22,6 @@ export const POST = async <T = unknown, D = unknown>(
   return response.data;
 };
 
-export const POST_FORMDATA = async <T = unknown>(
-  url: string,
-  formData: FormData,
-  config?: AxiosRequestConfig,
-): Promise<T> => {
-  // Debug FormData trước khi gửi
-  for (const [key, value] of Array.from(formData.entries())) {
-    console.log(`POST_FORMDATA - ${key}:`, value);
-  }
-
-  const response: AxiosResponse<T> = await apiClient.post(url, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data', // Thêm rõ ràng để đảm bảo
-      ...(config?.headers || {}),
-    },
-    ...config,
-  });
-  return response.data;
-};
-
 export const PUT = async <T = unknown, D = unknown>(
   url: string,
   data?: D,
