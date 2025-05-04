@@ -1,4 +1,4 @@
-import SignUpForm from '../components/SignUpForm';
+import SignUpForm from '@/app/[lang]/(user)/(auth)/components/SignUpForm';
 import { checkUserAuth } from '@/shared/actions/auth.actions';
 import { AUTH_ACTIONS } from '@/shared/constants';
 

@@ -16,8 +16,8 @@ import { useZodForm } from '@/shared/hooks';
 import { createChatbotSchema } from '@/shared/validations/chatbot/chatbot.schema';
 import { ImagePlus } from 'lucide-react';
 // import { useRouter } from 'next/navigation';
+import { useCreateChatbot } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/hooks/useChatbot';
 import { z } from 'zod';
-import { useCreateChatbot } from '../hooks/useChatbot';
 
 const CreateChatbotModal = ({
   isOpen,

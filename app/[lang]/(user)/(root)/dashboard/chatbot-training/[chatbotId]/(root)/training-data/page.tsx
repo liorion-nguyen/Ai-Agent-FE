@@ -1,5 +1,6 @@
 'use client';
 
+import { useGetChatbot } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/hooks/useChatbot';
 import Empty from '@/components/ui/Empty';
 import { ModalButton } from '@/components/ui/Modal';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -16,7 +17,6 @@ import {
 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useLayoutEffect, useState } from 'react';
-import { useGetChatbot } from '../../../hooks/useChatbot';
 import ModalAddKnowledge from './components/ModalAddKnowledge';
 import ModalCreateKnowledge from './components/ModalCreateKnowledge';
 import ResourceItem from './components/ResourceItem';

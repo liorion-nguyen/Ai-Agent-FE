@@ -1,5 +1,4 @@
 import { GET, PATCH, POST } from '@/services/api';
-import { API_ENDPOINTS } from '@/shared/constants';
 import {
   ChatbotResponse,
   ChatbotsResponse,
@@ -14,7 +13,8 @@ import {
   UpdateChatbotConfigParams,
   UpdateChatbotOnboardingParams,
   UpdateChatbotPromptParams,
-} from '../types/chatbot';
+} from '@/services/types/chatbot';
+import { API_ENDPOINTS } from '@/shared/constants';
 export const chatbotApi = {
   getAllChatbots: () => GET<ChatbotsResponse>(API_ENDPOINTS.GET_ALL_CHATBOTS),
 

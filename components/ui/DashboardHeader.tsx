@@ -1,6 +1,7 @@
 'use client';
 
 import { useSignOut } from '@/app/[lang]/(user)/(auth)/hooks';
+import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
 import AccountCircleIcon from '@/public/icons/account-circle-icon.svg';
 import CartIcon from '@/public/icons/cart-icon.svg';
 import HeartIcon from '@/public/icons/heart-icon.svg';
@@ -14,7 +15,6 @@ import useUserStore from '@/store/user';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import SectionDashboardLayout from '../layout/section-landing-page-layout';
 import { Button } from './Button';
 import {
   DropdownMenu,

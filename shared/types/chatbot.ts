@@ -1,4 +1,4 @@
-import { ChatbotStatus } from '../constants/chatbot';
+import { ChatbotStatus } from '@/shared/constants/chatbot';
 import { Model } from './model';
 import { Resource } from './resource';
 import { User } from './user';

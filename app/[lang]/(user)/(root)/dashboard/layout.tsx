@@ -1,8 +1,8 @@
+import SidebarNav from '@/app/[lang]/(user)/(root)/components/SidebarNav';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/Sidebar';
 import { checkAdminAuth } from '@/shared/actions/auth.actions';
 import { AUTH_ACTIONS } from '@/shared/constants';
 import { ReactNode } from 'react';
-import SidebarNav from '../components/SidebarNav';
 
 export const generateMetadata = () => {
   return {

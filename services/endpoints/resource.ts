@@ -1,5 +1,4 @@
 import { GET, PATCH, POST, POST_FORMDATA } from '@/services/api';
-import { API_ENDPOINTS } from '@/shared/constants';
 import {
   AddResourceToChatbotParams,
   AddResourceToChatbotResponse,
@@ -11,7 +10,8 @@ import {
   GetResourceResponse,
   UploadFileKnowledgeParams,
   UploadFileKnowledgeResponse,
-} from '../types/resource';
+} from '@/services/types/resource';
+import { API_ENDPOINTS } from '@/shared/constants';
 
 export const resourceApi = {
   getAllResources: () =>

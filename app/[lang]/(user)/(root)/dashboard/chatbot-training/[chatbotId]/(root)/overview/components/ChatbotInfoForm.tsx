@@ -1,5 +1,7 @@
 'use client';
 
+import { useUpdateChatbot } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/[chatbotId]/(root)/overview/hooks/useUpdateChatbot';
+import { useGetChatbot } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/hooks/useChatbot';
 import { useZodForm } from '@/shared/hooks';
 import { updateChatbotSchema } from '@/shared/validations/chatbot/chatbot.schema';
 import useChatbotStore from '@/store/chatbot';
@@ -7,8 +9,6 @@ import { ChevronDown, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { useGetChatbot } from '../../../../hooks/useChatbot';
-import { useUpdateChatbot } from '../hooks/useUpdateChatbot';
 
 const ChatbotInfoForm = () => {
   const params = useParams();

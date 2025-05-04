@@ -1,5 +1,6 @@
 'use client';
 
+import { useCreateResource } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/[chatbotId]/(root)/training-data/hooks/useResource';
 import {
   Modal,
   ModalBody,
@@ -22,7 +23,6 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useCreateResource } from '../hooks/useResource';
 // Zod Schema
 
 // Types

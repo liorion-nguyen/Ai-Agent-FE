@@ -1,5 +1,7 @@
 'use client';
 
+import ResourceItem from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/[chatbotId]/(root)/training-data/components/ResourceItem';
+import { useGetResources } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/[chatbotId]/(root)/training-data/hooks/useResource';
 import Empty from '@/components/ui/Empty';
 import { ModalButton } from '@/components/ui/Modal';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -8,12 +10,10 @@ import { Inbox, Plus, Search } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useLayoutEffect, useState } from 'react';
-import ResourceItem from '../chatbot-training/[chatbotId]/(root)/training-data/components/ResourceItem';
-import { useGetResources } from '../chatbot-training/[chatbotId]/(root)/training-data/hooks/useResource';
 const ModalCreateKnowledge = dynamic(
   () =>
     import(
-      '../chatbot-training/[chatbotId]/(root)/training-data/components/ModalCreateKnowledge'
+      '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/[chatbotId]/(root)/training-data/components/ModalCreateKnowledge'
     ),
   { ssr: false },
 );

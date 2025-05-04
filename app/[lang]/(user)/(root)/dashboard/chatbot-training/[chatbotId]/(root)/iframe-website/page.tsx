@@ -1,11 +1,11 @@
 'use client';
+import { useGetChatbot } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/hooks/useChatbot';
 import { toast } from '@/shared/hooks';
 import useChatbotStore from '@/store/chatbot';
 import useUserStore from '@/store/user';
 import { Check, Copy } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useGetChatbot } from '../../../hooks/useChatbot';
 
 export default function IframeWebsitePage() {
   const siteURL = process.env.NEXT_PUBLIC_SERVER_URL;

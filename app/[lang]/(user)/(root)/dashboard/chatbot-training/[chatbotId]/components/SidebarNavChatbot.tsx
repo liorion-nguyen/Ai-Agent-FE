@@ -1,5 +1,6 @@
 'use client';
 
+import { useGetChatbot } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/hooks/useChatbot';
 import useChatbotStore from '@/store/chatbot';
 import {
   BotMessageSquare,
@@ -15,7 +16,6 @@ import {
 import Image from 'next/image';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useGetChatbot } from '../../hooks/useChatbot';
 interface SidebarGroup {
   label: string;
   items: SidebarItem[];

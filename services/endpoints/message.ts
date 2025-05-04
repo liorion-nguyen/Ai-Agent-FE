@@ -1,4 +1,4 @@
-import { MessageParams } from '../types/message';
+import { MessageParams } from '@/services/types/message';
 
 export const messageApi = {
   sendMessage: async (

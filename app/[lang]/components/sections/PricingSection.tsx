@@ -1,11 +1,11 @@
 'use client';
+import { useSubscriptions } from '@/app/[lang]/hooks/useSubscription';
 import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
 import { Skeleton } from '@/components/ui/Skeleton';
 import useSubscriptionStore from '@/store/subscription';
 import { CircleCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useLayoutEffect } from 'react';
-import { useSubscriptions } from '../../hooks/useSubscription';
 const PricingSection = () => {
   const { subscriptions } = useSubscriptionStore();
 

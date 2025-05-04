@@ -1,5 +1,9 @@
 'use client';
 
+import {
+  useAddResourceToChatbot,
+  useGetResources,
+} from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/[chatbotId]/(root)/training-data/hooks/useResource';
 import Img from '@/components/ui/Image';
 import {
   Modal,
@@ -16,7 +20,6 @@ import { formatDate } from '@/shared/utils/date';
 import useResourceStore from '@/store/resource';
 import { ArrowLeftRight, BookOpenText, BotMessageSquare } from 'lucide-react';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { useAddResourceToChatbot, useGetResources } from '../hooks/useResource';
 interface ModalAddKnowledgeProps {
   isOpen: boolean;
   onClose: () => void;
