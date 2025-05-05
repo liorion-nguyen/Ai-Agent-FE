@@ -58,7 +58,6 @@ export interface MessageType {
   sender: string;
 }
 
-
 export interface ChatbotToken {
   id: string;
   token: string;

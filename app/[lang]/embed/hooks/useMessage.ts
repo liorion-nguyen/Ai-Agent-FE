@@ -1,134 +1,81 @@
 import { messageApi } from '@/services/endpoints';
 import { APIErrorHandler } from '@/services/types';
-import { InitCheckActiveChatbotParams, InitCheckActiveChatbotResponse, MessageParams } from '@/services/types/message';
+import {
+  InitCheckActiveChatbotParams,
+  InitCheckActiveChatbotResponse,
+} from '@/services/types/message';
 import { useToast } from '@/shared/hooks';
-import useMessageStore from '@/store/message';
+import { processStreamData } from '@/shared/utils/stream';
+import { useMessageStore } from '@/store/message';
 import { useMutation } from '@tanstack/react-query';
 
 export const useSendMessage = () => {
-  const { addMessage } = useMessageStore();
-  const { toast } = useToast();
-
-  const processStreamData = async (reader: ReadableStreamDefaultReader<Uint8Array>): Promise<void> => {
-    const decoder = new TextDecoder('utf-8');
-    let botReply = '';
-    let buffer = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-
-      // Split into event blocks
-      const eventBlocks = buffer.split('\n\n');
-      buffer = eventBlocks.pop() || '';
-
-      for (const block of eventBlocks) {
-        const lines = block.trim().split('\n');
-        const eventLine = lines.find((line) => line.startsWith('event:'));
-        const dataLine = lines.find((line) => line.startsWith('data:'));
-
-        if (!eventLine || !dataLine) continue;
-
-        const eventType = eventLine.replace('event:', '').trim();
-        const dataStr = dataLine.replace('data:', '').trim();
-
-        let data;
-        try {
-          data = JSON.parse(dataStr);
-        } catch (error) {
-          console.error('Error parsing JSON:', error, 'Raw data:', dataStr);
-          continue;
-        }
-
-        switch (eventType) {
-          case 'conversation.message.delta':
-            if (data.role === 'assistant' && data.type === 'answer') {
-              botReply += data.content;
-              // Update or add bot message
-              const lastMessage = useMessageStore.getState().messages.slice(-1)[0];
-              if (lastMessage && lastMessage.sender === 'bot') {
-                addMessage({
-                  ...lastMessage,
-                  content: botReply,
-                  updatedAt: new Date().toISOString(),
-                });
-              } else {
-                addMessage({
-                  id: crypto.randomUUID(),
-                  content: botReply,
-                  createdAt: new Date().toISOString(),
-                  updatedAt: new Date().toISOString(),
-                  sender: 'bot',
-                });
-              }
-            }
-            break;
-
-          case 'conversation.message.completed':
-            botReply = data.content || botReply;
-            // Update or add final bot message
-            const lastMessage = useMessageStore.getState().messages.slice(-1)[0];
-            if (lastMessage && lastMessage.sender === 'bot') {
-              addMessage({
-                ...lastMessage,
-                content: botReply,
-                updatedAt: new Date().toISOString(),
-              });
-            } else {
-              addMessage({
-                id: crypto.randomUUID(),
-                content: botReply,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-                sender: 'bot',
-              });
-            }
-            return;
-
-          case 'done':
-            return;
-
-          default:
-            break;
-        }
-      }
-    }
-  };
-
   const {
-    mutate,
-    isPending: loading,
-    error,
-  } = useMutation<void, APIErrorHandler, MessageParams>({
-    mutationFn: async (message) => {
-      // Add user message before sending
+    addMessage,
+    setLoading,
+    setError,
+    setStreaming,
+    conversationId,
+    setConversationId,
+  } = useMessageStore();
+
+  const sendMessage = async (
+    chatbotId: string,
+    userId: string,
+    message: string,
+    conversationId: string,
+  ) => {
+    try {
+      setLoading(true);
+      setError(null);
+      setStreaming(true);
+
       addMessage({
         id: crypto.randomUUID(),
-        content: message.message,
+        content: message,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         sender: 'user',
       });
 
-      const stream = await messageApi.sendMessage(message);
-      const reader = stream.getReader();
-      await processStreamData(reader);
-    },
-    onError: (err) => {
-      toast({
-        title: 'Gửi tin nhắn thất bại',
-        description: err?.message.message || 'Đã có lỗi xảy ra',
-        variant: 'destructive',
+      const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/chatbot-embed/send`;
+
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message,
+          conversation_id: conversationId,
+          chatbot_id: chatbotId,
+          user_id: userId,
+        }),
       });
-    },
-  });
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('Reader not found');
+      }
+
+      await processStreamData(reader);
+    } catch (error) {
+      const errorMessage = 'Gửi tin nhắn thất bại!';
+      setError(errorMessage);
+      setStreaming(false);
+      console.error('Error:', error);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
-    sendMessage: mutate,
-    loading,
-    error,
+    sendMessage,
+    loading: useMessageStore((state) => state.loading),
+    error: useMessageStore((state) => state.error),
+    conversationId,
+    setConversationId,
   };
 };
 
@@ -139,7 +86,11 @@ export const useInitCheckActiveChatbot = () => {
     mutate,
     isPending: loading,
     error,
-  } = useMutation<InitCheckActiveChatbotResponse, APIErrorHandler, InitCheckActiveChatbotParams>({
+  } = useMutation<
+    InitCheckActiveChatbotResponse,
+    APIErrorHandler,
+    InitCheckActiveChatbotParams
+  >({
     mutationFn: messageApi.initCheckActiveChatbot,
     onSuccess: async (data) => {
       const conversation = await messageApi.createConversation({

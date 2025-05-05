@@ -7,6 +7,8 @@ interface MessageState {
   hydrated: boolean;
   isStreaming: boolean;
   conversationId: string;
+  loading: boolean;
+  error: string | null;
   setMessages: (newMessages: MessageType[]) => void;
   setHydrated: (value: boolean) => void;
   addMessage: (newMessage: MessageType) => void;
@@ -14,9 +16,11 @@ interface MessageState {
   setStreaming: (value: boolean) => void;
   clearMessages: () => void;
   setConversationId: (value: string) => void;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
 }
 
-const useMessageStore = create<MessageState>()(
+export const useMessageStore = create<MessageState>()(
   devtools(
     persist(
       (set) => ({
@@ -24,6 +28,8 @@ const useMessageStore = create<MessageState>()(
         hydrated: false,
         isStreaming: false,
         conversationId: '',
+        loading: false,
+        error: null,
         setMessages: (newMessages) => set({ messages: newMessages }),
         setHydrated: (value) => set({ hydrated: value }),
         addMessage: (newMessage) =>
@@ -59,8 +65,10 @@ const useMessageStore = create<MessageState>()(
             };
           }),
         setStreaming: (value) => set({ isStreaming: value }),
-        clearMessages: () => set({ messages: [] }),
+        clearMessages: () => set({ messages: [], error: null }),
         setConversationId: (value) => set({ conversationId: value }),
+        setLoading: (loading) => set({ loading }),
+        setError: (error) => set({ error }),
       }),
       {
         name: 'message-storage',
@@ -71,5 +79,3 @@ const useMessageStore = create<MessageState>()(
     ),
   ),
 );
-
-export default useMessageStore;

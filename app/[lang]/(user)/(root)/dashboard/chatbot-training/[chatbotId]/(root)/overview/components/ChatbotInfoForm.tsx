@@ -14,7 +14,7 @@ const ChatbotInfoForm = () => {
   const params = useParams();
   const chatbotId = params.chatbotId || 'bot-demo';
   const { chatbot } = useChatbotStore();
-  
+
   const { getChatbot } = useGetChatbot();
   const { error, success } = useUpdateChatbot();
   const inpRef = useRef<HTMLInputElement>(null);

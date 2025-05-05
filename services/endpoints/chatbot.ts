@@ -82,7 +82,7 @@ export const chatbotApi = {
       ),
       {
         api_token: params.api_token,
-        connector_id: params.connector_id
+        connector_id: params.connector_id,
       },
     ),
 
@@ -104,8 +104,11 @@ export const chatbotApi = {
       params,
     ),
 
-  getChatbotTokens: () => GET<ChatbotTokenResponse>(API_ENDPOINTS.GET_CHATBOT_TOKENS),
+  getChatbotTokens: () =>
+    GET<ChatbotTokenResponse>(API_ENDPOINTS.GET_CHATBOT_TOKENS),
 
   createChatbotToken: (chatbot_id: string) =>
-    POST<CreateChatbotTokenParams>(API_ENDPOINTS.CREATE_CHATBOT_TOKEN, { chatbot_id }),
+    POST<CreateChatbotTokenParams>(API_ENDPOINTS.CREATE_CHATBOT_TOKEN, {
+      chatbot_id,
+    }),
 };

@@ -39,7 +39,8 @@ export const API_ENDPOINTS = {
   // Messages
   SEND_MESSAGE_REVIEW: '/users/:user_id/chatbots/:chatbot_id/chat',
   SEND_MESSAGE: '/users/:user_id/chatbots/:chatbot_id/iframe/chat',
-  INIT_CHECK_ACTIVE_CHATBOT: '/chatbot-embed/init?chatbotId=:chatbot_id&userId=:user_id&token=:token',
+  INIT_CHECK_ACTIVE_CHATBOT:
+    '/chatbot-embed/init?chatbotId=:chatbot_id&userId=:user_id&token=:token',
   CREATE_CONVERSATION: '/conversations',
   // Resources
   GET_ALL_RESOURCES: '/users/profile/resources',
@@ -57,6 +58,10 @@ export const API_ENDPOINTS = {
   // Subscriptions
   GET_SUBSCRIPTIONS: '/subscriptions',
   GET_SUBSCRIPTION: '/users/profile/subscription',
+  SUBSCRIBE_SUBSCRIPTION: '/subscriptions/subscribe',
+  UPGRADE_SUBSCRIPTION: '/subscriptions/upgrade',
+  CANCEL_SUBSCRIPTION: '/subscriptions/cancel',
+  RENEW_SUBSCRIPTION: '/subscriptions/renew',
 };
 
 export const HTTP_CODE = {

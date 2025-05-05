@@ -14,3 +14,13 @@ export interface SubscriptionResponse {
     status: string;
   };
 }
+
+export interface CommonBasicResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface CommonBasicRequest {
+  subscriptionId: string;
+  userId: string;
+}

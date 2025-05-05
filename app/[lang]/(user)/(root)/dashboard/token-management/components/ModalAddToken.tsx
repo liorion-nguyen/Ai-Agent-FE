@@ -27,7 +27,6 @@ export default function ModalAddToken({ isOpen, onClose }: ModalAddTokenProps) {
     handleSubmit,
     formState: { errors },
     watch,
-    setValue,
   } = useZodForm(tokenSchema, {
     defaultValues: {
       tokenName: '',
@@ -44,11 +43,13 @@ export default function ModalAddToken({ isOpen, onClose }: ModalAddTokenProps) {
     try {
       const payload = {
         tokenName: data.tokenName,
-        expiration: data.expiration === 'custom' ? data.customDays : data.expiration,
+        expiration:
+          data.expiration === 'custom' ? data.customDays : data.expiration,
       };
       console.log('Token data:', payload);
       if (chatbots.length > 0) {
         createChatbotToken(chatbots[0].id);
+        onClose();
       } else {
         toast({
           title: 'Không tìm thấy chatbot',
@@ -123,7 +124,11 @@ export default function ModalAddToken({ isOpen, onClose }: ModalAddTokenProps) {
         <ModalButton variant="secondary" onClick={onClose}>
           Hủy
         </ModalButton>
-        <ModalButton type="submit" disabled={loading} onClick={handleSubmit(onSubmit)}>
+        <ModalButton
+          type="submit"
+          disabled={loading}
+          onClick={handleSubmit(onSubmit)}
+        >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Thêm'}
         </ModalButton>
       </ModalFooter>

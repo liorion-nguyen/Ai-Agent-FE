@@ -33,10 +33,12 @@ const useChatbotStore = create<ChatbotState>()(
         setChatbot: (newChatbot) => set({ chatbot: newChatbot }),
         resetChatbot: () => set({ chatbot: undefined }),
         resetChatbots: () => set({ chatbots: [] }),
-        setChatbotTokens: (newChatbotTokens) => set({ chatbotTokens: newChatbotTokens }),
+        setChatbotTokens: (newChatbotTokens) =>
+          set({ chatbotTokens: newChatbotTokens }),
         resetChatbotTokens: () => set({ chatbotTokens: [] }),
         setHydrated: (value) => set({ hydrated: value }),
-        setChatbotToken: (newChatbotToken) => set({ chatbotToken: newChatbotToken }),
+        setChatbotToken: (newChatbotToken) =>
+          set({ chatbotToken: newChatbotToken }),
         resetChatbotToken: () => set({ chatbotToken: undefined }),
       }),
       {

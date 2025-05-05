@@ -23,7 +23,7 @@ export default function TrainingDataDetailPage() {
     if (resource) {
       setSelectedDocument(resource.documents?.[0] || null);
     }
-  }, [resourceId, getResource, resource]);
+  }, [resourceId]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);

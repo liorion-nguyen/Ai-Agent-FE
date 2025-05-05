@@ -1,10 +1,10 @@
 'use client';
-import { useGetTokens } from "@/app/[lang]/(user)/(root)/dashboard/token-management/hooks/useToken";
-import { ChatbotToken } from "@/shared/types/chatbot";
-import { formatDateTime } from "@/shared/utils";
-import useChatbotStore from "@/store/chatbot";
-import { Copy } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useGetTokens } from '@/app/[lang]/(user)/(root)/dashboard/token-management/hooks/useToken';
+import { ChatbotToken } from '@/shared/types/chatbot';
+import { formatDateTime } from '@/shared/utils';
+import useChatbotStore from '@/store/chatbot';
+import { Copy } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function ViewTokens() {
   const { chatbotTokens } = useChatbotStore();
@@ -35,20 +35,39 @@ export default function ViewTokens() {
           <table className="min-w-full bg-white border border-gray-200">
             <thead>
               <tr className="bg-gray-100">
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">ID</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">Token</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">Trạng Thái</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">Hết Hạn</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">Ngày Tạo</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">Cập Nhật</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">Hành Động</th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">
+                  ID
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">
+                  Token
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">
+                  Trạng Thái
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">
+                  Hết Hạn
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">
+                  Ngày Tạo
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">
+                  Cập Nhật
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b">
+                  Hành Động
+                </th>
               </tr>
             </thead>
             <tbody>
               {chatbotTokens.map((token: ChatbotToken) => (
                 <tr key={token.id} className="hover:bg-gray-50">
-                  <td className="py-3 px-4 text-sm text-gray-900 border-b">{token.id}</td>
-                  <td className="py-3 px-4 text-sm text-gray-900 border-b truncate max-w-xs" title={token.token}>
+                  <td className="py-3 px-4 text-sm text-gray-900 border-b">
+                    {token.id}
+                  </td>
+                  <td
+                    className="py-3 px-4 text-sm text-gray-900 border-b truncate max-w-xs"
+                    title={token.token}
+                  >
                     {token.token.substring(0, 30)}...
                   </td>
                   <td className="py-3 px-4 text-sm border-b">
@@ -62,9 +81,15 @@ export default function ViewTokens() {
                       {token.status}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-sm text-gray-900 border-b">{formatDateTime(token.expires_at)}</td>
-                  <td className="py-3 px-4 text-sm text-gray-900 border-b">{formatDateTime(token.created_at)}</td>
-                  <td className="py-3 px-4 text-sm text-gray-900 border-b">{formatDateTime(token.updated_at)}</td>
+                  <td className="py-3 px-4 text-sm text-gray-900 border-b">
+                    {formatDateTime(token.expires_at)}
+                  </td>
+                  <td className="py-3 px-4 text-sm text-gray-900 border-b">
+                    {formatDateTime(token.created_at)}
+                  </td>
+                  <td className="py-3 px-4 text-sm text-gray-900 border-b">
+                    {formatDateTime(token.updated_at)}
+                  </td>
                   <td className="py-3 px-4 text-sm text-gray-900 border-b">
                     <button
                       onClick={() => handleCopyToken(token.token, token.id)}
@@ -73,7 +98,9 @@ export default function ViewTokens() {
                     >
                       <Copy size={16} />
                       {copiedTokenId === token.id && (
-                        <span className="text-green-600 text-xs">Đã sao chép!</span>
+                        <span className="text-green-600 text-xs">
+                          Đã sao chép!
+                        </span>
                       )}
                     </button>
                   </td>

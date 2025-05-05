@@ -25,7 +25,7 @@ import {
   LogOut,
   MessageSquare,
   Settings,
-  User
+  User,
 } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';

@@ -2,7 +2,11 @@
 
 import { chatbotApi } from '@/services/endpoints';
 import { APIErrorHandler } from '@/services/types';
-import { PublishChatbotParams, PublishChatbotResponse, UpdateChatbotConfigParams } from '@/services/types/chatbot';
+import {
+  PublishChatbotParams,
+  PublishChatbotResponse,
+  UpdateChatbotConfigParams,
+} from '@/services/types/chatbot';
 import { useToast } from '@/shared/hooks';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';

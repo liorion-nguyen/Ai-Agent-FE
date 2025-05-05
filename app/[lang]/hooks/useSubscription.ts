@@ -1,13 +1,17 @@
 import { subscriptionApi } from '@/services/endpoints/subscription';
 import { APIErrorHandler } from '@/services/types';
-import { SubscriptionResponse } from '@/services/types/subscription';
-import { useToast } from '@/shared/hooks';
+import {
+  CommonBasicRequest,
+  CommonBasicResponse,
+  SubscriptionResponse,
+} from '@/services/types/subscription';
+import { toast } from '@/shared/hooks';
 import { Subscription } from '@/shared/types/subscription';
 import useSubscriptionStore from '@/store/subscription';
+import useUserStore from '@/store/user';
 import { useMutation } from '@tanstack/react-query';
 
 export const useSubscriptions = () => {
-  const { toast } = useToast();
   const { setSubscriptions } = useSubscriptionStore();
   const {
     mutateAsync: getSubscriptions,
@@ -35,8 +39,9 @@ export const useSubscriptions = () => {
 };
 
 export const useSubscription = () => {
-  const { toast } = useToast();
-  const { setSubscription } = useSubscriptionStore();
+  const { setSubscription, subscriptions } = useSubscriptionStore();
+  // const { subscribeSubscription } = useSubscribeSubscription();
+  const { user } = useUserStore();
   const {
     mutateAsync: getSubscription,
     isPending: loading,
@@ -46,9 +51,55 @@ export const useSubscription = () => {
     onSuccess: (data) => {
       setSubscription(data.userSubscription);
     },
+    onError: (e) => {
+      // toast({
+      //   title: 'Lấy gói thất bại',
+      //   description: err?.message.message,
+      //   variant: 'destructive',
+      // });
+      if (e.statusCode === 404) {
+        const subscriptionId = subscriptions.find(
+          (subscription) => subscription.price == 0,
+        )?.id;
+        if (subscriptionId) {
+          // subscribeSubscription({
+          //   subscriptionId,
+          //   userId: user?.id || '',
+          // });
+          subscriptionApi.subscribeSubscription({
+            subscriptionId,
+            userId: user?.id || '',
+          });
+        }
+      }
+    },
+  });
+
+  return {
+    getSubscription,
+    loading,
+    error,
+  };
+};
+
+export const useSubscribeSubscription = () => {
+  const { getSubscription } = useSubscription();
+  const {
+    mutateAsync: subscribeSubscription,
+    isPending: loading,
+    error,
+  } = useMutation<CommonBasicResponse, APIErrorHandler, CommonBasicRequest>({
+    mutationFn: (data) => subscriptionApi.subscribeSubscription(data),
+    onSuccess: (data) => {
+      toast({
+        title: 'Mua gói thành công',
+        description: data.message,
+      });
+      getSubscription();
+    },
     onError: (err) => {
       toast({
-        title: 'Lấy gói thất bại',
+        title: 'Mua gói thất bại',
         description: err?.message.message,
         variant: 'destructive',
       });
@@ -56,7 +107,7 @@ export const useSubscription = () => {
   });
 
   return {
-    getSubscription,
+    subscribeSubscription,
     loading,
     error,
   };

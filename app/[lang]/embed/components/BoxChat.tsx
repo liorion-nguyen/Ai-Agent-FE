@@ -1,15 +1,16 @@
 'use client';
 
 import ItemMessage from '@/app/[lang]/embed/components/ItemMessage';
-import { messageApi } from '@/services/endpoints';
+import {
+  useInitCheckActiveChatbot,
+  useSendMessage,
+} from '@/app/[lang]/embed/hooks/useMessage';
 import { toast } from '@/shared/hooks';
 import { MessageType } from '@/shared/types/chatbot';
-import { processStreamData } from '@/shared/utils/stream';
-import useMessageStore from '@/store/message';
+import { useMessageStore } from '@/store/message';
 import { MessageCircle, MessageSquareOff, Plus, Send, X } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { useInitCheckActiveChatbot } from '../hooks/useMessage';
 
 const BoxChat = () => {
   const searchParams = useSearchParams();
@@ -18,6 +19,7 @@ const BoxChat = () => {
   const token = searchParams.get('token');
   const { initCheckActiveChatbot } = useInitCheckActiveChatbot();
   const { conversationId, hydrated } = useMessageStore();
+  const { sendMessage } = useSendMessage();
   useEffect(() => {
     if (token && chatbotId && userId && !conversationId && hydrated) {
       initCheckActiveChatbot({
@@ -26,10 +28,16 @@ const BoxChat = () => {
         api_token: token,
       });
     }
-  }, [token, chatbotId, userId, conversationId, hydrated, initCheckActiveChatbot]);
+  }, [
+    token,
+    chatbotId,
+    userId,
+    conversationId,
+    hydrated,
+    initCheckActiveChatbot,
+  ]);
 
-  const { messages, addMessage, clearMessages, isStreaming } =
-    useMessageStore();
+  const { messages, clearMessages, isStreaming } = useMessageStore();
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -66,32 +74,8 @@ const BoxChat = () => {
     }
 
     try {
-      // Add user message
-      const userMessage: MessageType = {
-        id: crypto.randomUUID(),
-        content: inputValue,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        sender: 'user',
-      };
-      addMessage(userMessage);
-      setInputValue('');
-
-      // Set streaming state
-      useMessageStore.getState().setStreaming(true);
-
-      // Send message to API
-      const stream = await messageApi.sendMessage({
-        userId,
-        chatbotId,
-        message: inputValue,
-        conversationId,
-      });
-
-      const reader = stream.getReader();
-      await processStreamData(reader);
+      await sendMessage(chatbotId, userId, inputValue, conversationId);
     } catch (error) {
-      useMessageStore.getState().setStreaming(false);
       toast({
         title: 'Error',
         description: 'Failed to send message.',

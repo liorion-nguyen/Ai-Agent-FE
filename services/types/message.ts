@@ -51,5 +51,4 @@ export interface CreateConversationResponse {
   chatbot: {
     id: string;
   };
-  end_user: {};
 }

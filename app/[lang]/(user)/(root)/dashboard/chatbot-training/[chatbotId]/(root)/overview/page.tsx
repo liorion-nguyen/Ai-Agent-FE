@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import ChatbotInfoForm from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/[chatbotId]/(root)/overview/components/ChatbotInfoForm';
 import PreviewChat from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/[chatbotId]/(root)/overview/components/PreviewChat';
@@ -12,7 +12,7 @@ export default function OverviewPage() {
           <PublishChatbot />
           <button className="bg-purple-500 text-white px-4 py-2 rounded-md">
             Lưu thay đổi
-        </button>
+          </button>
         </div>
       </div>
       <div className="flex h-[calc(100vh-65px)]">
