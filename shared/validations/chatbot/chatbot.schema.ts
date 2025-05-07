@@ -2,11 +2,10 @@ import { z } from 'zod';
 
 export const updateChatbotSchema = z.object({
   chatbot_name: z.string().min(1, 'Tên chatbot không được để trống'),
-  businessName: z.string().min(1, 'Tên doanh nghiệp không được để trống'),
-  language: z.enum(['Tiếng Việt', 'English'], {
-    message: 'Vui lòng chọn ngôn ngữ hợp lệ',
-  }),
-  theme: z.string().min(1, 'Màu sắc không được để trống'),
+  description: z.string().optional(),
+  businessName: z.string().optional(),
+  language: z.enum(['Tiếng Việt', 'English']).optional(),
+  theme: z.string().min(1, 'Màu sắc không được để trống').optional(),
   thumbnail: z.string().optional(),
 });
 

@@ -21,11 +21,11 @@ import {
   FileText,
   HelpCircle,
   Key,
-  Link,
   LogOut,
   MessageSquare,
   Settings,
   User,
+  Users,
 } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -63,10 +63,10 @@ const items = [
     tooltip: 'Quản lý token',
   },
   {
-    title: 'Affiliate',
-    url: '/dashboard/affiliate',
-    icon: Link,
-    tooltip: 'Affiliate',
+    title: 'Quản lý member',
+    url: '/dashboard/member-management',
+    icon: Users,
+    tooltip: 'Quản lý member',
   },
   {
     title: 'Hỗ trợ yêu cầu ticket',

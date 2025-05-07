@@ -1,19 +1,40 @@
 'use client';
-import { useSubscriptions } from '@/app/[lang]/hooks/useSubscription';
+import {
+  useCancelSubscription,
+  useSubscribeSubscription,
+  useSubscription,
+  useSubscriptions,
+} from '@/app/[lang]/hooks/useSubscription';
 import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { cn } from '@/lib/utils';
 import useSubscriptionStore from '@/store/subscription';
+import useUserStore from '@/store/user';
 import { CircleCheck } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useLayoutEffect } from 'react';
 const PricingSection = () => {
-  const { subscriptions } = useSubscriptionStore();
+  const { subscriptions, subscription } = useSubscriptionStore();
 
   const { getSubscriptions, loading } = useSubscriptions();
-  const router = useRouter();
+  const { user } = useUserStore();
+  const { getSubscription } = useSubscription();
+  // const router = useRouter();
   useLayoutEffect(() => {
     getSubscriptions();
-  }, [getSubscriptions]);
+    getSubscription();
+  }, [getSubscriptions, getSubscription]);
+
+  const { subscribeSubscription } = useSubscribeSubscription();
+  const { cancelSubscription } = useCancelSubscription();
+  const handleSubscribeSubscription = async (id: string) => {
+    if (subscription) {
+      await cancelSubscription({
+        subscriptionId: subscription.id,
+        userId: user?.id || '',
+      });
+    }
+    await subscribeSubscription({ subscriptionId: id, userId: user?.id || '' });
+  };
 
   return (
     <SectionDashboardLayout className="py-16">
@@ -82,13 +103,25 @@ const PricingSection = () => {
                   {/* Button */}
                   <div className="text-center">
                     <button
-                      className={`w-full py-2 rounded-md font-medium transition bg-purple-600 text-white hover:bg-purple-700`}
+                      className={cn(
+                        `w-full py-2 rounded-md font-medium transition bg-purple-600 text-white hover:bg-purple-700`,
+                        subscription &&
+                          subscription.subscription.name == plan.name &&
+                          'bg-gray-300 text-gray-500 cursor-not-allowed',
+                      )}
                       onClick={() => {
-                        console.log(plan);
-                        router.push(`/payment/${plan.id}`);
+                        handleSubscribeSubscription(plan.id);
+                        // router.push(`/payment/${plan.id}`);
                       }}
+                      disabled={
+                        subscription &&
+                        subscription.subscription.name == plan.name
+                      }
                     >
-                      Chọn gói
+                      {subscription &&
+                      subscription.subscription.name == plan.name
+                        ? 'Đã mua gói'
+                        : 'Chọn gói'}
                     </button>
                   </div>
                 </div>

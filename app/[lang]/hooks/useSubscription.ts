@@ -112,3 +112,32 @@ export const useSubscribeSubscription = () => {
     error,
   };
 };
+
+export const useCancelSubscription = () => {
+  const {
+    mutateAsync: cancelSubscription,
+    isPending: loading,
+    error,
+  } = useMutation<CommonBasicResponse, APIErrorHandler, CommonBasicRequest>({
+    mutationFn: (data) => subscriptionApi.cancelSubscription(data),
+    onSuccess: (data) => {
+      toast({
+        title: 'Hủy gói thành công',
+        description: data.message,
+      });
+    },
+    onError: (err) => {
+      toast({
+        title: 'Hủy gói thất bại',
+        description: err?.message.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  return {
+    cancelSubscription,
+    loading,
+    error,
+  };
+};

@@ -71,16 +71,21 @@ export interface PublishChatbotResponse {
   message: string;
 }
 
-export interface UpdateChatbotConfigParams {
-  user_id: string;
-  chatbot_id: string;
-  api_token: string;
-  model_info_config: {
-    model_id: string;
-    model_name: string;
-  };
+export interface UpdateChatbotBasicParams {
+  user_id?: string;
+  chatbot_id?: string;
+  api_token?: string;
+  chatbot_name?: string;
+  description?: string;
+  businessName?: string;
+  language?: string;
+  theme?: string;
 }
 
+export interface UpdateChatbotBasicResponse {
+  message: string;
+  statusCode: number;
+}
 export interface UpdateChatbotPromptParams {
   user_id: string;
   chatbot_id: string;

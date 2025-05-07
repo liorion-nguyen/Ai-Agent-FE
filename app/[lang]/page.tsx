@@ -1,3 +1,4 @@
+'use client';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import CaseStudiesSection from './components/sections/CaseStudiesSection';
 import ConsultationFormSection from './components/sections/ConsultationFormSection';

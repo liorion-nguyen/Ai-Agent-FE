@@ -1,6 +1,12 @@
 'use client';
 
 import { useGetChatbot } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/hooks/useChatbot';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/DropdownMenu';
 import useChatbotStore from '@/store/chatbot';
 import {
   BotMessageSquare,
@@ -16,7 +22,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 interface SidebarGroup {
   label: string;
   items: SidebarItem[];
@@ -93,11 +99,10 @@ const CustomChatbotSidebar = () => {
   const params = useParams();
   const pathname = usePathname();
   const chatbotId = params.chatbotId || 'bot-demo';
-  const { hydrated, chatbot } = useChatbotStore();
+  const { hydrated, chatbot, chatbots } = useChatbotStore();
   const { getChatbot } = useGetChatbot();
   useEffect(() => {
     if (!hydrated) return;
-
     if (!chatbot || chatbot.id !== chatbotId) {
       getChatbot(chatbotId as string);
     }
@@ -112,6 +117,17 @@ const CustomChatbotSidebar = () => {
     router.push('/dashboard/chatbot-training');
   };
 
+  const [showAll, setShowAll] = useState(false);
+
+  const visibleItems = showAll ? chatbots : chatbots.slice(0, 5);
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      // Reset lại nếu menu bị đóng
+      setShowAll(false);
+    }
+  };
+
   return (
     <aside className="w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col">
       {/* Header */}
@@ -122,19 +138,68 @@ const CustomChatbotSidebar = () => {
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
-        <Image
-          width={32}
-          height={32}
-          src={chatbot?.thumbnail || '/icons/admin_icon.png'}
-          alt="Chatbot Avatar"
-          className="w-8 h-8 rounded-full"
-        />
-        <h2 className="text-base font-semibold text-gray-800">
-          {chatbot?.chatbot_name}
-        </h2>
-        <button className="text-gray-600 hover:text-gray-800 ml-auto">
-          <ChevronDown className="w-5 h-5" />
-        </button>
+
+        <DropdownMenu onOpenChange={handleOpenChange}>
+          <DropdownMenuTrigger asChild>
+            <div className="flex items-center gap-2 cursor-pointer">
+              <Image
+                width={32}
+                height={32}
+                src={chatbot?.thumbnail || '/icons/admin_icon.png'}
+                alt="Chatbot Avatar"
+                className="w-8 h-8 rounded-full"
+              />
+              <h2 className="text-base font-semibold text-gray-800 line-clamp-1">
+                {chatbot?.chatbot_name}
+              </h2>
+              <ChevronDown className="w-5 h-5 text-gray-600 hover:text-gray-800 ml-auto" />
+            </div>
+          </DropdownMenuTrigger>
+
+          {chatbots.length > 1 && (
+            <DropdownMenuContent>
+              {visibleItems.map(
+                (chatbot) =>
+                  chatbot.id !== chatbotId && (
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      key={chatbot.id}
+                      onSelect={() => {
+                        router.push(
+                          `/dashboard/chatbot-training/${chatbot.id}`,
+                        );
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Image
+                          width={32}
+                          height={32}
+                          src={chatbot.thumbnail || '/icons/admin_icon.png'}
+                          alt="Chatbot Avatar"
+                          className="w-8 h-8 rounded-full"
+                        />
+                        <p className="text-gray-800 line-clamp-1">
+                          {chatbot.chatbot_name}
+                        </p>
+                      </div>
+                    </DropdownMenuItem>
+                  ),
+              )}
+
+              {chatbots.length > 5 && !showAll && (
+                <div
+                  className="px-2 py-1 cursor-pointer text-blue-600 hover:underline text-center"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowAll(true);
+                  }}
+                >
+                  Xem tất cả
+                </div>
+              )}
+            </DropdownMenuContent>
+          )}
+        </DropdownMenu>
       </div>
 
       {/* Nút Chat với */}

@@ -14,7 +14,6 @@ export interface SubscriptionResponse {
     status: string;
   };
 }
-
 export interface CommonBasicResponse {
   success: boolean;
   message: string;

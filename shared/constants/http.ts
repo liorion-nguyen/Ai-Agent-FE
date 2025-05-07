@@ -62,6 +62,10 @@ export const API_ENDPOINTS = {
   UPGRADE_SUBSCRIPTION: '/subscriptions/upgrade',
   CANCEL_SUBSCRIPTION: '/subscriptions/cancel',
   RENEW_SUBSCRIPTION: '/subscriptions/renew',
+
+  // Members
+  GET_MEMBERS: 'members',
+  ADD_MEMBER: 'members/add',
 };
 
 export const HTTP_CODE = {

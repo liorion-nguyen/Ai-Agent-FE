@@ -13,7 +13,8 @@ import {
   PublishChatbotParams,
   PublishChatbotResponse,
   SendMessageParams,
-  UpdateChatbotConfigParams,
+  UpdateChatbotBasicParams,
+  UpdateChatbotBasicResponse,
   UpdateChatbotOnboardingParams,
   UpdateChatbotPromptParams,
 } from '@/services/types/chatbot';
@@ -41,13 +42,17 @@ export const chatbotApi = {
     );
   },
 
-  updateChatbotConfig: (params: UpdateChatbotConfigParams) =>
-    PATCH(
+  updateChatbotConfig: (params: UpdateChatbotBasicParams) =>
+    PATCH<UpdateChatbotBasicResponse>(
       API_ENDPOINTS.UPDATE_CHATBOT_CONFIG_BASIC.replace(
         ':user_id',
-        params.user_id,
-      ).replace(':chatbot_id', params.chatbot_id),
-      params,
+        params.user_id || '',
+      ).replace(':chatbot_id', params.chatbot_id || ''),
+      {
+        chatbot_name: params.chatbot_name,
+        description: params.description,
+        api_token: params.api_token,
+      },
     ),
 
   updateChatbotPrompt: (params: UpdateChatbotPromptParams) =>

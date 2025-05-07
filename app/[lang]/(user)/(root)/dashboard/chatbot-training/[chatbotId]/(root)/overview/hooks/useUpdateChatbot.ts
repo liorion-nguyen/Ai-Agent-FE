@@ -5,56 +5,53 @@ import { APIErrorHandler } from '@/services/types';
 import {
   PublishChatbotParams,
   PublishChatbotResponse,
-  UpdateChatbotConfigParams,
+  UpdateChatbotBasicParams,
+  UpdateChatbotBasicResponse,
 } from '@/services/types/chatbot';
 import { useToast } from '@/shared/hooks';
+import useChatbotStore from '@/store/chatbot';
+import useUserStore from '@/store/user';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
-
-interface UpdateChatbotResponse {
-  success: boolean;
-  message?: { message: string | string[] };
-}
-
 export const useUpdateChatbot = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<UpdateChatbotResponse | null>(null);
-  const [success, setSuccess] = useState(false);
-
-  const updateChatbot = async (
-    chatbotId: string,
-    data: UpdateChatbotConfigParams,
-  ) => {
-    setLoading(true);
-    setError(null);
-    setSuccess(false);
-
-    try {
-      const response = await fetch(`/api/chatbots/${chatbotId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+  const { toast } = useToast();
+  const { user, apiToken } = useUserStore();
+  const { chatbot } = useChatbotStore();
+  const {
+    mutate,
+    isPending: loading,
+    error,
+  } = useMutation<
+    UpdateChatbotBasicResponse,
+    APIErrorHandler,
+    UpdateChatbotBasicParams
+  >({
+    mutationFn: (params) =>
+      chatbotApi.updateChatbotConfig({
+        ...params,
+        chatbot_id: chatbot?.id,
+        user_id: user?.id,
+        api_token: apiToken,
+      }),
+    onSuccess: (data) => {
+      toast({
+        title: 'Cập nhật chatbot thành công',
+        description: data.message,
+        variant: 'default',
       });
-
-      const result: UpdateChatbotResponse = await response.json();
-
-      if (!response.ok) {
-        throw result;
-      }
-
-      setSuccess(true);
-      return result;
-    } catch (err) {
-      setError(err as UpdateChatbotResponse);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
+    },
+    onError: (err) => {
+      toast({
+        title: 'Cập nhật chatbot thất bại',
+        description: err?.message.message,
+        variant: 'destructive',
+      });
+    },
+  });
+  return {
+    updateChatbot: mutate,
+    loading,
+    error,
   };
-
-  return { updateChatbot, loading, error, success };
 };
 
 export const usePublishChatbot = () => {

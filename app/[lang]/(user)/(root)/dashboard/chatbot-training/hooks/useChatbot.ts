@@ -73,7 +73,7 @@ export const useCreateChatbot = () => {
   const { apiToken, user } = useUserStore();
   const router = useRouter();
   const {
-    mutate,
+    mutateAsync: createChatbot,
     isPending: loading,
     error,
   } = useMutation<
@@ -96,12 +96,12 @@ export const useCreateChatbot = () => {
       return dbResponse;
     },
     onSuccess: (data) => {
+      router.push(`/dashboard/chatbot-training/${data.id}`);
       toast({
         title: 'Tạo chatbot thành công',
         description: data.message,
         variant: 'default',
       });
-      router.push(`/dashboard/chatbot-training/${data.id}`);
     },
     onError: (err) => {
       toast({
@@ -113,7 +113,7 @@ export const useCreateChatbot = () => {
   });
 
   return {
-    createChatbot: mutate,
+    createChatbot,
     loading,
     error,
   };

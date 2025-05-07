@@ -18,13 +18,13 @@ export default function UpgradePage() {
             <div className="w-1/2 flex flex-col gap-4 p-4 border border-gray-200 rounded-lg items-center">
               <h4 className="text-lg font-bold">Page</h4>
               <StickyNote size={48} color="purple" />
-              <p>Mua thêm Page</p>
+              <p className="text-center">Mua thêm Page</p>
               <Button className="bg-purple-500 text-white">Mua ngay</Button>
             </div>
             <div className="w-1/2 flex flex-col gap-4 p-4 border border-gray-200 rounded-lg items-center">
               <h4 className="text-lg font-bold">Conversation</h4>
               <MessageCirclePlus size={48} color="purple" />
-              <p>Mua thêm conversation</p>
+              <p className="text-center">Mua thêm conversation</p>
               <Button className="bg-purple-500 text-white">Mua ngay</Button>
             </div>
           </div>

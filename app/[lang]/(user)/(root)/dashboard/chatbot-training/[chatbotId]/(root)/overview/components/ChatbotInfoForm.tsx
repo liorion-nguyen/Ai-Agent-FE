@@ -1,6 +1,5 @@
 'use client';
 
-import { useUpdateChatbot } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/[chatbotId]/(root)/overview/hooks/useUpdateChatbot';
 import { useGetChatbot } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/hooks/useChatbot';
 import { useZodForm } from '@/shared/hooks';
 import { updateChatbotSchema } from '@/shared/validations/chatbot/chatbot.schema';
@@ -8,15 +7,20 @@ import useChatbotStore from '@/store/chatbot';
 import { ChevronDown, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 
-const ChatbotInfoForm = () => {
+const ChatbotInfoForm = forwardRef((_, ref) => {
   const params = useParams();
   const chatbotId = params.chatbotId || 'bot-demo';
-  const { chatbot } = useChatbotStore();
+  const { chatbot, hydrated } = useChatbotStore();
 
   const { getChatbot } = useGetChatbot();
-  const { error, success } = useUpdateChatbot();
   const inpRef = useRef<HTMLInputElement>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const {
@@ -24,9 +28,11 @@ const ChatbotInfoForm = () => {
     formState: { errors },
     setValue,
     watch,
+    handleSubmit,
   } = useZodForm(updateChatbotSchema, {
     defaultValues: {
       chatbot_name: chatbot?.chatbot_name,
+      description: chatbot?.description,
       businessName: '',
       language: 'Tiếng Việt',
       theme: '#4C01C4',
@@ -34,23 +40,21 @@ const ChatbotInfoForm = () => {
     },
   });
 
-  // Theo dõi giá trị theme để hiển thị
   const themeValue = watch('theme');
 
-  // Lấy dữ liệu chatbot và cập nhật form
   useEffect(() => {
-    getChatbot(chatbotId as string);
+    if (!hydrated) return;
+    if (!chatbot) {
+      getChatbot(chatbotId as string);
+    }
     if (chatbot) {
       setValue('chatbot_name', chatbot.chatbot_name || '');
-      //   setValue('businessName', chatbot.businessName || '');
-      //   setValue('language', chatbot.language || 'Tiếng Việt');
-      //   setValue('theme', chatbot.theme || '#4C01C4');
+      setValue('description', chatbot.description || '');
       setValue('thumbnail', chatbot.thumbnail || '');
       setThumbnailPreview(chatbot.thumbnail || null);
     }
-  }, [chatbotId]);
+  }, [chatbotId, chatbot, hydrated, getChatbot, setValue]);
 
-  // Xử lý upload avatar
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -66,15 +70,21 @@ const ChatbotInfoForm = () => {
 
   const handleDelete = () => {
     console.log(`Xóa chatbot: ${chatbotId}`);
-    // Thêm logic để xóa chatbot
   };
 
+  useImperativeHandle(ref, () => ({
+    submitForm: () => {
+      return new Promise((resolve, reject) => {
+        handleSubmit(
+          (data) => resolve(data),
+          (err) => reject(err),
+        )();
+      });
+    },
+  }));
+
   return (
-    <form
-      //   onSubmit={handleSubmit((data) => updateChatbot(chatbotId as string, data))}
-      className="space-y-6"
-    >
-      {/* Tên */}
+    <form className="space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Tên <span className="text-red-500">*</span>
@@ -89,10 +99,23 @@ const ChatbotInfoForm = () => {
         )}
       </div>
 
-      {/* Tên doanh nghiệp */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Tên doanh nghiệp <span className="text-red-500">*</span>
+          Mô tả
+        </label>
+        <textarea
+          placeholder="Mô tả chatbot"
+          {...register('description')}
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+        {errors.description && (
+          <p className="text-sm text-red-500">{errors.description.message}</p>
+        )}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Tên doanh nghiệp
         </label>
         <input
           type="text"
@@ -105,9 +128,7 @@ const ChatbotInfoForm = () => {
         )}
       </div>
 
-      {/* Avatar và Theme */}
       <div className="flex items-center gap-6">
-        {/* Avatar */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Avatar
@@ -137,7 +158,6 @@ const ChatbotInfoForm = () => {
             <p className="text-sm text-red-500">{errors.thumbnail.message}</p>
           )}
         </div>
-        {/* Theme */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Theme
@@ -157,7 +177,6 @@ const ChatbotInfoForm = () => {
         </div>
       </div>
 
-      {/* Ngôn ngữ trả lời */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Ngôn ngữ trả lời
@@ -177,21 +196,6 @@ const ChatbotInfoForm = () => {
         )}
       </div>
 
-      {/* Thông báo lỗi hoặc thành công */}
-      {error && (
-        <div className="text-sm text-red-700 bg-red-100 px-3 py-2 rounded">
-          {Array.isArray(error.message?.message)
-            ? error.message.message.join(', ')
-            : error.message?.message || 'Cập nhật thất bại'}
-        </div>
-      )}
-      {success && (
-        <div className="text-sm text-green-700 bg-green-100 px-3 py-2 rounded">
-          Cập nhật thành công
-        </div>
-      )}
-
-      {/* Nút Lưu và Xóa */}
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -204,6 +208,8 @@ const ChatbotInfoForm = () => {
       </div>
     </form>
   );
-};
+});
+
+ChatbotInfoForm.displayName = 'ChatbotInfoForm';
 
 export default ChatbotInfoForm;
