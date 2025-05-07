@@ -77,19 +77,22 @@ const CreateChatbotModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={closeModal} size="4xl">
+    <Modal
+      isOpen={isOpen}
+      onClose={closeModal}
+      size="4xl"
+      className="max-h-[700px] overflow-y-auto"
+    >
       <ModalHeader>
         <ModalTitle>Tạo chatbot</ModalTitle>
         <ModalCloseButton onClick={closeModal} />
       </ModalHeader>
-      <ModalBody className="flex  gap-4">
-        <form onSubmit={handleSubmit(onSubmit)} className="w-1/2">
-          {/* Chi tiết bot */}
+      <ModalBody className="flex gap-4 md:flex-row flex-col mb-3 md:mb-0">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full md:w-1/2">
           <h4 className="text-md font-medium text-gray-900 mb-2">
             Chi tiết bot
           </h4>
           <div className="flex flex-col gap-4">
-            {/* Tên bot */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Tên bot <span className="text-red-500">*</span>
@@ -106,7 +109,6 @@ const CreateChatbotModal = ({
             </div>
           </div>
 
-          {/* Hình ảnh bot */}
           <div className="mb-4">
             <h4 className="text-sm font-medium text-gray-900 mb-2">
               Hình ảnh bot
@@ -130,7 +132,6 @@ const CreateChatbotModal = ({
             )}
           </div>
 
-          {/* Danh sách ngành nghề */}
           <div className="mb-4">
             <h4 className="text-sm font-medium text-gray-900 mb-2">
               Danh sách ngành nghề
@@ -148,7 +149,6 @@ const CreateChatbotModal = ({
             )}
           </div>
 
-          {/* Mô tả */}
           <div className="mb-4">
             <h4 className="text-sm font-medium text-gray-900 mb-2">Mô tả</h4>
             <textarea
@@ -164,8 +164,7 @@ const CreateChatbotModal = ({
           </div>
         </form>
 
-        {/* Kích bản mẫu */}
-        <div className="mb-4 border-l border-gray-200 pl-4 w-1/2">
+        <div className="mb-4 md:border-l border-gray-200 pl-4 w-full md:w-1/2">
           <h4 className="text-md font-medium text-gray-900 mb-2">
             Kích bản mẫu
           </h4>

@@ -129,7 +129,11 @@ const ModalCreateKnowledge = ({
   ];
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      className="max-h-[700px] overflow-y-auto"
+    >
       <ModalHeader>
         <ModalTitle>Create Knowledge</ModalTitle>
         <ModalCloseButton onClick={() => setIsOpen(false)} />
