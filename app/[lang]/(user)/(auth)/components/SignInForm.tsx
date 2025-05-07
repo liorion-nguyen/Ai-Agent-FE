@@ -16,26 +16,47 @@ const SignInForm = () => {
 
   return (
     <form onSubmit={handleSubmit((data) => signIn(data))} className="space-y-4">
-      <input
-        type="email"
-        placeholder="Email"
-        {...register('email')}
-        className="w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      {errors.email && (
-        <p className="text-sm text-red-500">{errors.email.message}</p>
-      )}
+      {/* Email Input */}
+      <div>
+        <label className="block text-sm font-medium text-gray-900 dark:text-gray-100">
+          Email <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="email"
+          placeholder="Nhập email của bạn"
+          {...register('email')}
+          className="w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+        {errors.email && (
+          <p className="text-sm text-red-500">{errors.email.message}</p>
+        )}
+      </div>
 
-      <input
-        type="password"
-        placeholder="Password"
-        {...register('password')}
-        className="w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      {errors.password && (
-        <p className="text-sm text-red-500">{errors.password.message}</p>
-      )}
+      {/* Password Input */}
+      <div>
+        <div className="flex justify-between items-center">
+          <label className="block text-sm font-medium text-gray-900 dark:text-gray-100">
+            Mật khẩu <span className="text-red-500">*</span>
+          </label>
+          <a
+            href={ROUTES.FORGOT_PASSWORD}
+            className="text-sm text-purple-600 hover:underline dark:text-purple-400"
+          >
+            Quên mật khẩu?
+          </a>
+        </div>
+        <input
+          type="password"
+          placeholder="Nhập mật khẩu của bạn"
+          {...register('password')}
+          className="w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+        {errors.password && (
+          <p className="text-sm text-red-500">{errors.password.message}</p>
+        )}
+      </div>
 
+      {/* Error Message */}
       {errorSignIn && (
         <div className="text-sm text-red-700 bg-red-100 px-3 py-2 rounded dark:bg-red-800/50 dark:text-red-300">
           {Array.isArray(errorSignIn.message?.message)
@@ -44,16 +65,25 @@ const SignInForm = () => {
         </div>
       )}
 
+      {/* Sign In Button */}
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50"
+        className="w-full py-2 px-4 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition disabled:opacity-50"
       >
-        {loading ? 'Signing in...' : 'Sign In'}
+        {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
       </button>
 
-      <a href={ROUTES.SIGNUP}>You do not have an account? Sign Up</a>
-      <a href={ROUTES.FORGOT_PASSWORD}>Forgot your password?</a>
+      {/* Sign Up Link */}
+      <div className="text-center flex justify-center items-center gap-2">
+        <p>Bạn chưa có tài khoản?</p>
+        <a
+          href={ROUTES.SIGNUP}
+          className="text-sm text-purple-600 hover:underline dark:text-purple-400"
+        >
+          Đăng ký
+        </a>
+      </div>
     </form>
   );
 };

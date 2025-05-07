@@ -18,6 +18,7 @@ export interface VerifyOtpParams {
 export interface NewPasswordParams {
   email: string;
   new_password: string;
+  otp: string;
 }
 
 export interface GetAllUsersResponse {

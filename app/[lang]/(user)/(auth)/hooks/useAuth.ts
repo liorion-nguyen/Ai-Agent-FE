@@ -1,4 +1,3 @@
-import { useMutation } from '@tanstack/react-query';
 import { authAPI } from '@/services/endpoints';
 import {
   APIErrorHandler,
@@ -6,19 +5,25 @@ import {
   SignInResponse,
   SignUpParams,
 } from '@/services/types';
-import { toast, useToast } from '@/shared/hooks';
-import { ROUTES } from '@/shared/constants';
-import { useRouter } from 'next/navigation';
 import {
   ForgotPasswordParams,
-  VerifyOtpParams,
   NewPasswordParams,
+  VerifyOtpParams,
 } from '@/services/types/user';
+import { ROUTES } from '@/shared/constants';
+import { toast, useToast } from '@/shared/hooks';
 import useForgotPasswordStore from '@/store/forgot-password';
-
+import useUserStore from '@/store/user';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useMe, useSetApiToken } from './useUser';
+import { useSetWorkspace } from './useWorkspace';
 export const useSignIn = () => {
   const { toast } = useToast();
   const router = useRouter();
+  const { me } = useMe();
+  const { setApiToken } = useSetApiToken();
+  const { setWorkspace } = useSetWorkspace();
 
   const {
     mutate,
@@ -29,6 +34,14 @@ export const useSignIn = () => {
     onSuccess: (data) => {
       document.cookie = `access_token=${data.token.access_token}; path=/; max-age=${60 * 60 * 24 * 7}`;
       document.cookie = `refresh_token=${data.token.refresh_token}; path=/; max-age=${60 * 60 * 24 * 7}`;
+      me();
+      setApiToken();
+      setWorkspace();
+      toast({
+        title: 'Đăng nhập thành công',
+        description: 'Đăng nhập thành công',
+        variant: 'default',
+      });
       router.push(ROUTES.HOME);
     },
     onError: (err) => {
@@ -89,6 +102,8 @@ export const useSignOut = () => {
       document.cookie = `access_token=; path=/; max-age=0`;
       document.cookie = `refresh_token=; path=/; max-age=0`;
       router.push(ROUTES.SIGNIN);
+      useUserStore.setState({ user: undefined });
+      useUserStore.setState({ apiToken: undefined });
     },
     onError: (err) => {
       toast({
@@ -149,23 +164,28 @@ export const useVerifyOtp = () => {
     error,
   } = useMutation({
     mutationFn: (params: VerifyOtpParams) => authAPI.postVerifyOtp(params),
-    onSuccess: () => {
-      toast({
-        title: 'Xác thực OTP thành công',
-        description: 'Xác thực OTP thành công',
-      });
-      useForgotPasswordStore.setState({ step: 3 });
-    },
-    onError: (err) => {
-      toast({
-        title: 'Xác thực OTP thất bại',
-        description: err?.message,
-      });
-    },
   });
+  const verifyOtp = (params: VerifyOtpParams) => {
+    mutate(params, {
+      onSuccess: () => {
+        toast({
+          title: 'Xác thực OTP thành công',
+          description: 'Xác thực OTP thành công',
+        });
+        useForgotPasswordStore.setState({ otp: params.otp });
+        useForgotPasswordStore.setState({ step: 3 });
+      },
+      onError: (err) => {
+        toast({
+          title: 'Xác thực OTP thất bại',
+          description: err?.message,
+        });
+      },
+    });
+  };
 
   return {
-    verifyOtp: mutate,
+    verifyOtp,
     loading,
     error,
   };

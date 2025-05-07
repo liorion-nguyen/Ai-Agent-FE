@@ -1,14 +1,11 @@
-import { DELETE, GET, PATCH, POST } from '@/services/api';
-import { API_ENDPOINTS } from '@/shared/constants';
-import { User } from '@/shared/types';
+import { DELETE, GET, PATCH } from '@/services/api';
 import {
   ApiTokenResponse,
-  ForgotPasswordParams,
   GetAllUsersResponse,
   GetUserByIdResponse,
-  NewPasswordParams,
-  VerifyOtpParams,
-} from '../types/user';
+} from '@/services/types/user';
+import { API_ENDPOINTS } from '@/shared/constants';
+import { User } from '@/shared/types';
 export const userApi = {
   updateProfile: (params: Partial<User>) =>
     PATCH(API_ENDPOINTS.UPDATE_PROFILE, params),

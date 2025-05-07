@@ -1,9 +1,9 @@
 'use client';
 
+import ForgotPasswordForm from '@/app/[lang]/(user)/(auth)/components/ForgotPasswordForm';
+import NewPasswordForm from '@/app/[lang]/(user)/(auth)/components/NewPasswordForm';
+import OtpVerificationForm from '@/app/[lang]/(user)/(auth)/components/OtpVerificationForm';
 import useForgotPasswordStore from '@/store/forgot-password';
-import ForgotPasswordForm from '../../components/ForgotPasswordForm';
-import OtpVerificationForm from '../../components/OtpVerificationForm';
-import NewPasswordForm from '../../components/NewPasswordForm';
 
 const ForgotPassword = () => {
   const { step } = useForgotPasswordStore();

@@ -1,49 +1,63 @@
 import { GET, PATCH, POST } from '@/services/api';
-import { API_ENDPOINTS } from '@/shared/constants';
-import { Chatbot } from '@/shared/types/chatbot';
 import {
-  CreateChatbotInParams,
+  ChatbotResponse,
+  ChatbotsResponse,
+  ChatbotTokenResponse,
+  CreateChatbotCozeInParams,
+  CreateChatbotCozeResponse,
+  CreateChatbotDbInParams,
+  CreateChatbotDbResponse,
   CreateChatbotOnboardingParams,
   CreateChatbotPromptParams,
+  CreateChatbotTokenParams,
   PublishChatbotParams,
-  UpdateChatbotConfigParams,
-  UpdateChatbotDocumentsParams,
+  PublishChatbotResponse,
+  SendMessageParams,
+  UpdateChatbotBasicParams,
+  UpdateChatbotBasicResponse,
   UpdateChatbotOnboardingParams,
   UpdateChatbotPromptParams,
-} from '../types/chatbot';
+} from '@/services/types/chatbot';
+import { API_ENDPOINTS } from '@/shared/constants';
 export const chatbotApi = {
-  getAllChatbots: () => GET<Chatbot[]>(API_ENDPOINTS.GET_ALL_CHATBOTS),
+  getAllChatbots: () => GET<ChatbotsResponse>(API_ENDPOINTS.GET_ALL_CHATBOTS),
 
   getChatbotById: (id: string) =>
-    GET<Chatbot>(API_ENDPOINTS.GET_CHATBOT_BY_ID.replace(':id', id)),
+    GET<ChatbotResponse>(API_ENDPOINTS.GET_CHATBOT_BY_ID.replace(':id', id)),
 
-  createChatbot: (params: CreateChatbotInParams) =>
-    POST(
-      API_ENDPOINTS.CREATE_CHATBOT.replace(':user_id', params.user_id),
+  createChatbotDb: (params: CreateChatbotDbInParams) =>
+    POST<CreateChatbotDbResponse>(
+      API_ENDPOINTS.CREATE_CHATBOT_DB.replace(':user_id', params.user_id || ''),
       params,
     ),
 
-  updateChatbotConfig: (params: UpdateChatbotConfigParams) =>
-    PATCH(
+  createChatbotCoze: (params: CreateChatbotCozeInParams) => {
+    const { chatbot_id, ...rest } = params;
+    return PATCH<CreateChatbotCozeResponse>(
+      API_ENDPOINTS.CREATE_CHATBOT_COZE.replace(
+        ':user_id',
+        params.user_id || '',
+      ).replace(':chatbot_id', chatbot_id),
+      rest,
+    );
+  },
+
+  updateChatbotConfig: (params: UpdateChatbotBasicParams) =>
+    PATCH<UpdateChatbotBasicResponse>(
       API_ENDPOINTS.UPDATE_CHATBOT_CONFIG_BASIC.replace(
         ':user_id',
-        params.user_id,
-      ).replace(':chatbot_id', params.chatbot_id),
-      params,
+        params.user_id || '',
+      ).replace(':chatbot_id', params.chatbot_id || ''),
+      {
+        chatbot_name: params.chatbot_name,
+        description: params.description,
+        api_token: params.api_token,
+      },
     ),
 
   updateChatbotPrompt: (params: UpdateChatbotPromptParams) =>
     PATCH(
       API_ENDPOINTS.UPDATE_CHATBOT_PROMPT.replace(
-        ':user_id',
-        params.user_id,
-      ).replace(':chatbot_id', params.chatbot_id),
-      params,
-    ),
-
-  updateChatbotDocuments: (params: UpdateChatbotDocumentsParams) =>
-    PATCH(
-      API_ENDPOINTS.UPDATE_CHATBOT_DOCUMENTS.replace(
         ':user_id',
         params.user_id,
       ).replace(':chatbot_id', params.chatbot_id),
@@ -66,12 +80,15 @@ export const chatbotApi = {
     ),
 
   publishChatbot: (params: PublishChatbotParams) =>
-    POST(
+    POST<PublishChatbotResponse>(
       API_ENDPOINTS.PUBLISH_CHATBOT.replace(':user_id', params.user_id).replace(
         ':chatbot_id',
         params.chatbot_id,
       ),
-      params,
+      {
+        api_token: params.api_token,
+        connector_id: params.connector_id,
+      },
     ),
 
   createOnboardingChatbot: (params: CreateChatbotOnboardingParams) =>
@@ -82,4 +99,21 @@ export const chatbotApi = {
       ).replace(':chatbot_id', params.chatbot_id),
       params,
     ),
+
+  sendMessage: (params: SendMessageParams) =>
+    POST(
+      API_ENDPOINTS.SEND_MESSAGE.replace(':user_id', params.user_id).replace(
+        ':chatbot_id',
+        params.chatbot_id,
+      ),
+      params,
+    ),
+
+  getChatbotTokens: () =>
+    GET<ChatbotTokenResponse>(API_ENDPOINTS.GET_CHATBOT_TOKENS),
+
+  createChatbotToken: (chatbot_id: string) =>
+    POST<CreateChatbotTokenParams>(API_ENDPOINTS.CREATE_CHATBOT_TOKEN, {
+      chatbot_id,
+    }),
 };

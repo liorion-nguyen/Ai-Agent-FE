@@ -1,4 +1,4 @@
-import { UserRole, UserStatus } from '../constants';
+import { UserRole, UserStatus } from '@/shared/constants';
 import { Chatbot } from './chatbot';
 export interface User {
   id: string;

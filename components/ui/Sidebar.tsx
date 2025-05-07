@@ -1,12 +1,10 @@
 'use client';
 
-import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { VariantProps, cva } from 'class-variance-authority';
-import { PanelLeft } from 'lucide-react';
+import { ChevronsRightLeft } from 'lucide-react';
+import * as React from 'react';
 
-import { useIsMobile } from '@/shared/hooks/useMobile';
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Separator } from '@/components/ui/Separator';
@@ -24,6 +22,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/Tooltip';
+import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/shared/hooks/useMobile';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -289,14 +289,18 @@ const SidebarTrigger = React.forwardRef<
       data-sidebar="trigger"
       variant="ghost"
       size="icon"
-      className={cn('h-7 w-7', className)}
+      className={cn(
+        'h-7 w-7',
+        className,
+        'absolute top-8 -right-3 z-20 bg-white',
+      )}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();
       }}
       {...props}
     >
-      <PanelLeft />
+      <ChevronsRightLeft />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

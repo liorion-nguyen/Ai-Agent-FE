@@ -18,17 +18,20 @@ export const API_ENDPOINTS = {
   // Chatbots
   GET_ALL_CHATBOTS: '/users/profile/chatbots',
   GET_CHATBOT_BY_ID: '/users/profile/chatbots/:id',
-  CREATE_CHATBOT: '/users/:user_id/chatbots',
+  CREATE_CHATBOT_DB: '/users/:user_id/chatbots',
+  CREATE_CHATBOT_COZE: '/users/:user_id/chatbots/:chatbot_id',
   UPDATE_CHATBOT_CONFIG_BASIC:
     '/users/:user_id/chatbots/:chatbot_id/config-basic',
   UPDATE_CHATBOT_PROMPT: '/users/:user_id/chatbots/:chatbot_id/import-prompts',
-  UPDATE_CHATBOT_DOCUMENTS:
+  ADD_RESOURCE_TO_CHATBOT:
     '/users/:user_id/chatbots/:chatbot_id/import-documents',
   PUBLISH_CHATBOT: '/users/:user_id/chatbots/:chatbot_id/publish',
   CREATE_ONBOARDING_CHATBOT: '/users/:user_id/chatbots/:chatbot_id/onboarding',
   UPDATE_ONBOARDING_CHATBOT:
     '/users/:user_id/chatbots/:chatbot_id/onboarding/:onboarding_id',
   CREATE_CHATBOT_PROMPT: '/users/:user_id/prompts',
+  GET_CHATBOT_TOKENS: 'users/profile/chatbot-token',
+  CREATE_CHATBOT_TOKEN: 'chatbot-tokens/generate-chatbot-token',
 
   // Models
   GET_MODELS: '/chatbot-models',
@@ -36,18 +39,33 @@ export const API_ENDPOINTS = {
   // Messages
   SEND_MESSAGE_REVIEW: '/users/:user_id/chatbots/:chatbot_id/chat',
   SEND_MESSAGE: '/users/:user_id/chatbots/:chatbot_id/iframe/chat',
-
+  INIT_CHECK_ACTIVE_CHATBOT:
+    '/chatbot-embed/init?chatbotId=:chatbot_id&userId=:user_id&token=:token',
+  CREATE_CONVERSATION: '/conversations',
   // Resources
   GET_ALL_RESOURCES: '/users/profile/resources',
   GET_RESOURCE_BY_ID: '/users/profile/resources/:id',
   CREATE_RESOURCE: '/users/:user_id/resources',
   CREATE_PROMPT: '/users/:user_id/prompts',
-  UPLOAD_FILE: '/users/:user_id/endcode-files',
+  ENCODE_FILE: '/users/:user_id/endcode-files',
+  UPLOAD_FILE: '/users/:user_id/resources/:resource_id/documents/files',
   ADD_DOCUMENT_TO_RESOURCE:
     '/users/:user_id/resources/:resource_id/documents/files',
 
   // Workspaces
   GET_WORKSPACE: '/users/profile/workspaces',
+
+  // Subscriptions
+  GET_SUBSCRIPTIONS: '/subscriptions',
+  GET_SUBSCRIPTION: '/users/profile/subscription',
+  SUBSCRIBE_SUBSCRIPTION: '/subscriptions/subscribe',
+  UPGRADE_SUBSCRIPTION: '/subscriptions/upgrade',
+  CANCEL_SUBSCRIPTION: '/subscriptions/cancel',
+  RENEW_SUBSCRIPTION: '/subscriptions/renew',
+
+  // Members
+  GET_MEMBERS: 'members',
+  ADD_MEMBER: 'members/add',
 };
 
 export const HTTP_CODE = {

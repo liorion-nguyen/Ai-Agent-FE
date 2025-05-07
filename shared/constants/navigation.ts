@@ -1,8 +1,7 @@
 export const navigationItems = [
-  { label: 'SHOP ALL', href: '/shop-all' },
-  { label: 'NEW', href: '/new' },
-  { label: 'FEATURED', href: '/featured' },
-  { label: 'BEST SELLERS', href: '/best-sellers' },
-  { label: 'COLLECTIONS', href: '/collections' },
-  { label: 'STORES', href: '/stores' },
+  { label: 'Trang chủ', href: '/' },
+  { label: 'Hướng dẫn', href: '/guide' },
+  { label: 'Tính năng', href: '/features' },
+  { label: 'Báo giá', href: '/price' },
+  { label: 'Quản lý chatbot', href: '/dashboard' },
 ];
