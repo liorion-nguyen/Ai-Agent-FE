@@ -31,7 +31,7 @@ const ProfilePage = () => {
     useState(false);
 
   return (
-    <div className="max-w-3xl w-2/3 mx-auto p-6">
+    <div className="max-w-3xl w-full md:w-2/3 mx-auto p-4 md:p-6">
       <h3 className="text-2xl font-bold mb-6">Thông tin cá nhân</h3>
       {/* Hình đại diện */}
       <div className="mb-6">

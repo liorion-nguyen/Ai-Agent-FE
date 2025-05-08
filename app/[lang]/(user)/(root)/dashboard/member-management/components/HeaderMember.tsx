@@ -7,9 +7,9 @@ export default function HeaderMember() {
   const [isOpen, setIsOpen] = useState(false);
   const { subscription } = useSubscriptionStore();
   return (
-    <div className="flex justify-between items-center bg-white p-4 border-b border-gray-200 min-h-[65px] max-h-[65px]">
+    <div className="flex justify-between items-center bg-white p-4 border-b border-gray-200 min-h-max md:min-h-[65px] md:max-h-[65px]">
       <h3 className="text-xl font-bold">Thành viên & Quyền truy cập</h3>
-      <div className="flex items-center gap-5">
+      <div className="flex flex-col-reverse md:flex-row items-center gap-5">
         <div className="flex flex-col items-center gap-2">
           <div className="flex items-center gap-2">
             <p>Thành viên</p>

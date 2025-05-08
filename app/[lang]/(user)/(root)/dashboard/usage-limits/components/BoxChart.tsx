@@ -48,7 +48,6 @@ const BoxChart = () => {
       ]);
     }
   }, [subscription]);
-  console.log(subscription);
 
   const getChartData = (value: number, total: number) => ({
     labels: ['Đã sử dụng', 'Còn lại'],
@@ -77,7 +76,7 @@ const BoxChart = () => {
   };
 
   return (
-    <div className="w-full h-fit grid grid-cols-2 gap-6 p-6">
+    <div className="w-full h-fit grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
       {statsData.map((stat, index) => (
         <div
           key={index}
