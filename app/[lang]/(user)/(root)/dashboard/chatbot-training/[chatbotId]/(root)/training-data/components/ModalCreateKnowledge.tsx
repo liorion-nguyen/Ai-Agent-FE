@@ -9,6 +9,7 @@ import {
   ModalHeader,
   ModalTitle,
 } from '@/components/ui/Modal'; // Import Modal
+import { ExternalTypeName, ImportType } from '@/shared/constants/knowledge';
 import { useZodForm } from '@/shared/hooks';
 import { createResourceSchema } from '@/shared/validations/resource/resource.schema';
 import {
@@ -39,17 +40,29 @@ interface ModalCreateKnowledgeProps {
   setIsOpen: (isOpen: boolean) => void;
 }
 
+interface FormatOption {
+  value: ExternalTypeName;
+  label: string;
+  icon: React.ReactElement;
+}
+
+interface ImportTypeOption {
+  value: ImportType;
+  label: string;
+  desc: string;
+  icon: React.ElementType;
+}
+
 const ModalCreateKnowledge = ({
   isOpen,
   setIsOpen,
 }: ModalCreateKnowledgeProps) => {
   const router = useRouter();
-  const [selectedExternalTypeName, setSelectedExternalTypeName] = useState<
-    'text' | 'image'
-  >('text');
-  const [selectedImportType, setSelectedImportType] = useState<
-    'local' | 'online' | 'notion' | 'google' | 'lark' | 'custom'
-  >('local');
+  const [selectedExternalTypeName, setSelectedExternalTypeName] =
+    useState<ExternalTypeName>(ExternalTypeName.TEXT);
+  const [selectedImportType, setSelectedImportType] = useState<ImportType>(
+    ImportType.LOCAL,
+  );
 
   const { createResource, loading } = useCreateResource();
 
@@ -76,52 +89,52 @@ const ModalCreateKnowledge = ({
     }
   };
 
-  const formatOptions = [
+  const formatOptions: FormatOption[] = [
     {
-      value: 'text',
+      value: ExternalTypeName.TEXT,
       label: 'Text format',
       icon: <LetterText className="w-5 h-5 text-gray-500" />,
     },
     {
-      value: 'image',
+      value: ExternalTypeName.IMAGE,
       label: 'Image format',
       icon: <FileImage className="w-5 h-5 text-gray-500" />,
     },
   ];
 
-  const importTypeOptions = [
+  const importTypeOptions: ImportTypeOption[] = [
     {
-      value: 'local',
+      value: ImportType.LOCAL,
       label: 'Local documents',
       desc: 'Upload local files',
       icon: File,
     },
     {
-      value: 'online',
+      value: ImportType.ONLINE,
       label: 'Online data',
       desc: 'Obtain data on web pages',
       icon: Globe,
     },
     {
-      value: 'notion',
+      value: ImportType.NOTION,
       label: 'Notion',
       desc: 'Import Notion pages',
       icon: FileText,
     },
     {
-      value: 'google',
+      value: ImportType.GOOGLE,
       label: 'Google Doc',
       desc: 'Import Google Docs',
       icon: FileText,
     },
     {
-      value: 'lark',
+      value: ImportType.LARK,
       label: 'Lark',
       desc: 'Import Lark documents',
       icon: FileX,
     },
     {
-      value: 'custom',
+      value: ImportType.CUSTOM,
       label: 'Custom',
       desc: 'Custom content',
       icon: FilePlus,
@@ -149,13 +162,8 @@ const ModalCreateKnowledge = ({
                   key={option.value}
                   type="button"
                   onClick={() => {
-                    setSelectedExternalTypeName(
-                      option.value as 'text' | 'image',
-                    );
-                    setValue(
-                      'external_type_name',
-                      option.value as 'text' | 'image',
-                    );
+                    setSelectedExternalTypeName(option.value);
+                    setValue('external_type_name', option.value);
                   }}
                   className={`
                   flex flex-col items-center p-4 rounded-lg border transition-colors gap-2
@@ -226,25 +234,8 @@ const ModalCreateKnowledge = ({
                   key={option.value}
                   type="button"
                   onClick={() => {
-                    setSelectedImportType(
-                      option.value as
-                        | 'local'
-                        | 'online'
-                        | 'notion'
-                        | 'google'
-                        | 'lark'
-                        | 'custom',
-                    );
-                    setValue(
-                      'import_type',
-                      option.value as
-                        | 'local'
-                        | 'online'
-                        | 'notion'
-                        | 'google'
-                        | 'lark'
-                        | 'custom',
-                    );
+                    setSelectedImportType(option.value);
+                    setValue('import_type', option.value);
                   }}
                   className={`
                   flex items-center p-4 rounded-lg border transition-colors

@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 
 export default function SectionIframe() {
   const siteURL = process.env.NEXT_PUBLIC_SERVER_URL;
-  const { chatbotId } = useParams();
+  const { chatbotId } = useParams<{ chatbotId: string }>();
   const { hydrated, chatbot } = useChatbotStore();
   const { getChatbot } = useGetChatbot();
   const { chatbotToken } = useChatbotStore();
@@ -29,7 +29,7 @@ export default function SectionIframe() {
     };
     checkPublishChatbot();
     if (!chatbotId || chatbot?.id !== chatbotId) {
-      getChatbot(chatbotId as string);
+      getChatbot(chatbotId);
     }
   }, [hydrated, chatbotId, getChatbot, chatbot?.id]);
   const [copied, setCopied] = useState(false);

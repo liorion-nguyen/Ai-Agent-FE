@@ -96,21 +96,19 @@ const sidebarGroups: SidebarGroup[] = [
 
 const CustomChatbotSidebar = () => {
   const router = useRouter();
-  const params = useParams();
+  const { chatbotId } = useParams<{ chatbotId: string }>();
   const pathname = usePathname();
-  const chatbotId = params.chatbotId || 'bot-demo';
   const { hydrated, chatbot, chatbots } = useChatbotStore();
   const { getChatbot } = useGetChatbot();
   useEffect(() => {
     if (!hydrated) return;
     if (!chatbot || chatbot.id !== chatbotId) {
-      getChatbot(chatbotId as string);
+      getChatbot(chatbotId);
     }
   }, [hydrated, getChatbot, chatbotId, chatbot]);
 
   const handleChatClick = () => {
     console.log('Chat với chatbot:', chatbotId);
-    // Thêm logic để mở giao diện chat
   };
 
   const handleBackClick = () => {
@@ -223,10 +221,7 @@ const CustomChatbotSidebar = () => {
             <ul className="space-y-1">
               {group.items.map((item) => {
                 const ItemIcon = item.icon;
-                const url = item.url.replace(
-                  '[chatbotId]',
-                  chatbotId as string,
-                );
+                const url = item.url.replace('[chatbotId]', chatbotId);
                 const isActive = pathname.includes(url);
 
                 return (

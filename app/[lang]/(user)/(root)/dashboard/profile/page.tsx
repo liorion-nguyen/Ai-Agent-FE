@@ -18,7 +18,9 @@ const ProfilePage = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setAvatar(reader.result as string);
+        if (reader.result && typeof reader.result === 'string') {
+          setAvatar(reader.result);
+        }
       };
       reader.readAsDataURL(file);
     }

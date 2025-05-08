@@ -18,24 +18,17 @@ const BoxChat = () => {
   const userId = searchParams.get('userId');
   const token = searchParams.get('token');
   const { initCheckActiveChatbot } = useInitCheckActiveChatbot();
-  const { conversationId, hydrated } = useMessageStore();
+  const { conversationId } = useMessageStore();
   const { sendMessage } = useSendMessage();
   useEffect(() => {
-    if (token && chatbotId && userId && !conversationId && hydrated) {
+    if (token && chatbotId && userId) {
       initCheckActiveChatbot({
         user_id: userId,
         chatbot_id: chatbotId,
         api_token: token,
       });
     }
-  }, [
-    token,
-    chatbotId,
-    userId,
-    conversationId,
-    hydrated,
-    initCheckActiveChatbot,
-  ]);
+  }, [token, chatbotId, userId, initCheckActiveChatbot]);
 
   const { messages, clearMessages, isStreaming } = useMessageStore();
   const [isOpen, setIsOpen] = useState(false);

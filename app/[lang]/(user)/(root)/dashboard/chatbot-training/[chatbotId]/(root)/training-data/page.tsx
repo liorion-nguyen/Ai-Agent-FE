@@ -5,7 +5,6 @@ import Empty from '@/components/ui/Empty';
 import { ModalButton } from '@/components/ui/Modal';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { ToolbarButton } from '@/components/ui/ToolbarButton';
-import { Chatbot } from '@/shared/types/chatbot';
 import useChatbotStore from '@/store/chatbot';
 import {
   ArrowDownUp,
@@ -22,9 +21,8 @@ import ModalCreateKnowledge from './components/ModalCreateKnowledge';
 import ResourceItem from './components/ResourceItem';
 
 export default function TrainingDataPage() {
-  const params = useParams();
   const router = useRouter();
-  const chatbotId = params.chatbotId || 'bot-demo';
+  const { chatbotId } = useParams<{ chatbotId: string }>();
   const { hydrated, chatbot } = useChatbotStore();
   const { getChatbot, loading } = useGetChatbot();
   const [isOpenImportModal, setIsOpenImportModal] = useState(false);
@@ -32,7 +30,7 @@ export default function TrainingDataPage() {
   useLayoutEffect(() => {
     if (!hydrated) return;
     if (!chatbotId || chatbot?.id !== chatbotId) {
-      getChatbot(chatbotId as string);
+      getChatbot(chatbotId);
     }
   }, [hydrated, getChatbot, chatbotId, chatbot?.id]);
 
@@ -123,15 +121,17 @@ export default function TrainingDataPage() {
               <Plus className="w-4 h-4" />
               Add FAQs
             </ModalButton>
-            <ModalAddKnowledge
-              chatbot={chatbot as Chatbot}
-              isOpen={isOpenAddModal}
-              onClose={() => setIsOpenAddModal(false)}
-              onSuccess={() => {
-                setIsOpenAddModal(false);
-                getChatbot(chatbotId as string);
-              }}
-            />
+            {chatbot && (
+              <ModalAddKnowledge
+                chatbot={chatbot}
+                isOpen={isOpenAddModal}
+                onClose={() => setIsOpenAddModal(false)}
+                onSuccess={() => {
+                  setIsOpenAddModal(false);
+                  getChatbot(chatbotId);
+                }}
+              />
+            )}
           </div>
         </div>
 

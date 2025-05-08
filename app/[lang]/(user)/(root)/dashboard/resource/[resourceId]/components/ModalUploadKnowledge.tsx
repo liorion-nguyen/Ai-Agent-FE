@@ -19,7 +19,7 @@ const ModalUploadKnowledge = ({
   setIsOpen,
   onSuccess,
 }: ModalUploadKnowledgeProps) => {
-  const { resourceId } = useParams();
+  const { resourceId } = useParams<{ resourceId: string }>();
   const { uploadFile, loading } = useUploadFile();
 
   const [fileName, setFileName] = useState<string>('');
@@ -28,13 +28,14 @@ const ModalUploadKnowledge = ({
     handleSubmit,
     setValue,
     formState: { errors },
+    reset,
   } = useZodForm(uploadFileSchema, {
     defaultValues: {
       file: undefined,
     },
   });
 
-  const onSubmit = async (data: { file: File | undefined }) => {
+  const onSubmit = async (data: { file?: File | undefined }) => {
     if (!data.file) {
       toast({
         title: 'Error',
@@ -46,7 +47,7 @@ const ModalUploadKnowledge = ({
     try {
       const res = await uploadFile({
         file: data.file,
-        resource_id: resourceId as string,
+        resource_id: resourceId,
       });
       if (res.success) {
         toast({
@@ -56,6 +57,7 @@ const ModalUploadKnowledge = ({
         });
         setIsOpen(false);
         onSuccess();
+        reset();
       } else {
         throw new Error('Upload failed.');
       }
@@ -87,7 +89,7 @@ const ModalUploadKnowledge = ({
           description: 'Only PDF, TXT, DOC, DOCX, or MD files are allowed.',
           variant: 'destructive',
         });
-        setValue('file', null as unknown as File, { shouldValidate: true });
+        reset({ file: undefined });
         setFileName('');
         return;
       }
@@ -97,14 +99,14 @@ const ModalUploadKnowledge = ({
           description: 'File size must not exceed 100MB.',
           variant: 'destructive',
         });
-        setValue('file', null as unknown as File, { shouldValidate: true });
+        reset({ file: undefined });
         setFileName('');
         return;
       }
       setValue('file', file, { shouldValidate: true });
       setFileName(file.name);
     } else {
-      setValue('file', null as unknown as File, { shouldValidate: true });
+      reset({ file: undefined });
       setFileName('');
     }
   };

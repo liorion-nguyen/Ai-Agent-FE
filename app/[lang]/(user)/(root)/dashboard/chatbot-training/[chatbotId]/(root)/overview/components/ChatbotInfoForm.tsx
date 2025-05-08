@@ -16,8 +16,7 @@ import {
 } from 'react';
 
 const ChatbotInfoForm = forwardRef((_, ref) => {
-  const params = useParams();
-  const chatbotId = params.chatbotId || 'bot-demo';
+  const { chatbotId } = useParams<{ chatbotId: string }>();
   const { chatbot, hydrated } = useChatbotStore();
 
   const { getChatbot } = useGetChatbot();
@@ -45,7 +44,7 @@ const ChatbotInfoForm = forwardRef((_, ref) => {
   useEffect(() => {
     if (!hydrated) return;
     if (!chatbot) {
-      getChatbot(chatbotId as string);
+      getChatbot(chatbotId);
     }
     if (chatbot) {
       setValue('chatbot_name', chatbot.chatbot_name || '');
@@ -60,9 +59,11 @@ const ChatbotInfoForm = forwardRef((_, ref) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setThumbnailPreview(base64String);
-        setValue('thumbnail', base64String);
+        const base64String = reader.result;
+        if (base64String && typeof base64String === 'string') {
+          setThumbnailPreview(base64String);
+          setValue('thumbnail', base64String);
+        }
       };
       reader.readAsDataURL(file);
     }
