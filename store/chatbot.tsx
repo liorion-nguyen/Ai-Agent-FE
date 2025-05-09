@@ -1,5 +1,5 @@
 // store/chatbot.ts
-import { Chatbot, ChatbotToken } from '@/shared/types/chatbot';
+import { Chatbot, ChatbotEmbed, ChatbotToken } from '@/shared/types/chatbot';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
@@ -9,8 +9,11 @@ interface ChatbotState {
   hydrated: boolean;
   chatbotTokens: ChatbotToken[];
   chatbotToken: ChatbotToken | undefined;
+  chatbotEmbed: ChatbotEmbed | undefined;
   setChatbots: (newChatbots: Chatbot[]) => void;
   setChatbot: (newChatbot: Chatbot) => void;
+  setChatbotEmbed: (newChatbotEmbed: ChatbotEmbed) => void;
+  resetChatbotEmbed: () => void;
   resetChatbot: () => void;
   resetChatbots: () => void;
   setChatbotTokens: (newChatbotTokens: ChatbotToken[]) => void;
@@ -29,8 +32,12 @@ const useChatbotStore = create<ChatbotState>()(
         chatbotTokens: [],
         chatbotToken: undefined,
         hydrated: false,
+        chatbotEmbed: undefined,
         setChatbots: (newChatbots) => set({ chatbots: newChatbots }),
         setChatbot: (newChatbot) => set({ chatbot: newChatbot }),
+        setChatbotEmbed: (newChatbotEmbed) =>
+          set({ chatbotEmbed: newChatbotEmbed }),
+        resetChatbotEmbed: () => set({ chatbotEmbed: undefined }),
         resetChatbot: () => set({ chatbot: undefined }),
         resetChatbots: () => set({ chatbots: [] }),
         setChatbotTokens: (newChatbotTokens) =>

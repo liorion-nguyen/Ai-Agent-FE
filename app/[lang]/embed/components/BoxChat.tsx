@@ -7,11 +7,12 @@ import {
 } from '@/app/[lang]/embed/hooks/useMessage';
 import { toast } from '@/shared/hooks';
 import { MessageType } from '@/shared/types/chatbot';
+import useChatbotStore from '@/store/chatbot';
 import { useMessageStore } from '@/store/message';
 import { MessageCircle, MessageSquareOff, Plus, Send, X } from 'lucide-react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-
 const BoxChat = () => {
   const searchParams = useSearchParams();
   const chatbotId = searchParams.get('chatbotId');
@@ -20,6 +21,9 @@ const BoxChat = () => {
   const { initCheckActiveChatbot } = useInitCheckActiveChatbot();
   const { conversationId } = useMessageStore();
   const { sendMessage } = useSendMessage();
+  const { chatbotEmbed } = useChatbotStore();
+  console.log('chatbotEmbed', chatbotEmbed);
+
   useEffect(() => {
     if (token && chatbotId && userId) {
       initCheckActiveChatbot({
@@ -68,6 +72,7 @@ const BoxChat = () => {
 
     try {
       await sendMessage(chatbotId, userId, inputValue, conversationId);
+      setInputValue('');
     } catch (error) {
       toast({
         title: 'Error',
@@ -101,7 +106,7 @@ const BoxChat = () => {
           {/* Header */}
           <div className="p-4 border-b border-gray-200 flex justify-between items-center">
             <h3 className="text-lg font-semibold text-gray-800">
-              L-Edu Assistant
+              {chatbotEmbed?.chatbot_name}
             </h3>
             <div className="flex items-center gap-2">
               <button
@@ -134,7 +139,18 @@ const BoxChat = () => {
                   {isStreaming && (
                     <div className="flex items-center gap-2 text-gray-500">
                       <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                        B
+                        {chatbotEmbed?.icon_url ? (
+                          <Image
+                            src={chatbotEmbed.icon_url}
+                            alt="Chatbot Icon"
+                            width={32}
+                            height={32}
+                          />
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                            {chatbotEmbed?.chatbot_name.charAt(0)}
+                          </div>
+                        )}
                       </div>
                       <p>Typing...</p>
                     </div>

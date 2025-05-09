@@ -28,11 +28,16 @@ export interface InitCheckActiveChatbotParams {
 }
 
 export interface InitCheckActiveChatbotResponse {
-  status: string;
   data: {
-    chatbotId: string;
-    userId: string;
+    id: string;
+    chatbot_name: string;
+    icon_url: string | null;
+    status: string;
+    user: {
+      id: string;
+    };
   };
+  status: string;
 }
 
 export interface CreateConversationParams {

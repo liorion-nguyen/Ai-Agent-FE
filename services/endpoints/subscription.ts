@@ -11,6 +11,8 @@ export const subscriptionApi = {
   getSubscriptions: () => GET<Subscription[]>(API_ENDPOINTS.GET_SUBSCRIPTIONS),
   getSubscription: () =>
     GET<SubscriptionResponse>(API_ENDPOINTS.GET_SUBSCRIPTION),
+  getSubscriptionById: (id: string) =>
+    GET<Subscription>(API_ENDPOINTS.GET_SUBSCRIPTION_BY_ID.replace(':id', id)),
   subscribeSubscription: (data: CommonBasicRequest) =>
     POST<CommonBasicResponse>(API_ENDPOINTS.SUBSCRIBE_SUBSCRIPTION, data),
   cancelSubscription: (data: CommonBasicRequest) =>

@@ -1,9 +1,9 @@
 'use client';
 
-import { adminRegisterSchema } from '@/shared/validations';
-import { useZodForm } from '@/shared/hooks';
 import { useSignUp } from '@/app/[lang]/(user)/(auth)/hooks';
 import { ROUTES } from '@/shared/constants';
+import { useZodForm } from '@/shared/hooks';
+import { adminRegisterSchema } from '@/shared/validations';
 import { useState } from 'react';
 
 const SignUpForm = () => {
@@ -69,7 +69,7 @@ const SignUpForm = () => {
         <label className="block text-sm font-medium text-gray-900 dark:text-gray-100">
           Mật khẩu <span className="text-red-500">*</span>
         </label>
-        <div className="relative">
+        <div className="relative flex align-middle">
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Nhập mật khẩu của bạn"
@@ -79,7 +79,7 @@ const SignUpForm = () => {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-2 text-gray-500"
+            className="absolute text-gray-500 right-3 top-1/2 transform -translate-y-1/2"
           >
             {showPassword ? (
               <svg

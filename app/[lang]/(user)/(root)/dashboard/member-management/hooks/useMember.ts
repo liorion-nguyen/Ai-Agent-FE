@@ -3,10 +3,12 @@ import { APIErrorHandler } from '@/services/types';
 import {
   AddMemberParams,
   AddMemberResponse,
+  GetMembersParams,
   GetMembersResponse,
 } from '@/services/types/member';
 import { toast } from '@/shared/hooks';
 import useMemberStore from '@/store/member';
+import useUserStore from '@/store/user';
 import { useMutation } from '@tanstack/react-query';
 
 export const useGetMembers = () => {
@@ -15,8 +17,8 @@ export const useGetMembers = () => {
     mutateAsync,
     isPending: loading,
     error,
-  } = useMutation<GetMembersResponse, APIErrorHandler>({
-    mutationFn: () => memberAPI.getMembers(),
+  } = useMutation<GetMembersResponse, APIErrorHandler, GetMembersParams>({
+    mutationFn: (params: GetMembersParams) => memberAPI.getMembers(params),
     onSuccess: (data) => {
       setMembers(data.data);
     },
@@ -38,6 +40,7 @@ export const useGetMembers = () => {
 
 export const useAddMember = () => {
   const { getMembers } = useGetMembers();
+  const { user, workspace } = useUserStore();
   const {
     mutateAsync,
     isPending: loading,
@@ -50,7 +53,10 @@ export const useAddMember = () => {
         description: data.message,
         variant: 'default',
       });
-      getMembers();
+      getMembers({
+        user_id: user?.id || '',
+        workspace_id: workspace?.id || '',
+      });
     },
     onError: (err) => {
       toast({

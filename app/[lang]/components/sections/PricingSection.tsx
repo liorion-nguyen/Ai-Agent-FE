@@ -1,7 +1,5 @@
 'use client';
 import {
-  useCancelSubscription,
-  useSubscribeSubscription,
   useSubscription,
   useSubscriptions,
 } from '@/app/[lang]/hooks/useSubscription';
@@ -9,32 +7,19 @@ import SectionDashboardLayout from '@/components/layout/section-landing-page-lay
 import { Skeleton } from '@/components/ui/Skeleton';
 import { cn } from '@/lib/utils';
 import useSubscriptionStore from '@/store/subscription';
-import useUserStore from '@/store/user';
 import { CircleCheck } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useLayoutEffect } from 'react';
 const PricingSection = () => {
   const { subscriptions, subscription } = useSubscriptionStore();
 
   const { getSubscriptions, loading } = useSubscriptions();
-  const { user } = useUserStore();
   const { getSubscription } = useSubscription();
-  // const router = useRouter();
+  const router = useRouter();
   useLayoutEffect(() => {
     getSubscriptions();
     getSubscription();
   }, [getSubscriptions, getSubscription]);
-
-  const { subscribeSubscription } = useSubscribeSubscription();
-  const { cancelSubscription } = useCancelSubscription();
-  const handleSubscribeSubscription = async (id: string) => {
-    if (subscription) {
-      await cancelSubscription({
-        subscriptionId: subscription.id,
-        userId: user?.id || '',
-      });
-    }
-    await subscribeSubscription({ subscriptionId: id, userId: user?.id || '' });
-  };
 
   return (
     <SectionDashboardLayout className="py-16">
@@ -110,8 +95,7 @@ const PricingSection = () => {
                           'bg-gray-300 text-gray-500 cursor-not-allowed',
                       )}
                       onClick={() => {
-                        handleSubscribeSubscription(plan.id);
-                        // router.push(`/payment/${plan.id}`);
+                        router.push(`/payment/${plan.id}`);
                       }}
                       disabled={
                         subscription &&

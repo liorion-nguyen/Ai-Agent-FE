@@ -58,14 +58,15 @@ export const API_ENDPOINTS = {
   // Subscriptions
   GET_SUBSCRIPTIONS: '/subscriptions',
   GET_SUBSCRIPTION: '/users/profile/subscription',
+  GET_SUBSCRIPTION_BY_ID: '/subscriptions/:id',
   SUBSCRIBE_SUBSCRIPTION: '/subscriptions/subscribe',
   UPGRADE_SUBSCRIPTION: '/subscriptions/upgrade',
   CANCEL_SUBSCRIPTION: '/subscriptions/cancel',
   RENEW_SUBSCRIPTION: '/subscriptions/renew',
 
   // Members
-  GET_MEMBERS: 'members',
-  ADD_MEMBER: 'members/add',
+  GET_MEMBERS: 'workspaces/:workspace_id/members?user_id=:user_id',
+  ADD_MEMBER: 'workspaces/:workspace_id/members',
 };
 
 export const HTTP_CODE = {

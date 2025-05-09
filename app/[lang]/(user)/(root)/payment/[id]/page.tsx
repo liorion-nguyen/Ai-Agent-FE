@@ -1,10 +1,46 @@
 'use client';
+import {
+  useCancelSubscription,
+  useGetSubscriptionById,
+  useSubscribeSubscription,
+} from '@/app/[lang]/hooks/useSubscription';
+import { Subscription } from '@/shared/types/subscription';
+import { formatCurrency } from '@/shared/utils/currency';
+import { formatDate } from '@/shared/utils/date';
+import useUserStore from '@/store/user';
 import { ChevronLeft, Pencil } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function PaymentPage() {
   const router = useRouter();
+  const { id } = useParams<{ id: string }>();
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const { getSubscriptionById } = useGetSubscriptionById();
+  const { user } = useUserStore();
+  const { subscribeSubscription } = useSubscribeSubscription();
+  const { cancelSubscription } = useCancelSubscription();
+
+  const handleSubscribeSubscription = async (id: string) => {
+    if (subscription) {
+      await cancelSubscription({
+        subscriptionId: subscription.id,
+        userId: user?.id || '',
+      });
+    }
+    await subscribeSubscription({ subscriptionId: id, userId: user?.id || '' });
+    router.back();
+  };
+
+  useEffect(() => {
+    const fetchSubscription = async () => {
+      const subscription = await getSubscriptionById(id);
+      setSubscription(subscription);
+    };
+    fetchSubscription();
+  }, [getSubscriptionById, id]);
+
   return (
     <div className="flex flex-col gap-4 max-w-4xl mx-auto mt-20">
       <div className="flex items-center gap-2">
@@ -20,11 +56,18 @@ export default function PaymentPage() {
           </h3>
           <div className="space-y-2 text-gray-600">
             <p>
-              <strong>Khách hàng:</strong> Nguyen Quoc Chung
+              <strong>Khách hàng:</strong> {user?.fullname}
             </p>
-            <p>
-              <strong>Số điện thoại:</strong> 0708200334
-            </p>
+            {user?.phone && (
+              <p>
+                <strong>Số điện thoại:</strong> {user?.phone}
+              </p>
+            )}
+            {user?.email && (
+              <p>
+                <strong>Email:</strong> {user?.email}
+              </p>
+            )}
             <p>
               <strong>Địa chỉ:</strong>{' '}
               <span className="text-purple-600 flex items-center">
@@ -75,23 +118,29 @@ export default function PaymentPage() {
           </h3>
           <div className="space-y-2 text-gray-600">
             <p>
-              <strong>Ngày tạo:</strong> 03/05/2025
+              <strong>Ngày tạo:</strong> {formatDate(new Date())}
             </p>
             <p>
-              <strong>Loại gói:</strong> Gói nâng cao
+              <strong>Loại gói:</strong> {subscription?.name}
             </p>
             <p>
-              <strong>Thời gian đăng ký:</strong> 12 tháng
+              <strong>Thời gian đăng ký:</strong>{' '}
+              {subscription?.duration_months}
             </p>
             <p>
-              <strong>Giá tiền:</strong> 11,988,000đ
+              <strong>Giá tiền:</strong>{' '}
+              {formatCurrency(subscription?.price || 0)}
             </p>
           </div>
           <div className="mt-4 space-y-2 text-gray-600">
             <p>
-              <strong>Tổng số tiền:</strong> 11,988,000đ
+              <strong>Tổng số tiền:</strong>{' '}
+              {formatCurrency(subscription?.price || 0)}
             </p>
-            <button className="bg-purple-700 text-white w-full py-2 rounded">
+            <button
+              className="bg-purple-700 text-white w-full py-2 rounded"
+              onClick={() => handleSubscribeSubscription(id)}
+            >
               Tiến hành thanh toán
             </button>
           </div>

@@ -6,6 +6,7 @@ import {
 } from '@/services/types/message';
 import { useToast } from '@/shared/hooks';
 import { processStreamData } from '@/shared/utils/stream';
+import useChatbotStore from '@/store/chatbot';
 import { useMessageStore } from '@/store/message';
 import { useMutation } from '@tanstack/react-query';
 
@@ -82,6 +83,7 @@ export const useSendMessage = () => {
 export const useInitCheckActiveChatbot = () => {
   const { toast } = useToast();
   const { setConversationId } = useMessageStore();
+  const { setChatbotEmbed } = useChatbotStore();
   const {
     mutate,
     isPending: loading,
@@ -93,9 +95,10 @@ export const useInitCheckActiveChatbot = () => {
   >({
     mutationFn: messageApi.initCheckActiveChatbot,
     onSuccess: async (data) => {
+      setChatbotEmbed(data.data);
       const conversation = await messageApi.createConversation({
-        user_id: data.data.userId,
-        chatbot_id: data.data.chatbotId,
+        user_id: data.data.user.id,
+        chatbot_id: data.data.id,
       });
       setConversationId(conversation.id);
     },

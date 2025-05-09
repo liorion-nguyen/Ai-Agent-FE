@@ -6,14 +6,18 @@ export interface GetMembersResponse {
   data: Member[];
 }
 
+export interface GetMembersParams {
+  user_id: string;
+  workspace_id: string;
+}
+
 export interface AddMemberResponse {
   success: boolean;
   message: string;
 }
 
 export interface AddMemberParams {
-  fullName: string;
   email: string;
-  password: string;
   role: string;
+  workspace_id: string;
 }

@@ -17,15 +17,17 @@ import { memberSchema } from '@/shared/validations/member/member.schema';
 import useUserStore from '@/store/user';
 import { z } from 'zod';
 
-interface ModalAddMemberProps {
+interface ModalDetailMemberProps {
   isOpen: boolean;
   onClose: () => void;
+  id: string;
 }
 
-export default function ModalAddMember({
+export default function ModalDetailMember({
   isOpen,
   onClose,
-}: ModalAddMemberProps) {
+  id,
+}: ModalDetailMemberProps) {
   const {
     register,
     handleSubmit,
@@ -59,6 +61,11 @@ export default function ModalAddMember({
         variant: 'destructive',
       });
     }
+  };
+
+  const handleDelete = () => {
+    console.log('Xóa thành viên:', id);
+    onClose();
   };
 
   return (
@@ -105,11 +112,18 @@ export default function ModalAddMember({
           Đóng
         </ModalButton>
         <ModalButton
+          variant="primary"
+          className="bg-red-500 hover:bg-red-600"
+          onClick={handleDelete}
+        >
+          Xóa
+        </ModalButton>
+        <ModalButton
           type="submit"
           disabled={loading}
           onClick={handleSubmit(onSubmit)}
         >
-          {loading ? 'Đang xử lý...' : 'Thêm thành viên'}
+          {loading ? 'Đang cập nhật...' : 'Cập nhật'}
         </ModalButton>
       </ModalFooter>
     </Modal>

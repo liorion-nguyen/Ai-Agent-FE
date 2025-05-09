@@ -24,6 +24,16 @@ export interface Chatbot {
   chatbot_resources: ChatbotResource[];
 }
 
+export interface ChatbotEmbed {
+  id: string;
+  chatbot_name: string;
+  icon_url: string | null;
+  status: string;
+  user: {
+    id: string;
+  };
+}
+
 export interface ChatbotOnboarding {
   id: string;
   description: string;

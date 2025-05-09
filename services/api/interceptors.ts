@@ -43,16 +43,14 @@ export const setupInterceptors = (axiosInstance: AxiosInstance): void => {
           );
 
           const newToken = response.data.access_token;
-          // axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
           if (originalRequest.headers) {
             document.cookie = `access_token=${newToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
           }
           return axiosInstance(originalRequest);
         } catch (refreshError) {
-          console.error('Token refresh failed:', refreshError);
           document.cookie = `access_token=; path=/; max-age=0`;
           document.cookie = `refresh_token=; path=/; max-age=0`;
-          window.location.href = '/sign-in';
+          // window.location.href = '/vi/s';
         }
       }
 

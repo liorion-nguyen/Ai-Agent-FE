@@ -23,6 +23,7 @@ import {
   Key,
   LogOut,
   MessageSquare,
+  RemoveFormatting,
   Settings,
   User,
   Users,
@@ -55,6 +56,12 @@ const items = [
     url: '/dashboard/messages',
     icon: MessageSquare,
     tooltip: 'Quản lý tín nhắn',
+  },
+  {
+    title: 'Quản lý form',
+    url: '/dashboard/form-management',
+    icon: RemoveFormatting,
+    tooltip: 'Quản lý form',
   },
   {
     title: 'Quản lý token',
