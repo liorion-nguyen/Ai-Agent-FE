@@ -67,6 +67,9 @@ export const API_ENDPOINTS = {
   // Members
   GET_MEMBERS: 'workspaces/:workspace_id/members?user_id=:user_id',
   ADD_MEMBER: 'workspaces/:workspace_id/members',
+
+  // Forms
+  GET_FORMS: 'workspaces/:workspace_id/forms?user_id=:user_id',
 };
 
 export const HTTP_CODE = {

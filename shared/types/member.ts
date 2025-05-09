@@ -15,13 +15,10 @@ export interface Member {
   };
 }
 
-export interface MemberRow {
-  user: {
-    id: string;
-    fullname: string;
-    email: string;
-    username: string;
-  };
+export interface MemberList {
+  fullname: string;
+  email: string;
+  username: string;
   role: string;
   created_at: string;
   isActive: boolean;

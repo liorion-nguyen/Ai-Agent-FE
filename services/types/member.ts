@@ -1,9 +1,16 @@
-import { Member } from '@/shared/types/member';
+import { Member, MemberList } from '@/shared/types';
 
 export interface GetMembersResponse {
   success: boolean;
   message: string;
   data: Member[];
+}
+
+export interface GetMemberResTabel {
+  success: boolean;
+  message: string;
+  data: MemberList[];
+  totalCount: number;
 }
 
 export interface GetMembersParams {

@@ -3,11 +3,8 @@
 import { useSignOut } from '@/app/[lang]/(user)/(auth)/hooks';
 import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
 import AccountCircleIcon from '@/public/icons/account-circle-icon.svg';
-import CartIcon from '@/public/icons/cart-icon.svg';
-import HeartIcon from '@/public/icons/heart-icon.svg';
 import LogoAgent from '@/public/icons/ic_logo-agent.webp';
 import MenuIcon from '@/public/icons/menu-icon.svg';
-import SearchIcon from '@/public/icons/search-icon.svg';
 import { ROUTES } from '@/shared/constants';
 import { navigationItems } from '@/shared/constants/navigation';
 import { useIsMobile } from '@/shared/hooks/useMobile';
@@ -159,12 +156,6 @@ const DashboardHeader = () => {
                     <Img src={MenuIcon.src} alt="menu" className="w-6 h-6" />
                   </button>
                 )}
-                <button aria-label="Search" className="p-1">
-                  <Img src={SearchIcon.src} alt="Search" className="w-6 h-6" />
-                </button>
-                <button aria-label="Wishlist" className="hidden sm:block p-1">
-                  <Img src={HeartIcon.src} alt="Wishlist" className="w-6 h-6" />
-                </button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button aria-label="Account" className="p-1">
@@ -199,12 +190,6 @@ const DashboardHeader = () => {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <button aria-label="Cart" className="p-1 relative">
-                  <Img src={CartIcon.src} alt="Cart" className="w-6 h-6" />
-                  <span className="absolute -top-1 -right-1 bg-secondary text-foreground rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
-                    1
-                  </span>
-                </button>
               </div>
             )}
           </div>

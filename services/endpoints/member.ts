@@ -1,11 +1,11 @@
 import { GET, POST } from '@/services/api';
-import { API_ENDPOINTS } from '@/shared/constants';
 import {
   AddMemberParams,
   AddMemberResponse,
   GetMembersParams,
   GetMembersResponse,
-} from '../types/member';
+} from '@/services/types/member';
+import { API_ENDPOINTS } from '@/shared/constants';
 
 export const memberAPI = {
   getMembers: (params: GetMembersParams) =>

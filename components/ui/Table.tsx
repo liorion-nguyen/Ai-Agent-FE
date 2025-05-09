@@ -1,120 +1,124 @@
-import { cn } from '@/lib/utils';
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-} from '@tanstack/react-table';
 import * as React from 'react';
 
-type GenericTableProps<T> = {
-  data: T[];
-  columns: ColumnDef<T>[];
-  className?: string;
-  tableClassName?: string;
-  headerClassName?: string;
-  rowClassName?: string;
-  cellClassName?: string;
+import { cn } from '@/lib/utils';
+
+const Table = React.forwardRef<
+  HTMLTableElement,
+  React.HTMLAttributes<HTMLTableElement>
+>(({ className, ...props }, ref) => (
+  <div className="relative w-full overflow-auto">
+    <table
+      ref={ref}
+      className={cn('w-full caption-bottom text-sm', className)}
+      {...props}
+    />
+  </div>
+));
+Table.displayName = 'Table';
+
+const TableHeader = React.forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(({ className, ...props }, ref) => (
+  <thead ref={ref} className={cn('[&_tr]:border-b', className)} {...props} />
+));
+TableHeader.displayName = 'TableHeader';
+
+const TableBody = React.forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(({ className, ...props }, ref) => (
+  <tbody
+    ref={ref}
+    className={cn('[&_tr:last-child]:border-0', className)}
+    {...props}
+  />
+));
+TableBody.displayName = 'TableBody';
+
+const TableFooter = React.forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(({ className, ...props }, ref) => (
+  <tfoot
+    ref={ref}
+    className={cn(
+      'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
+      className,
+    )}
+    {...props}
+  />
+));
+TableFooter.displayName = 'TableFooter';
+
+const TableRow = React.forwardRef<
+  HTMLTableRowElement,
+  React.HTMLAttributes<HTMLTableRowElement>
+>(({ className, ...props }, ref) => (
+  <tr
+    ref={ref}
+    className={cn(
+      'border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
+      className,
+    )}
+    {...props}
+  />
+));
+TableRow.displayName = 'TableRow';
+
+const TableHead = React.forwardRef<
+  HTMLTableCellElement,
+  React.ThHTMLAttributes<HTMLTableCellElement> & {
+    className?: string;
+  }
+>(({ className, ...props }, ref) => (
+  <th
+    ref={ref}
+    className={cn(
+      'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+      className,
+    )}
+    {...props}
+  />
+));
+TableHead.displayName = 'TableHead';
+
+const TableCell = React.forwardRef<
+  HTMLTableCellElement,
+  React.TdHTMLAttributes<HTMLTableCellElement> & {
+    className?: string;
+  }
+>(({ className, ...props }, ref) => (
+  <td
+    ref={ref}
+    className={cn(
+      'p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+      className,
+    )}
+    {...props}
+  />
+));
+TableCell.displayName = 'TableCell';
+
+const TableCaption = React.forwardRef<
+  HTMLTableCaptionElement,
+  React.HTMLAttributes<HTMLTableCaptionElement>
+>(({ className, ...props }, ref) => (
+  <caption
+    ref={ref}
+    className={cn('mt-4 text-sm text-muted-foreground', className)}
+    {...props}
+  />
+));
+TableCaption.displayName = 'TableCaption';
+
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
 };
-
-const GenericTable = <T extends object>({
-  data,
-  columns,
-  className,
-  tableClassName,
-  headerClassName,
-  rowClassName,
-  cellClassName,
-}: GenericTableProps<T>) => {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-
-  const memoizedData = React.useMemo(() => data, [data]);
-  const memoizedColumns = React.useMemo(() => columns, [columns]);
-
-  const table = useReactTable({
-    data: memoizedData,
-    columns: memoizedColumns,
-    state: { sorting },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    debugTable: process.env.NODE_ENV === 'development', // Fixed to use NODE_ENV
-  });
-
-  return (
-    <div className={cn('overflow-x-auto w-full', className)}>
-      <table
-        role="grid"
-        aria-label="Danh sách biểu mẫu"
-        className={cn(
-          'w-full border border-gray-200 table-auto',
-          tableClassName,
-        )}
-      >
-        <thead className={cn('bg-gray-50', headerClassName)}>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className={cn(
-                    'py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider',
-                    header.column.getCanSort() && 'cursor-pointer select-none',
-                  )}
-                  onClick={header.column.getToggleSortingHandler()}
-                  aria-sort={
-                    header.column.getIsSorted()
-                      ? header.column.getIsSorted() === 'asc'
-                        ? 'ascending'
-                        : 'descending'
-                      : 'none'
-                  }
-                >
-                  {header.isPlaceholder ? null : (
-                    <div className="flex items-center gap-1">
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                      {{
-                        asc: <span>🔼</span>,
-                        desc: <span>🔽</span>,
-                      }[header.column.getIsSorted() as string] ?? null}
-                    </div>
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className={cn(
-                'border-b border-gray-200 hover:bg-gray-50',
-                rowClassName,
-              )}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  className={cn(
-                    'py-3 px-4 text-sm text-gray-900',
-                    cellClassName,
-                  )}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-export default GenericTable;
