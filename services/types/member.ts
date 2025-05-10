@@ -1,3 +1,4 @@
+import { MemberRole } from '@/shared/constants/member';
 import { Member, MemberList } from '@/shared/types';
 
 export interface GetMembersResponse {
@@ -24,7 +25,8 @@ export interface AddMemberResponse {
 }
 
 export interface AddMemberParams {
-  email: string;
-  role: string;
+  email?: string;
+  role?: MemberRole;
   workspace_id: string;
+  user_id?: string;
 }

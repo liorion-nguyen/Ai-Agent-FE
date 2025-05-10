@@ -2,6 +2,8 @@ import { GET, POST } from '@/services/api';
 import {
   CommonBasicRequest,
   CommonBasicResponse,
+  RemainingLimitsRequest,
+  RemainingLimitsResponse,
   SubscriptionResponse,
 } from '@/services/types/subscription';
 import { API_ENDPOINTS } from '@/shared/constants';
@@ -21,4 +23,11 @@ export const subscriptionApi = {
     POST<CommonBasicResponse>(API_ENDPOINTS.UPGRADE_SUBSCRIPTION, data),
   renewSubscription: (data: CommonBasicRequest) =>
     POST<CommonBasicResponse>(API_ENDPOINTS.RENEW_SUBSCRIPTION, data),
+  getRemainingLimits: (data: RemainingLimitsRequest) =>
+    GET<RemainingLimitsResponse>(
+      API_ENDPOINTS.GET_REMAINING_LIMITS.replace(
+        ':startDate',
+        data.startDate,
+      ).replace(':endDate', data.endDate),
+    ),
 };

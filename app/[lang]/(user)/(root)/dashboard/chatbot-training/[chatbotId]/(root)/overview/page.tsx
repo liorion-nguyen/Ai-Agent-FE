@@ -36,7 +36,7 @@ export default function OverviewPage() {
         <div className="w-1/2 p-4 h-full overflow-y-auto">
           <ChatbotInfoForm ref={formRef} />
         </div>
-        <div className="w-1/2 flex justify-center bg-gray-100 p-4 h-full">
+        <div className="w-1/2 flex justify-center bg-gray-100 p-10 h-full">
           <PreviewChat />
         </div>
       </div>

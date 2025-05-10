@@ -1,5 +1,5 @@
-import { useGetMembers } from '@/app/[lang]/(user)/(root)/dashboard/member-management/hooks/useMember';
-import { useMemberColumns } from '@/components/ui/columns/MemberColumns';
+import { useGetDomain } from '@/app/[lang]/(user)/(root)/dashboard/domain-management/hooks/useDomain';
+import { useDomainColumns } from '@/components/ui/columns/DomainColumns';
 import { PaginationControls } from '@/components/ui/custom/PaginationControl';
 import Search from '@/components/ui/Search';
 import { Spinner } from '@/components/ui/Spinner';
@@ -13,10 +13,10 @@ import {
 } from '@/components/ui/Table';
 import { cn } from '@/lib/utils';
 import { useTableQuery } from '@/shared/hooks/useTableQuery';
-import { MemberList } from '@/shared/types';
+import { DomainList } from '@/shared/types';
 import { flexRender } from '@tanstack/react-table';
 
-const MemberTable = () => {
+const DomainTable = () => {
   const {
     table,
     isLoading,
@@ -28,7 +28,7 @@ const MemberTable = () => {
     pageCount,
     currentPage,
     hasData,
-  } = useTableQuery<MemberList>(useMemberColumns(), useGetMembers, {
+  } = useTableQuery<DomainList>(useDomainColumns(), useGetDomain, {
     enablePagination: true,
     enableSorting: true,
     enableSearch: true,
@@ -38,7 +38,7 @@ const MemberTable = () => {
   if (error) {
     return (
       <div className="text-center py-10 text-red-500">
-        Error loading permissions: {error.message?.message ?? 'Unknown error'}
+        Error loading domains: {error.message?.message ?? 'Unknown error'}
       </div>
     );
   }
@@ -49,7 +49,7 @@ const MemberTable = () => {
         <Search
           value={search}
           onChange={setSearch}
-          placeholder="Search members..."
+          placeholder="Search domains..."
           className="w-64"
         />
       </div>
@@ -146,7 +146,7 @@ const MemberTable = () => {
                     colSpan={table.getAllColumns().length}
                     className="text-center py-6 text-gray-500 dark:text-gray-400"
                   >
-                    Không tìm thấy thành viên nào.
+                    Không tìm thấy domain nào.
                   </TableCell>
                 </TableRow>
               )}
@@ -169,4 +169,4 @@ const MemberTable = () => {
   );
 };
 
-export default MemberTable;
+export default DomainTable;

@@ -1,5 +1,5 @@
 'use client';
-import { useAddMember } from '@/app/[lang]/(user)/(root)/dashboard/member-management/hooks/useMember';
+import { useUpdateMember } from '@/app/[lang]/(user)/(root)/dashboard/member-management/hooks/useMember';
 import {
   Modal,
   ModalBody,
@@ -20,13 +20,15 @@ import { z } from 'zod';
 interface ModalDetailMemberProps {
   isOpen: boolean;
   onClose: () => void;
-  id: string;
+  email: string;
+  role: MemberRole;
 }
 
 export default function ModalDetailMember({
   isOpen,
   onClose,
-  id,
+  email,
+  role,
 }: ModalDetailMemberProps) {
   const {
     register,
@@ -34,12 +36,12 @@ export default function ModalDetailMember({
     formState: { errors },
   } = useZodForm(memberSchema, {
     defaultValues: {
-      email: '',
-      role: MemberRole.MEMBER,
+      email: email,
+      role: role,
     },
   });
 
-  const { addMember, loading } = useAddMember();
+  const { updateMember, loading } = useUpdateMember();
   const { workspace } = useUserStore();
 
   const onSubmit = async (data: z.infer<typeof memberSchema>) => {
@@ -47,11 +49,9 @@ export default function ModalDetailMember({
       const payload = {
         email: data.email,
         role: data.role,
-      };
-      addMember({
-        ...payload,
         workspace_id: workspace?.id || '',
-      });
+      };
+      await updateMember(payload);
       onClose();
     } catch (error) {
       console.error('Error creating member:', error);
@@ -61,11 +61,6 @@ export default function ModalDetailMember({
         variant: 'destructive',
       });
     }
-  };
-
-  const handleDelete = () => {
-    console.log('Xóa thành viên:', id);
-    onClose();
   };
 
   return (
@@ -82,6 +77,7 @@ export default function ModalDetailMember({
             </label>
             <ModalInput
               placeholder="Nhập email của bạn"
+              disabled
               {...register('email')}
             />
             {errors.email && (
@@ -110,13 +106,6 @@ export default function ModalDetailMember({
       <ModalFooter>
         <ModalButton variant="secondary" onClick={onClose}>
           Đóng
-        </ModalButton>
-        <ModalButton
-          variant="primary"
-          className="bg-red-500 hover:bg-red-600"
-          onClick={handleDelete}
-        >
-          Xóa
         </ModalButton>
         <ModalButton
           type="submit"

@@ -1,4 +1,4 @@
-import { GET, POST } from '@/services/api';
+import { DELETE, GET, PATCH, POST } from '@/services/api';
 import {
   AddMemberParams,
   AddMemberResponse,
@@ -23,5 +23,22 @@ export const memberAPI = {
         email: member.email,
         role: member.role,
       },
+    ),
+
+  updateMember: (member: AddMemberParams) =>
+    PATCH<AddMemberResponse>(
+      API_ENDPOINTS.UPDATE_MEMBER.replace(':workspace_id', member.workspace_id),
+      {
+        email: member.email,
+        role: member.role,
+      },
+    ),
+
+  deleteMember: (member: AddMemberParams) =>
+    DELETE<AddMemberResponse>(
+      API_ENDPOINTS.DELETE_MEMBER.replace(
+        ':workspace_id',
+        member.workspace_id,
+      ).replace(':user_id', member.user_id || ''),
     ),
 };

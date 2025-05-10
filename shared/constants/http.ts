@@ -63,10 +63,13 @@ export const API_ENDPOINTS = {
   UPGRADE_SUBSCRIPTION: '/subscriptions/upgrade',
   CANCEL_SUBSCRIPTION: '/subscriptions/cancel',
   RENEW_SUBSCRIPTION: '/subscriptions/renew',
-
+  GET_REMAINING_LIMITS:
+    '/users/profile/subscription/limits?endDate=:endDate&startDate=:startDate',
   // Members
   GET_MEMBERS: 'workspaces/:workspace_id/members?user_id=:user_id',
   ADD_MEMBER: 'workspaces/:workspace_id/members',
+  UPDATE_MEMBER: 'workspaces/:workspace_id/members',
+  DELETE_MEMBER: 'workspaces/:workspace_id/members/:user_id',
 
   // Forms
   GET_FORMS: 'workspaces/:workspace_id/forms?user_id=:user_id',

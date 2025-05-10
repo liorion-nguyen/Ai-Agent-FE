@@ -1,12 +1,7 @@
 import { APIErrorHandler } from '@/services/types';
 import { ACCESS_TOKEN, HTTP_CODE, REFRESH_TOKEN } from '@/shared/constants';
+import { getTokenFromCookie } from '@/shared/utils/cookie';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-
-function getTokenFromCookie(name: string) {
-  const cookies = document.cookie.split('; ');
-  const cookie = cookies.find((c) => c.startsWith(name + '='));
-  return cookie ? cookie.split('=')[1] : null;
-}
 
 export const setupInterceptors = (axiosInstance: AxiosInstance): void => {
   axiosInstance.interceptors.request.use(

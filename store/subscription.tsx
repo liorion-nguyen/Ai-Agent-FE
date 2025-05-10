@@ -1,17 +1,23 @@
 // store/Subscription.ts
-import { Subscription, UserSubscription } from '@/shared/types/subscription';
+import {
+  RemainingLimits,
+  Subscription,
+  UserSubscription,
+} from '@/shared/types/subscription';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 interface SubscriptionState {
   subscriptions: Subscription[];
   subscription: UserSubscription | undefined;
+  remainingLimits: RemainingLimits | undefined;
   hydrated: boolean;
   setSubscriptions: (newSubscriptions: Subscription[]) => void;
   setSubscription: (newSubscription: UserSubscription) => void;
   resetSubscription: () => void;
   resetSubscriptions: () => void;
   setHydrated: (value: boolean) => void;
+  setRemainingLimits: (newRemainingLimits: RemainingLimits) => void;
 }
 
 const useSubscriptionStore = create<SubscriptionState>()(
@@ -20,6 +26,7 @@ const useSubscriptionStore = create<SubscriptionState>()(
       (set) => ({
         subscriptions: [],
         subscription: undefined,
+        remainingLimits: undefined,
         hydrated: false,
         setSubscriptions: (newSubscriptions) =>
           set({ subscriptions: newSubscriptions }),
@@ -28,6 +35,8 @@ const useSubscriptionStore = create<SubscriptionState>()(
         resetSubscription: () => set({ subscription: undefined }),
         resetSubscriptions: () => set({ subscriptions: [] }),
         setHydrated: (value) => set({ hydrated: value }),
+        setRemainingLimits: (newRemainingLimits) =>
+          set({ remainingLimits: newRemainingLimits }),
       }),
       {
         name: 'subscription-storage',

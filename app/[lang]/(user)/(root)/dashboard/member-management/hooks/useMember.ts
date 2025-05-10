@@ -7,16 +7,18 @@ import {
 } from '@/services/types/member';
 import { toast } from '@/shared/hooks';
 import { TableQueryParams } from '@/shared/types/table';
+import useMemberStore from '@/store/member';
 import useUserStore from '@/store/user';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const useGetMembers = (params?: TableQueryParams) => {
   const { user, workspace } = useUserStore();
+  const { setMembers } = useMemberStore();
   const { data, isLoading, error, refetch, isFetching, isError } = useQuery<
     GetMemberResTabel,
     APIErrorHandler
   >({
-    queryKey: ['permissions', params],
+    queryKey: ['members', params],
     queryFn: async () => {
       const res = await memberAPI.getMembers({
         ...params,
@@ -36,6 +38,7 @@ export const useGetMembers = (params?: TableQueryParams) => {
         })),
         totalCount: res.data.length,
       };
+      setMembers(res.data);
       if (res.success) {
         return response;
       }
@@ -62,16 +65,12 @@ export const useAddMember = () => {
     error,
   } = useMutation<AddMemberResponse, APIErrorHandler, AddMemberParams>({
     mutationFn: (member: AddMemberParams) => memberAPI.addMember(member),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       toast({
         title: 'Thêm thành viên thành công',
         description: data.message,
         variant: 'default',
       });
-      // getMembers({
-      //   user_id: user?.id || '',
-      //   workspace_id: workspace?.id || '',
-      // });
     },
     onError: (err) => {
       toast({
@@ -84,6 +83,66 @@ export const useAddMember = () => {
 
   return {
     addMember: mutateAsync,
+    loading,
+    error,
+  };
+};
+
+export const useUpdateMember = () => {
+  const {
+    mutateAsync,
+    isPending: loading,
+    error,
+  } = useMutation<AddMemberResponse, APIErrorHandler, AddMemberParams>({
+    mutationFn: (member: AddMemberParams) => memberAPI.updateMember(member),
+    onSuccess: async (data) => {
+      toast({
+        title: 'Cập nhật thành viên thành công',
+        description: data.message,
+        variant: 'default',
+      });
+    },
+    onError: (err) => {
+      toast({
+        title: 'Cập nhật thành viên thất bại',
+        description: err?.message.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  return {
+    updateMember: mutateAsync,
+    loading,
+    error,
+  };
+};
+
+export const useDeleteMember = () => {
+  const {
+    mutateAsync,
+    isPending: loading,
+    error,
+  } = useMutation<AddMemberResponse, APIErrorHandler, AddMemberParams>({
+    mutationFn: (member: AddMemberParams) => memberAPI.deleteMember(member),
+    onSuccess: async (data) => {
+      toast({
+        title: 'Xóa thành viên thành công',
+        description: data.message,
+        variant: 'default',
+      });
+    },
+    onError: (err) => {
+      toast({
+        title: 'Xóa thành viên thất bại',
+        description: err?.message.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  return {
+    deleteMember: mutateAsync,
     loading,
     error,
   };

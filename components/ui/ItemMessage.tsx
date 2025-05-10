@@ -67,19 +67,21 @@ export const ItemMessage = ({ message }: ItemMessageProps) => {
         {/* Nội dung tin nhắn */}
         <div className="max-w-[70%] flex flex-col gap-1">
           <span className="text-sm font-semibold text-gray-800">
-            {message.sender === 'user' ? 'You' : 'L Edu'}
+            {message.sender === 'user' ? 'You' : 'Bot'}
           </span>
 
           <MarkdownViewer content={message.content} />
 
-          {message.sender === 'bot' && !showForm && (
-            <button
-              onClick={() => setShowForm(true)}
-              className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition w-fit text-sm"
-            >
-              Bạn muốn mua sản phẩm này?
-            </button>
-          )}
+          {message.sender === 'bot' &&
+            message.content.includes('mua sản phẩm') &&
+            !showForm && (
+              <button
+                onClick={() => setShowForm(true)}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition w-fit text-sm"
+              >
+                Bạn muốn mua sản phẩm này?
+              </button>
+            )}
         </div>
       </div>
 

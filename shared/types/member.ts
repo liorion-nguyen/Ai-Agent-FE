@@ -1,7 +1,9 @@
+import { MemberRole } from '@/shared/constants/member';
+
 export interface Member {
   created_at: string;
   joined_at: string;
-  role: string;
+  role: MemberRole;
   updated_at: string;
   user: {
     email: string;
@@ -19,7 +21,7 @@ export interface MemberList {
   fullname: string;
   email: string;
   username: string;
-  role: string;
+  role: MemberRole;
   created_at: string;
   isActive: boolean;
 }

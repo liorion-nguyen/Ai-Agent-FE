@@ -46,7 +46,7 @@ export default function ModalAddMember({
         email: data.email,
         role: data.role,
       };
-      addMember({
+      await addMember({
         ...payload,
         workspace_id: workspace?.id || '',
       });

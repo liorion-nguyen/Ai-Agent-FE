@@ -79,23 +79,23 @@ const DashboardHeader = () => {
                       <div key={index} className="relative">
                         <Link
                           href={item.href}
-                          className={`px-3 md:px-5 flex items-center h-full font-medium text-[18px] md:text-[22px] tracking-wider font-road ${
+                          className={`px-3 md:px-5 flex items-center h-full text-[16px] md:text-[18px] font-medium border-b-2 border-b-transparent ${
                             item.label === activeLabel ||
                             (item.label === 'Trang chủ' && activeLabel === '')
-                              ? 'text-white border-l-[3px] border-r-[3px] border-solid border-border bg-active'
-                              : 'text-foreground hover:text-hover hover:bg-blue-100'
+                              ? 'text-foreground !border-b-purple-600 bg-purple-100'
+                              : 'text-foreground hover:border-b-purple-600 hover:bg-purple-100'
                           }`}
                         >
                           {item.label}
                           {/* {item.label === activeLabel && (
-                        <div className="absolute left-1/2 transform -translate-x-1/2 mt-7">
-                          <Img
-                            src={'/images/line_text_inactive.png'}
-                            alt={`${item.label} image`}
-                            className="w-24 h-12"
-                          />
-                        </div>
-                      )} */}
+                            <div className="absolute left-1/2 transform -translate-x-1/2 mt-7">
+                              <Img
+                                src={'/images/line_text_inactive.png'}
+                                alt={`${item.label} image`}
+                                className="w-24 h-12"
+                              />
+                            </div>
+                          )} */}
                         </Link>
                       </div>
                     ),

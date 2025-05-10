@@ -1,10 +1,10 @@
 'use client';
 
-import ItemMessage from '@/app/[lang]/embed/components/ItemMessage';
 import {
   useInitCheckActiveChatbot,
   useSendMessage,
 } from '@/app/[lang]/embed/hooks/useMessage';
+import ItemMessage from '@/components/ui/ItemMessage';
 import { toast } from '@/shared/hooks';
 import { MessageType } from '@/shared/types/chatbot';
 import useChatbotStore from '@/store/chatbot';
@@ -22,7 +22,6 @@ const BoxChat = () => {
   const { conversationId } = useMessageStore();
   const { sendMessage } = useSendMessage();
   const { chatbotEmbed } = useChatbotStore();
-  console.log('chatbotEmbed', chatbotEmbed);
 
   useEffect(() => {
     if (token && chatbotId && userId) {

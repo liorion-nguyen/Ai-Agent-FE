@@ -34,3 +34,10 @@ export interface UserSubscription {
   };
   status: string;
 }
+
+export interface RemainingLimits {
+  message: number;
+  knowledge: number;
+  agent: number;
+  member: number;
+}

@@ -1,15 +1,30 @@
 import ModalDetailMember from '@/app/[lang]/(user)/(root)/dashboard/member-management/components/ModalDetailMeber';
+import { useDeleteMember } from '@/app/[lang]/(user)/(root)/dashboard/member-management/hooks/useMember';
 import { Button } from '@/components/ui/Button';
+import { MemberRole } from '@/shared/constants/member';
 import { useGenerateColumns } from '@/shared/hooks';
 import { MemberList } from '@/shared/types';
+import useMemberStore from '@/store/member';
+import useUserStore from '@/store/user';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { Pencil, Trash } from 'lucide-react';
 import { useState } from 'react';
-
 export function useMemberColumns(): ReturnType<
   typeof useGenerateColumns<MemberList>
 > {
+  const { deleteMember } = useDeleteMember();
+  const { workspace } = useUserStore();
+  const { members } = useMemberStore();
+  const handleDelete = async (email: string) => {
+    const member = members.find((member) => member.user.email == email);
+    if (member) {
+      await deleteMember({
+        user_id: member.user.id,
+        workspace_id: workspace?.id || '',
+      });
+    }
+  };
   return useGenerateColumns<MemberList>({
     columns: [
       {
@@ -40,7 +55,7 @@ export function useMemberColumns(): ReturnType<
         cell: (row) => (
           <span
             className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-              row.role === 'Chủ sở hữu'
+              row.role === MemberRole.ADMIN
                 ? 'bg-purple-100 text-purple-800'
                 : 'bg-gray-100 text-gray-800'
             }`}
@@ -80,14 +95,15 @@ export function useMemberColumns(): ReturnType<
                 size="icon"
                 variant="ghost"
                 className="transition-transform duration-200 hover:scale-110 hover:text-red-500"
-                onClick={() => console.log('Delete', row.email)}
+                onClick={() => handleDelete(row.email)}
               >
                 <Trash size={16} />
               </Button>
               <ModalDetailMember
                 isOpen={isOpen}
                 onClose={() => setIsOpen(false)}
-                id={row.email}
+                email={row.email}
+                role={row.role}
               />
             </div>
           );

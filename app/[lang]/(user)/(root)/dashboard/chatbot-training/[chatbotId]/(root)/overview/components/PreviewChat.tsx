@@ -1,44 +1,132 @@
-import { MessageSquare } from 'lucide-react';
+import { useSendMessage } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/[chatbotId]/(root)/overview/hooks/useSendMessage';
+import ItemMessage from '@/components/ui/ItemMessage';
+import { toast } from '@/shared/hooks';
+import { MessageType } from '@/shared/types';
+import useChatbotStore from '@/store/chatbot';
+import { useMessageStore } from '@/store/message';
+import useUserStore from '@/store/user';
+import { Loader2, MessageSquareOff, Plus, Send } from 'lucide-react';
 import Image from 'next/image';
+import { useRef, useState } from 'react';
 
 export default function PreviewChat() {
+  const [inputValue, setInputValue] = useState('');
+  const { messages, clearMessages, isStreaming } = useMessageStore();
+  const { chatbot } = useChatbotStore();
+  const { user } = useUserStore();
+  const { sendMessage, loading } = useSendMessage();
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const handleSendMessage = async () => {
+    if (!inputValue.trim()) return;
+    if (!chatbot?.id || !user?.id) {
+      toast({
+        title: 'Error',
+        description: 'Missing chatbot or user information.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    setInputValue('');
+    try {
+      await sendMessage(chatbot?.id, inputValue);
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to send message.',
+        variant: 'destructive',
+      });
+      console.error('Send message error:', error);
+    }
+  };
+
+  const handleClearMessages = () => {
+    clearMessages();
+    setInputValue('');
+  };
   return (
-    <div className="bg-white rounded-lg shadow flex flex-col h-[500px] w-2/3">
-      <div className="flex items-center gap-2 mb-4 border-b border-gray-200 p-4">
-        <Image
-          width={32}
-          height={32}
-          src="/icons/admin_icon.png"
-          alt="Chatbot Avatar"
-          className="w-8 h-8 rounded-full"
-        />
-        <h3 className="text-lg font-semibold">Chatbot</h3>
+    <div className="h-full z-[10000] bg-white rounded-xl shadow-lg flex flex-col overflow-hidden">
+      {/* Header */}
+      <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+        <h3 className="text-lg font-semibold text-gray-800">
+          {chatbot?.chatbot_name}
+        </h3>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleClearMessages}
+            className="text-gray-500 hover:text-gray-700 transition"
+          >
+            <MessageSquareOff className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
-      {/* Nội dung chat */}
-      <div className="flex flex-col flex-1 overflow-y-auto space-y-4 justify-end p-4 border-b border-gray-200">
-        <div className="flex items-center gap-2 justify-start">
-          <Image
-            width={32}
-            height={32}
-            src="/icons/admin_icon.png"
-            alt="Chatbot Avatar"
-            className="w-8 h-8 rounded-full"
+      {/* Messages */}
+      <div ref={chatContainerRef} className="flex-1 p-4 overflow-y-auto">
+        <div className="space-y-4">
+          {messages.length === 0 && !isStreaming ? (
+            <div className="flex flex-col items-center justify-center h-full text-gray-500">
+              <p>Start a conversation!</p>
+            </div>
+          ) : (
+            <>
+              {messages.map((msg: MessageType, idx: number) => (
+                <ItemMessage key={idx} message={msg} />
+              ))}
+              {isStreaming && (
+                <div className="flex items-center gap-2 text-gray-500">
+                  <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                    {chatbot?.icon_url ? (
+                      <Image
+                        src={chatbot.icon_url}
+                        alt="Chatbot Icon"
+                        width={32}
+                        height={32}
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                        {chatbot?.chatbot_name.charAt(0)}
+                      </div>
+                    )}
+                  </div>
+                  <p>Typing...</p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Input */}
+      <div className="p-3 border-t border-gray-200">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Type your message..."
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            className="w-full px-4 py-2 border border-purple-500 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
           />
-          <p>👋 Hello! How can I help you today?</p>
+          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
+            <button className="text-gray-500 hover:text-gray-700 transition">
+              <Plus className="w-5 h-5" />
+            </button>
+            <button
+              onClick={handleSendMessage}
+              className="text-purple-600 hover:text-purple-700 transition"
+            >
+              {loading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <Send className="w-5 h-5" />
+              )}
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-2 justify-end">
-          <p className="text-sm text-white bg-purple-500 rounded-lg p-2 w-fit">
-            My email is example@example.com
-          </p>
-        </div>
+        <p className="text-xs text-gray-500 text-center mt-2">
+          This content is generated by AI and may not be accurate.
+        </p>
       </div>
-
-      {/* Nút Chat với */}
-      <button className="mt-4 bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 flex items-center justify-center gap-2 m-4">
-        Chat với
-        <MessageSquare className="w-5 h-5" />
-      </button>
     </div>
   );
 }
