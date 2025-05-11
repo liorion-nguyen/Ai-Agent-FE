@@ -32,3 +32,11 @@ export interface GetUserByIdResponse {
   message: string;
   data: User;
 }
+
+export interface UpdateProfileInParams {
+  fullname?: string;
+  phone?: string;
+  email?: string;
+  thumbnail?: string;
+  password?: string;
+}

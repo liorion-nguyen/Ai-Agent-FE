@@ -1,54 +1,34 @@
-import { APIErrorHandler, GetDomainsResponse } from '@/services/types';
-import { DomainStatus } from '@/shared/constants';
-import { TableQueryParams } from '@/shared/types/table';
-import { useQuery } from '@tanstack/react-query';
-export const useGetDomain = (params?: TableQueryParams) => {
-  const { data, isLoading, error, refetch, isFetching, isError } = useQuery<
-    GetDomainsResponse,
-    APIErrorHandler
-  >({
-    queryKey: ['permissions', params],
-    queryFn: async () => {
-      // const res = await formAPI.getForms(params!);
-      // if (res.success) {
-      //     return res;
-      // }
-      const res: GetDomainsResponse = {
-        success: true,
-        message: 'success',
-        data: [
-          {
-            id: '1',
-            domain: 'example.com',
-            status: DomainStatus.ACTIVE,
-            description: 'Mô tả',
-            created_at: '2021-01-01',
-          },
-          {
-            id: '2',
-            domain: 'example.com',
-            status: DomainStatus.ACTIVE,
-            description: 'Mô tả',
-            created_at: '2021-01-01',
-          },
-        ],
-        totalCount: 10,
-      };
-      if (res.success) {
-        return res;
-      }
-      throw res.data;
+import { domainAPI } from '@/services/endpoints/domain';
+import { AddDomainParams, APIErrorHandler } from '@/services/types';
+import { toast } from '@/shared/hooks';
+import { Domain } from '@/shared/types';
+import { useMutation } from '@tanstack/react-query';
+export const useAddDomain = () => {
+  const {
+    mutateAsync,
+    isPending: loading,
+    error,
+  } = useMutation<Domain, APIErrorHandler, AddDomainParams>({
+    mutationFn: (domain: AddDomainParams) => domainAPI.addDomain(domain),
+    onSuccess: async (data) => {
+      toast({
+        title: 'Thêm domain thành công',
+        variant: 'default',
+      });
+      await domainAPI.verifyDomain(data.id);
     },
-    refetchOnWindowFocus: true,
-    staleTime: 0,
+    onError: (err) => {
+      toast({
+        title: 'Thêm domain thất bại',
+        description: err?.message.message,
+        variant: 'destructive',
+      });
+    },
   });
 
   return {
-    data,
-    isLoading,
-    isFetching,
-    isError,
+    addDomain: mutateAsync,
+    loading,
     error,
-    refetch,
   };
 };

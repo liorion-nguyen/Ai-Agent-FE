@@ -1,4 +1,5 @@
 'use client';
+import { useAddDomain } from '@/app/[lang]/(user)/(root)/dashboard/domain-management/hooks/useDomain';
 import {
   Modal,
   ModalBody,
@@ -7,11 +8,9 @@ import {
   ModalFooter,
   ModalHeader,
   ModalInput,
-  ModalSelect,
   ModalTitle,
 } from '@/components/ui/Modal';
-import { DomainStatus } from '@/shared/constants';
-import { toast, useZodForm } from '@/shared/hooks';
+import { useZodForm } from '@/shared/hooks';
 import { domainSchema } from '@/shared/validations';
 import { z } from 'zod';
 
@@ -31,30 +30,17 @@ export default function ModalAddDomain({
   } = useZodForm(domainSchema, {
     defaultValues: {
       domain: '',
-      status: DomainStatus.ACTIVE,
       description: '',
     },
   });
-
-  // const { addDomain, loading } = useAddDomain();
+  const { addDomain, loading } = useAddDomain();
 
   const onSubmit = async (data: z.infer<typeof domainSchema>) => {
-    try {
-      console.log('data', data);
-      // await addDomain({
-      //   domain: data.domain,
-      //   status: data.status,
-      //   workspace_id: workspace?.id || '',
-      // });
-      onClose();
-    } catch (error) {
-      console.error('Error creating domain:', error);
-      toast({
-        title: 'Lỗi',
-        description: 'Không thể thêm domain',
-        variant: 'destructive',
-      });
-    }
+    await addDomain({
+      domain: data.domain,
+      description: data.description,
+    });
+    onClose();
   };
 
   return (
@@ -81,20 +67,6 @@ export default function ModalAddDomain({
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Trạng thái <span className="text-red-500">*</span>
-            </label>
-            <ModalSelect {...register('status')}>
-              <option value={DomainStatus.ACTIVE}>Hoạt động</option>
-              <option value={DomainStatus.INACTIVE}>Vô hiệu hóa</option>
-            </ModalSelect>
-            {errors.status && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.status.message}
-              </p>
-            )}
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
               Mô tả
             </label>
             <ModalInput placeholder="Mô tả" {...register('description')} />
@@ -112,11 +84,10 @@ export default function ModalAddDomain({
         </ModalButton>
         <ModalButton
           type="submit"
-          // disabled={loading}
+          disabled={loading}
           onClick={handleSubmit(onSubmit)}
         >
-          {/* {loading ? 'Đang xử lý...' : 'Thêm domain'} */}
-          Thêm domain
+          {loading ? 'Đang xử lý...' : 'Thêm domain'}
         </ModalButton>
       </ModalFooter>
     </Modal>

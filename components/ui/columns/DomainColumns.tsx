@@ -6,16 +6,17 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/Tooltip';
-import { useGenerateColumns } from '@/shared/hooks';
+import { useGenerateColumns, useVerifyDomain } from '@/shared/hooks';
 import { DomainList } from '@/shared/types/domain';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
-import { Pencil, Trash } from 'lucide-react';
+import { Pencil, ShieldCheck, Trash } from 'lucide-react';
 import { useState } from 'react';
 
 export function useDomainColumns(): ReturnType<
   typeof useGenerateColumns<DomainList>
 > {
+  const { verifyDomain } = useVerifyDomain();
   return useGenerateColumns<DomainList>({
     columns: [
       {
@@ -36,16 +37,13 @@ export function useDomainColumns(): ReturnType<
           </TooltipProvider>
         ),
       },
-      { key: 'domain', header: 'Domain' },
+      { key: 'name', header: 'Name' },
       {
-        key: 'status',
+        key: 'isVerified',
         header: 'Trạng thái',
-        cell: (row) => row.status,
-      },
-      {
-        key: 'description',
-        header: 'Mô tả',
-        cell: (row) => row.description,
+        cell: function StatusCell(row) {
+          return row.isVerified ? <p>Đã xác thực</p> : <p>Chưa xác thực</p>;
+        },
       },
       {
         key: 'created_at',
@@ -75,6 +73,14 @@ export function useDomainColumns(): ReturnType<
                 onClick={() => console.log('Delete', row.id)}
               >
                 <Trash size={16} />
+              </Button>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="transition-transform duration-200 hover:scale-110 hover:text-green-500"
+                onClick={() => verifyDomain(row.id.toString())}
+              >
+                <ShieldCheck size={16} />
               </Button>
               <ModalDetailDomain
                 isOpen={isOpen}

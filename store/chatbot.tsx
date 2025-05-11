@@ -1,4 +1,5 @@
 // store/chatbot.ts
+import { GetScriptIframeResponse } from '@/services/types/chatbot';
 import { Chatbot, ChatbotEmbed, ChatbotToken } from '@/shared/types/chatbot';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
@@ -10,6 +11,7 @@ interface ChatbotState {
   chatbotTokens: ChatbotToken[];
   chatbotToken: ChatbotToken | undefined;
   chatbotEmbed: ChatbotEmbed | undefined;
+  scriptIframe: GetScriptIframeResponse | undefined;
   setChatbots: (newChatbots: Chatbot[]) => void;
   setChatbot: (newChatbot: Chatbot) => void;
   setChatbotEmbed: (newChatbotEmbed: ChatbotEmbed) => void;
@@ -21,6 +23,8 @@ interface ChatbotState {
   setHydrated: (value: boolean) => void;
   setChatbotToken: (newChatbotToken: ChatbotToken) => void;
   resetChatbotToken: () => void;
+  setScriptIframe: (newScriptIframe: GetScriptIframeResponse) => void;
+  resetScriptIframe: () => void;
 }
 
 const useChatbotStore = create<ChatbotState>()(
@@ -33,6 +37,7 @@ const useChatbotStore = create<ChatbotState>()(
         chatbotToken: undefined,
         hydrated: false,
         chatbotEmbed: undefined,
+        scriptIframe: undefined,
         setChatbots: (newChatbots) => set({ chatbots: newChatbots }),
         setChatbot: (newChatbot) => set({ chatbot: newChatbot }),
         setChatbotEmbed: (newChatbotEmbed) =>
@@ -47,6 +52,9 @@ const useChatbotStore = create<ChatbotState>()(
         setChatbotToken: (newChatbotToken) =>
           set({ chatbotToken: newChatbotToken }),
         resetChatbotToken: () => set({ chatbotToken: undefined }),
+        setScriptIframe: (newScriptIframe) =>
+          set({ scriptIframe: newScriptIframe }),
+        resetScriptIframe: () => set({ scriptIframe: undefined }),
       }),
       {
         name: 'chatbot-storage',

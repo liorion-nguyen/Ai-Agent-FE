@@ -16,6 +16,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/Sidebar';
 import useSubscriptionStore from '@/store/subscription';
+import useUserStore from '@/store/user';
 import {
   BarChart,
   BotMessageSquare,
@@ -111,6 +112,7 @@ const items = [
 
 const SidebarNav = () => {
   const { signOut, loading } = useSignOut();
+  const { user } = useUserStore();
   const pathname = usePathname();
   const isActive = (url: string) => {
     return pathname.includes(url);
@@ -153,7 +155,7 @@ const SidebarNav = () => {
             className="w-10 h-10 rounded-full group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8"
           />
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-            <span className="font-semibold">Nguyen Quoc Chung</span>
+            <span className="font-semibold">{user?.fullname}</span>
             <span className="text-sm text-gray-400">
               {subscription?.subscription.name}
             </span>

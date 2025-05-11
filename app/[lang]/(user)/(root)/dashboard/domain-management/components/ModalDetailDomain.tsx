@@ -10,33 +10,9 @@ import {
   ModalTitle,
 } from '@/components/ui/Modal';
 import { DomainStatus } from '@/shared/constants';
+import { Domain } from '@/shared/types';
+import useDomainStore from '@/store/domain';
 import { useEffect, useState } from 'react';
-
-const domains = [
-  {
-    id: '1',
-    domain: 'example.com',
-    status: DomainStatus.ACTIVE,
-    description: 'Mô tả',
-    created_at: '2021-01-01',
-  },
-  {
-    id: '2',
-    domain: 'example.com',
-    status: DomainStatus.ACTIVE,
-    description: 'Mô tả',
-    created_at: '2021-01-01',
-  },
-];
-
-interface Domain {
-  id: string;
-  domain: string;
-  status: DomainStatus;
-  description: string;
-  created_at: string;
-}
-
 export default function ModalDetailForm({
   isOpen,
   onClose,
@@ -46,13 +22,17 @@ export default function ModalDetailForm({
   onClose: () => void;
   id: string;
 }) {
+  const { domains } = useDomainStore();
   const [domainData, setDomainData] = useState<Domain>({
     id: '',
-    domain: '',
-    status: DomainStatus.ACTIVE,
-    description: '',
+    name: '',
+    isVerified: false,
+    verificationToken: '',
+    status: '',
     created_at: '',
+    updated_at: '',
   });
+
   useEffect(() => {
     const domain = domains.find((d) => d.id === id);
     if (domain) {
@@ -90,7 +70,7 @@ export default function ModalDetailForm({
             </label>
             <ModalInput
               name="domain"
-              value={domainData.domain}
+              value={domainData.name}
               onChange={handleInputChange}
               placeholder="Nhập tên domain"
             />

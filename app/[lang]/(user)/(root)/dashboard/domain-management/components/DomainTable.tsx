@@ -1,4 +1,3 @@
-import { useGetDomain } from '@/app/[lang]/(user)/(root)/dashboard/domain-management/hooks/useDomain';
 import { useDomainColumns } from '@/components/ui/columns/DomainColumns';
 import { PaginationControls } from '@/components/ui/custom/PaginationControl';
 import Search from '@/components/ui/Search';
@@ -12,6 +11,7 @@ import {
   TableRow,
 } from '@/components/ui/Table';
 import { cn } from '@/lib/utils';
+import { useGetDomain } from '@/shared/hooks/useDomain';
 import { useTableQuery } from '@/shared/hooks/useTableQuery';
 import { DomainList } from '@/shared/types';
 import { flexRender } from '@tanstack/react-table';

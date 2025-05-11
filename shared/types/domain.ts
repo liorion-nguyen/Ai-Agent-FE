@@ -1,14 +1,19 @@
 export interface DomainList {
   id: string | number;
-  domain: string;
+  name: string;
+  isVerified: boolean;
+  verificationToken: string | null;
   status: string;
-  created_at: string | null;
-  description: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Domain {
-  domain: string;
+  id: string;
+  name: string;
+  isVerified: boolean;
+  verificationToken: string | null;
   status: string;
   created_at: string;
-  description: string;
+  updated_at: string;
 }

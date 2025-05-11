@@ -10,6 +10,8 @@ import {
   CreateChatbotOnboardingParams,
   CreateChatbotPromptParams,
   CreateChatbotTokenParams,
+  GetScriptIframeParams,
+  GetScriptIframeResponse,
   PublishChatbotParams,
   PublishChatbotResponse,
   SendMessageParams,
@@ -116,4 +118,12 @@ export const chatbotApi = {
     POST<CreateChatbotTokenParams>(API_ENDPOINTS.CREATE_CHATBOT_TOKEN, {
       chatbot_id,
     }),
+
+  getScriptIframe: (params: GetScriptIframeParams) =>
+    GET<GetScriptIframeResponse>(
+      API_ENDPOINTS.GET_SCRIPT_IFRAME.replace(
+        ':domainId',
+        params.domainId,
+      ).replace(':chatbotId', params.chatbotId),
+    ),
 };

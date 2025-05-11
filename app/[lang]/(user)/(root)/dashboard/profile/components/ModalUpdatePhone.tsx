@@ -1,3 +1,4 @@
+import { useUpdateProfile } from '@/app/[lang]/(user)/(root)/dashboard/profile/hooks/useProfile';
 import {
   Modal,
   ModalBody,
@@ -7,7 +8,6 @@ import {
   ModalTitle,
 } from '@/components/ui/Modal';
 import { useEffect, useState } from 'react';
-
 interface ModalUpdatePhoneNumberProps {
   isOpen: boolean;
   onClose: () => void;
@@ -20,13 +20,16 @@ export default function ModalUpdatePhoneNumber({
   phone,
 }: ModalUpdatePhoneNumberProps) {
   const [phoneNumber, setPhoneNumber] = useState<string>(phone);
+  const { updateProfile, loading } = useUpdateProfile();
   useEffect(() => {
     setPhoneNumber(phone);
   }, [phone]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('New phone number:', phoneNumber);
+    await updateProfile({
+      phone: phoneNumber,
+    });
     onClose();
   };
 
@@ -54,9 +57,11 @@ export default function ModalUpdatePhoneNumber({
             <ModalButton
               type="submit"
               className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
-              disabled={phoneNumber === phone || phoneNumber.length === 0}
+              disabled={
+                loading || phoneNumber === phone || phoneNumber.length === 0
+              }
             >
-              Tiếp theo
+              {loading ? 'Đang cập nhật...' : 'Tiếp theo'}
             </ModalButton>
           </div>
         </form>

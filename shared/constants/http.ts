@@ -9,7 +9,7 @@ export const API_ENDPOINTS = {
   FORGOT_PASSWORD: '/auth/forgot-password',
   VERIFY_OTP: '/auth/verify-otp',
   RESET_PASSWORD: '/auth/reset-password',
-  UPDATE_PROFILE: '/users/profile',
+  UPDATE_PROFILE: '/users/profile/update',
   DELETE_USER: '/users/:id',
   API_TOKEN: '/users/profile/api-token',
   GET_ALL_USERS: '/users',
@@ -32,7 +32,8 @@ export const API_ENDPOINTS = {
   CREATE_CHATBOT_PROMPT: '/users/:user_id/prompts',
   GET_CHATBOT_TOKENS: 'users/profile/chatbot-token',
   CREATE_CHATBOT_TOKEN: 'chatbot-tokens/generate-chatbot-token',
-
+  GET_SCRIPT_IFRAME:
+    '/chatbot-embed/script?chatbotId=:chatbotId&domainId=:domainId',
   // Models
   GET_MODELS: '/chatbot-models',
 
@@ -73,6 +74,13 @@ export const API_ENDPOINTS = {
 
   // Forms
   GET_FORMS: 'workspaces/:workspace_id/forms?user_id=:user_id',
+
+  // Domains
+  GET_DOMAINS: 'users/profile/domains',
+  ADD_DOMAIN: 'domains',
+  UPDATE_DOMAIN: 'domains',
+  DELETE_DOMAIN: 'domains/:domain_id',
+  VERIFY_DOMAIN: 'domains/:domain_id/verify',
 };
 
 export const HTTP_CODE = {
