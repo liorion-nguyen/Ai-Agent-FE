@@ -6,7 +6,7 @@ import {
 } from '@/app/[lang]/embed/hooks/useMessage';
 import ItemMessage from '@/components/ui/ItemMessage';
 import { toast } from '@/shared/hooks';
-import { MessageType } from '@/shared/types/chatbot';
+import { MessageType } from '@/shared/types';
 import useChatbotStore from '@/store/chatbot';
 import { useMessageStore } from '@/store/message';
 import { MessageCircle, MessageSquareOff, Plus, Send, X } from 'lucide-react';
@@ -17,7 +17,10 @@ const BoxChat = () => {
   const searchParams = useSearchParams();
   const chatbotId = searchParams.get('chatbotId');
   const userId = searchParams.get('userId');
+  const domainClient = searchParams.get('domainClient');
   const token = searchParams.get('token');
+  console.log('domainClient', domainClient);
+
   const { initCheckActiveChatbot } = useInitCheckActiveChatbot();
   const { conversationId } = useMessageStore();
   const { sendMessage } = useSendMessage();
@@ -86,6 +89,8 @@ const BoxChat = () => {
     clearMessages();
     setInputValue('');
   };
+
+  console.log(document.referrer);
 
   return (
     <div id="chatbot-container">

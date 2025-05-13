@@ -20,6 +20,7 @@ import useUserStore from '@/store/user';
 import {
   BarChart,
   BotMessageSquare,
+  CreditCard,
   FileText,
   HelpCircle,
   Key,
@@ -83,6 +84,12 @@ const items = [
     url: '/dashboard/domain-management',
     icon: PanelTop,
     tooltip: 'Quản lý domain',
+  },
+  {
+    title: 'Quản lý payment',
+    url: '/dashboard/payment-management',
+    icon: CreditCard,
+    tooltip: 'Quản lý payment',
   },
   {
     title: 'Hỗ trợ yêu cầu ticket',

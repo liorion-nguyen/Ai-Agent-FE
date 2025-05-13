@@ -34,13 +34,12 @@ export const chatbotApi = {
     ),
 
   createChatbotCoze: (params: CreateChatbotCozeInParams) => {
-    const { chatbot_id, ...rest } = params;
     return PATCH<CreateChatbotCozeResponse>(
       API_ENDPOINTS.CREATE_CHATBOT_COZE.replace(
         ':user_id',
         params.user_id || '',
-      ).replace(':chatbot_id', chatbot_id),
-      rest,
+      ).replace(':chatbot_id', params.chatbot_id),
+      params,
     );
   },
 
@@ -50,11 +49,7 @@ export const chatbotApi = {
         ':user_id',
         params.user_id || '',
       ).replace(':chatbot_id', params.chatbot_id || ''),
-      {
-        chatbot_name: params.chatbot_name,
-        description: params.description,
-        api_token: params.api_token,
-      },
+      params,
     ),
 
   updateChatbotPrompt: (params: UpdateChatbotPromptParams) =>
@@ -87,10 +82,7 @@ export const chatbotApi = {
         ':chatbot_id',
         params.chatbot_id,
       ),
-      {
-        api_token: params.api_token,
-        connector_id: params.connector_id,
-      },
+      params,
     ),
 
   createOnboardingChatbot: (params: CreateChatbotOnboardingParams) =>

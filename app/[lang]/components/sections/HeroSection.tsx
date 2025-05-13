@@ -1,5 +1,6 @@
 import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
-
+import Img from '@/components/ui/Image';
+import BannerRight from '@/public/images/bannerRight.png';
 const HeroSection = () => {
   return (
     <SectionDashboardLayout className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-16">
@@ -12,7 +13,8 @@ const HeroSection = () => {
           <ul className="space-y-3 text-lg">
             <li className="flex items-start">
               <span className="mr-2">✓</span>
-              AI Chatbot Freny tăng tỷ lệ chốt Sale tự động 2 năm vì khách hàng
+              AI Chatbot {process.env.NEXT_PUBLIC_NAME_APP} tăng tỷ lệ chốt Sale
+              tự động 2 năm vì khách hàng
             </li>
             <li className="flex items-start">
               <span className="mr-2">✓</span>
@@ -21,8 +23,8 @@ const HeroSection = () => {
             </li>
             <li className="flex items-start">
               <span className="mr-2">✓</span>
-              Tăng 50% tỷ lệ chốt đơn nhừo các tính năng đặc biệt cho trai Freny
-              AI Chatbot trai đầy nhiền nguồn tốt
+              Tăng 50% tỷ lệ chốt đơn nhừo các tính năng đặc biệt cho{' '}
+              {process.env.NEXT_PUBLIC_NAME_APP}
             </li>
           </ul>
           <div className="space-x-4">
@@ -43,11 +45,16 @@ const HeroSection = () => {
 
         {/* Right Image */}
         <div className="mt-8 md:mt-0 flex justify-center w-100">
-          <video
+          {/* <video
             src="https://preny.ai/video/video-preny.mp4"
             autoPlay
             muted
             loop
+            className="w-full max-w-md rounded-lg shadow-lg"
+          /> */}
+          <Img
+            src={BannerRight.src}
+            alt="Banner Right"
             className="w-full max-w-md rounded-lg shadow-lg"
           />
         </div>

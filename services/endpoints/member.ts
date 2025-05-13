@@ -16,29 +16,23 @@ export const memberAPI = {
       ).replace(':user_id', params.user_id),
     ),
 
-  addMember: (member: AddMemberParams) =>
+  addMember: (params: AddMemberParams) =>
     POST<AddMemberResponse>(
-      API_ENDPOINTS.ADD_MEMBER.replace(':workspace_id', member.workspace_id),
-      {
-        email: member.email,
-        role: member.role,
-      },
+      API_ENDPOINTS.ADD_MEMBER.replace(':workspace_id', params.workspace_id),
+      params,
     ),
 
-  updateMember: (member: AddMemberParams) =>
+  updateMember: (params: AddMemberParams) =>
     PATCH<AddMemberResponse>(
-      API_ENDPOINTS.UPDATE_MEMBER.replace(':workspace_id', member.workspace_id),
-      {
-        email: member.email,
-        role: member.role,
-      },
+      API_ENDPOINTS.UPDATE_MEMBER.replace(':workspace_id', params.workspace_id),
+      params,
     ),
 
-  deleteMember: (member: AddMemberParams) =>
+  deleteMember: (params: AddMemberParams) =>
     DELETE<AddMemberResponse>(
       API_ENDPOINTS.DELETE_MEMBER.replace(
         ':workspace_id',
-        member.workspace_id,
-      ).replace(':user_id', member.user_id || ''),
+        params.workspace_id,
+      ).replace(':user_id', params.user_id || ''),
     ),
 };

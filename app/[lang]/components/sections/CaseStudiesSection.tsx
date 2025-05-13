@@ -14,11 +14,12 @@ const CaseStudiesSection = () => {
     <SectionDashboardLayout className="bg-white py-16">
       <div className="container mx-auto">
         <h2 className="text-3xl font-bold text-center mb-4">
-          Các ngành đã ứng dụng AI Chatbot Freny hiệu quả
+          Các ngành đã ứng dụng AI Chatbot {process.env.NEXT_PUBLIC_NAME_APP}{' '}
+          hiệu quả
         </h2>
         <p className="text-center text-gray-600 mb-12">
-          Case study các ngành hàng đã ứng dụng thành công AI chatbot Freny,
-          tăng hơn 50% doanh thu
+          Case study các ngành hàng đã ứng dụng thành công AI chatbot{' '}
+          {process.env.NEXT_PUBLIC_NAME_APP}, tăng hơn 50% doanh thu
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {industries.map((industry, index) => (

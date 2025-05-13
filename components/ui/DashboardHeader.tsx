@@ -3,7 +3,7 @@
 import { useSignOut } from '@/app/[lang]/(user)/(auth)/hooks';
 import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
 import AccountCircleIcon from '@/public/icons/account-circle-icon.svg';
-import LogoAgent from '@/public/icons/ic_logo-agent.webp';
+import LogoAgent from '@/public/icons/ic_logo-agent.png';
 import MenuIcon from '@/public/icons/menu-icon.svg';
 import { ROUTES } from '@/shared/constants';
 import { navigationItems } from '@/shared/constants/navigation';

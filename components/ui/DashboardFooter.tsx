@@ -1,6 +1,6 @@
 import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
 import Img from '@/components/ui/Image';
-import LogoAgent from '@/public/icons/ic_logo-agent.webp';
+import LogoAgent from '@/public/icons/ic_logo-agent.png';
 import {
   FacebookIcon,
   InstagramIcon,
@@ -19,11 +19,11 @@ const DashboardFooter = () => {
     },
     {
       icon: <PhoneIcon size={16} />,
-      text: 'Hotline: 0389647778',
+      text: 'Hotline: 0708200334',
     },
     {
       icon: <MailIcon size={16} />,
-      text: 'cskh@freny.ai',
+      text: 'liorion.nguyen@gmail.com',
     },
   ];
   const social = [
@@ -135,11 +135,13 @@ const DashboardFooter = () => {
                 ))}
               </div>
               <p className="text-sm">
-                AI Chatbot Preny là giải pháp ứng dụng trí tuệ nhân tạo (AI)
-                giúp các doanh nghiệp tự động hóa khách hàng, tăng tỷ lệ chuyển
-                đổi, nhặt lại khi doanh nghiệp có khách hàng ở đa nền tảng. Vì
-                khả năng tự học, Chatbot AI Freny giúp các khách hàng ngay trong
-                15 giây đầu tiên, Chatbot AI Freny giúp các khách hàng sẵn sàng
+                AI Chatbot {process.env.NEXT_PUBLIC_NAME_APP} là giải pháp ứng
+                dụng trí tuệ nhân tạo (AI) giúp các doanh nghiệp tự động hóa
+                khách hàng, tăng tỷ lệ chuyển đổi, nhặt lại khi doanh nghiệp có
+                khách hàng ở đa nền tảng. Vì khả năng tự học, Chatbot AI{' '}
+                {process.env.NEXT_PUBLIC_NAME_APP} giúp các khách hàng ngay
+                trong 15 giây đầu tiên, Chatbot AI
+                {process.env.NEXT_PUBLIC_NAME_APP} giúp các khách hàng sẵn sàng
                 và tự động lựa được thông tin khách hàng, thúc đẩy họ đến quyết
                 định mua hàng.
               </p>
@@ -157,7 +159,9 @@ const DashboardFooter = () => {
             Terms of Service
           </a>
         </div>
-        <p className="text-white text-sm">© Preny AI 2024</p>
+        <p className="text-white text-sm">
+          © {process.env.NEXT_PUBLIC_NAME_APP} {new Date().getFullYear()}
+        </p>
       </SectionDashboardLayout>
     </div>
   );

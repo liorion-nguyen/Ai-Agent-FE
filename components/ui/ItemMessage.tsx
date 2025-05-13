@@ -1,6 +1,7 @@
 import MarkdownViewer from '@/components/ui/Markdown';
 import { toast, useZodForm } from '@/shared/hooks';
-import { MessageType } from '@/shared/types/chatbot';
+import { MessageType } from '@/shared/types';
+import { formatDateTimeMessage } from '@/shared/utils/date';
 import { purchaseSchema } from '@/shared/validations/chatbot/chatbot.schema';
 import { useState } from 'react';
 import { z } from 'zod';
@@ -72,6 +73,11 @@ export const ItemMessage = ({ message }: ItemMessageProps) => {
 
           <MarkdownViewer content={message.content} />
 
+          <span
+            className={`text-sm text-gray-500 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}
+          >
+            {formatDateTimeMessage(message.createdAt)}
+          </span>
           {message.sender === 'bot' &&
             message.content.includes('mua sản phẩm') &&
             !showForm && (

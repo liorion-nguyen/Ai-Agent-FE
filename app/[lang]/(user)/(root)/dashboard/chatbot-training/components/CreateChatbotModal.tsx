@@ -158,8 +158,9 @@ const CreateChatbotModal = ({
             Kịch bản mẫu
           </h4>
           <div className="text-sm text-purple-700 p-4 bg-purple-200 rounded-lg">
-            Preny cung cấp kịch bản mẫu tối ưu cho từng ngành nghề, giúp bạn dễ
-            dàng chốt sales với các câu hỏi phổ biến nhất. Bạn có thể sử dụng
+            {process.env.NEXT_PUBLIC_NAME_APP} cung cấp kịch bản mẫu tối ưu cho
+            từng ngành nghề, giúp bạn dễ dàng chốt sales với các câu hỏi phổ
+            biến nhất. Bạn có thể sử dụng ngay bằng việc tích chọn kịch bản sẵn,
             ngay bằng việc tích chọn kịch bản sẵn, tùy chỉnh hoặc tự tạo kịch
             bản riêng tại mục kịch bản chốt sales. Cảm ơn bạn!
           </div>

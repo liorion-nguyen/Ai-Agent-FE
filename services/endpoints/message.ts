@@ -2,6 +2,10 @@ import { GET, POST } from '@/services/api';
 import {
   CreateConversationParams,
   CreateConversationResponse,
+  GetDialogBoxMessagesParams,
+  GetDialogBoxMessagesResponse,
+  GetDialogBoxsParams,
+  GetDialogBoxsResponse,
   InitCheckActiveChatbotParams,
   InitCheckActiveChatbotResponse,
 } from '@/services/types/message';
@@ -19,8 +23,18 @@ export const messageApi = {
     ),
 
   createConversation: (params: CreateConversationParams) =>
-    POST<CreateConversationResponse>(API_ENDPOINTS.CREATE_CONVERSATION, {
-      user_id: params.user_id,
-      chatbot_id: params.chatbot_id,
-    }),
+    POST<CreateConversationResponse>(API_ENDPOINTS.CREATE_CONVERSATION, params),
+
+  getDialogBoxs: (params: GetDialogBoxsParams) =>
+    GET<GetDialogBoxsResponse>(
+      API_ENDPOINTS.GET_DIALOG_BOXS.replace(':chatbot_id', params.chatbot_id),
+    ),
+
+  getDialogBoxMessages: (params: GetDialogBoxMessagesParams) =>
+    GET<GetDialogBoxMessagesResponse>(
+      API_ENDPOINTS.GET_DIALOG_BOX_MESSAGES.replace(
+        ':dialog_box_id',
+        params.dialog_box_id,
+      ),
+    ),
 };

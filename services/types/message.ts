@@ -1,3 +1,5 @@
+import { DialogBoxType, MessageType } from '@/shared/types';
+
 export interface MessagePreviewParams {
   user_id: string;
   chatbot_id: string;
@@ -56,4 +58,24 @@ export interface CreateConversationResponse {
   chatbot: {
     id: string;
   };
+}
+
+export interface GetDialogBoxsParams {
+  chatbot_id: string;
+}
+
+export interface GetDialogBoxsResponse {
+  success: boolean;
+  message: string;
+  data: DialogBoxType[];
+}
+
+export interface GetDialogBoxMessagesParams {
+  dialog_box_id: string;
+}
+
+export interface GetDialogBoxMessagesResponse {
+  success: boolean;
+  message: string;
+  data: MessageType[];
 }

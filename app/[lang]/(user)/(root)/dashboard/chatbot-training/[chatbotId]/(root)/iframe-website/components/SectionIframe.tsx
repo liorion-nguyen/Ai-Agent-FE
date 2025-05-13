@@ -32,17 +32,39 @@ export default function SectionIframe() {
   }, [hydrated, chatbotId, getChatbot, chatbot?.id]);
   const [copied, setCopied] = useState(false);
 
+  // const scriptCode = `
+  //     <script>
+  //       const domainClient = window.location.hostname;
+  //       window.ChatbotConfig = {
+  //         domain: domainClient,
+  //         siteURL: "${siteURL}",
+  //         token: "${scriptIframe?.token}",
+  //         chatbotId: "${scriptIframe?.chatbotId}",
+  //         userId: "${scriptIframe?.userId}"
+  //     };
+  //     </script>
+  //     <script src="${siteURL}/embed/embed-chatbot.js" async></script>
+  //   `.trim();
   const scriptCode = `
-      <script>
-      window.ChatbotConfig = {
-          siteURL: "${siteURL}",
-          token: "${scriptIframe?.token}",
-          chatbotId: "${scriptIframe?.chatbotId}",
-          userId: "${scriptIframe?.userId}"
-      };
-      </script>
-      <script src="${siteURL}/embed/embed-chatbot.js" async></script>
-    `.trim();
+  <script>
+  (async function() {
+    const domain = window.location.hostname;
+
+    try {
+      const response = await fetch("${process.env.NEXT_PUBLIC_API_URL}/chatbot-embed/init?chatbotId=${scriptIframe?.chatbotId}&userId=${scriptIframe?.userId}&token=${scriptIframe?.token}&domainClient=" + encodeURIComponent(domain), {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      const result = await response.json();
+      console.log("Init result:", result);
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  })();
+</script>`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(scriptCode).then(() => {
@@ -127,7 +149,7 @@ export default function SectionIframe() {
                 </p>
                 <p className="text-sm text-gray-600 mb-2">Example:</p>
                 <pre className="bg-gray-50 p-4 rounded-md text-sm text-gray-700">
-                  {`<!DOCTYPE html>
+                  {`< !DOCTYPE html >
                     <html lang="en">
                     <head>
                       <meta charset="UTF-8">

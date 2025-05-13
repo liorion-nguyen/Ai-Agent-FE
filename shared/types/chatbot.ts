@@ -60,14 +60,6 @@ export interface ChatbotPrompt {
   description: string;
 }
 
-export interface MessageType {
-  id: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-  sender: string;
-}
-
 export interface ChatbotToken {
   id: string;
   token: string;

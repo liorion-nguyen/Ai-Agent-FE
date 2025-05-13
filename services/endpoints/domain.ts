@@ -6,11 +6,8 @@ import { Domain } from '@/shared/types';
 export const domainAPI = {
   getDomains: () => GET<GetDomainsResponse>(API_ENDPOINTS.GET_DOMAINS),
 
-  addDomain: (domain: AddDomainParams) =>
-    POST<Domain>(API_ENDPOINTS.ADD_DOMAIN, {
-      domain: domain.domain,
-      description: domain.description,
-    }),
+  addDomain: (params: AddDomainParams) =>
+    POST<Domain>(API_ENDPOINTS.ADD_DOMAIN, params),
 
   verifyDomain: (domainId: string) =>
     POST<string>(API_ENDPOINTS.VERIFY_DOMAIN.replace(':domain_id', domainId)),
