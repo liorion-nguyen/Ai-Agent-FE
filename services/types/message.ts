@@ -1,3 +1,5 @@
+import { DialogBoxType, MessageType } from '@/shared/types';
+
 export interface MessagePreviewParams {
   user_id: string;
   chatbot_id: string;
@@ -28,11 +30,16 @@ export interface InitCheckActiveChatbotParams {
 }
 
 export interface InitCheckActiveChatbotResponse {
-  status: string;
   data: {
-    chatbotId: string;
-    userId: string;
+    id: string;
+    chatbot_name: string;
+    icon_url: string | null;
+    status: string;
+    user: {
+      id: string;
+    };
   };
+  status: string;
 }
 
 export interface CreateConversationParams {
@@ -51,4 +58,24 @@ export interface CreateConversationResponse {
   chatbot: {
     id: string;
   };
+}
+
+export interface GetDialogBoxsParams {
+  chatbot_id: string;
+}
+
+export interface GetDialogBoxsResponse {
+  success: boolean;
+  message: string;
+  data: DialogBoxType[];
+}
+
+export interface GetDialogBoxMessagesParams {
+  dialog_box_id: string;
+}
+
+export interface GetDialogBoxMessagesResponse {
+  success: boolean;
+  message: string;
+  data: MessageType[];
 }

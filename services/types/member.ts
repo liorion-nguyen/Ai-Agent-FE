@@ -1,9 +1,22 @@
-import { Member } from '@/shared/types/member';
+import { MemberRole } from '@/shared/constants/member';
+import { Member, MemberList } from '@/shared/types';
 
 export interface GetMembersResponse {
   success: boolean;
   message: string;
   data: Member[];
+}
+
+export interface GetMemberResTabel {
+  success: boolean;
+  message: string;
+  data: MemberList[];
+  totalCount: number;
+}
+
+export interface GetMembersParams {
+  user_id: string;
+  workspace_id: string;
 }
 
 export interface AddMemberResponse {
@@ -12,8 +25,8 @@ export interface AddMemberResponse {
 }
 
 export interface AddMemberParams {
-  fullName: string;
-  email: string;
-  password: string;
-  role: string;
+  email?: string;
+  role?: MemberRole;
+  workspace_id: string;
+  user_id?: string;
 }

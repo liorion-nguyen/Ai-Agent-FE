@@ -27,15 +27,12 @@ const CreateChatbotModal = ({
   setIsOpen: (isOpen: boolean) => void;
   onSuccess: () => void;
 }) => {
-  //   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  // const router = useRouter();
   const { createChatbot, loading } = useCreateChatbot();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    // setValue,
     reset,
   } = useZodForm(createChatbotSchema, {
     defaultValues: {
@@ -49,25 +46,17 @@ const CreateChatbotModal = ({
   const closeModal = () => {
     setIsOpen(false);
     reset();
-    // setAvatarPreview(null);
   };
-
-  //   const handleAvatarChange = (base64: string) => {
-  //     setAvatarPreview(base64);
-  //     setValue('avatar', base64);
-  //   };
 
   const onSubmit = async (data: z.infer<typeof createChatbotSchema>) => {
     try {
       const newData: z.infer<typeof createChatbotSchema> = {
         chatbot_name: data.chatbot_name || '',
+        industry: data.industry || '',
+        description: data.description || '',
+        thumbnail: data.thumbnail || '',
       };
-      for (const key in data) {
-        if (data[key as keyof typeof data]) {
-          newData[key as keyof typeof data] =
-            data[key as keyof typeof data] || '';
-        }
-      }
+
       await createChatbot(newData);
       onSuccess();
       closeModal();
@@ -166,11 +155,12 @@ const CreateChatbotModal = ({
 
         <div className="mb-4 md:border-l border-gray-200 pl-4 w-full md:w-1/2">
           <h4 className="text-md font-medium text-gray-900 mb-2">
-            Kích bản mẫu
+            Kịch bản mẫu
           </h4>
           <div className="text-sm text-purple-700 p-4 bg-purple-200 rounded-lg">
-            Preny cung cấp kịch bản mẫu tối ưu cho từng ngành nghề, giúp bạn dễ
-            dàng chốt sales với các câu hỏi phổ biến nhất. Bạn có thể sử dụng
+            {process.env.NEXT_PUBLIC_NAME_APP} cung cấp kịch bản mẫu tối ưu cho
+            từng ngành nghề, giúp bạn dễ dàng chốt sales với các câu hỏi phổ
+            biến nhất. Bạn có thể sử dụng ngay bằng việc tích chọn kịch bản sẵn,
             ngay bằng việc tích chọn kịch bản sẵn, tùy chỉnh hoặc tự tạo kịch
             bản riêng tại mục kịch bản chốt sales. Cảm ơn bạn!
           </div>

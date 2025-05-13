@@ -154,3 +154,14 @@ export interface ChatbotTokenResponse {
 export interface CreateChatbotTokenParams {
   token: string;
 }
+
+export interface GetScriptIframeResponse {
+  token: string;
+  userId: string;
+  chatbotId: string;
+}
+
+export interface GetScriptIframeParams {
+  domainId: string;
+  chatbotId: string;
+}

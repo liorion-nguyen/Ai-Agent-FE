@@ -1,9 +1,11 @@
-import { MessageType } from '@/shared/types/chatbot';
+import { DialogBoxType, MessageType } from '@/shared/types';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 interface MessageState {
   messages: MessageType[];
+  dialogBoxs: DialogBoxType[];
+  dialogBoxMessages: MessageType[];
   hydrated: boolean;
   isStreaming: boolean;
   conversationId: string;
@@ -18,6 +20,8 @@ interface MessageState {
   setConversationId: (value: string) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setDialogBoxs: (newDialogBoxs: DialogBoxType[]) => void;
+  setDialogBoxMessages: (newDialogBoxMessages: MessageType[]) => void;
 }
 
 export const useMessageStore = create<MessageState>()(
@@ -30,6 +34,8 @@ export const useMessageStore = create<MessageState>()(
         conversationId: '',
         loading: false,
         error: null,
+        dialogBoxs: [],
+        dialogBoxMessages: [],
         setMessages: (newMessages) => set({ messages: newMessages }),
         setHydrated: (value) => set({ hydrated: value }),
         addMessage: (newMessage) =>
@@ -69,6 +75,9 @@ export const useMessageStore = create<MessageState>()(
         setConversationId: (value) => set({ conversationId: value }),
         setLoading: (loading) => set({ loading }),
         setError: (error) => set({ error }),
+        setDialogBoxs: (newDialogBoxs) => set({ dialogBoxs: newDialogBoxs }),
+        setDialogBoxMessages: (newDialogBoxMessages) =>
+          set({ dialogBoxMessages: newDialogBoxMessages }),
       }),
       {
         name: 'message-storage',

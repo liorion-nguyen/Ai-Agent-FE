@@ -1,3 +1,5 @@
+import { RemainingLimits } from '@/shared/types/subscription';
+
 export interface SubscriptionResponse {
   success: boolean;
   message: string;
@@ -22,4 +24,15 @@ export interface CommonBasicResponse {
 export interface CommonBasicRequest {
   subscriptionId: string;
   userId: string;
+}
+
+export interface RemainingLimitsResponse {
+  success: boolean;
+  message: string;
+  remainingLimits: RemainingLimits;
+}
+
+export interface RemainingLimitsRequest {
+  startDate: string;
+  endDate: string;
 }

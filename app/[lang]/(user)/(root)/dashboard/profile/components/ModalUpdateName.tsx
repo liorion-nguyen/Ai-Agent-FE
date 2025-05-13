@@ -1,3 +1,4 @@
+import { useUpdateProfile } from '@/app/[lang]/(user)/(root)/dashboard/profile/hooks/useProfile';
 import {
   Modal,
   ModalBody,
@@ -20,13 +21,16 @@ export default function ModalUpdateName({
   fullName,
 }: ModalUpdateNameProps) {
   const [name, setName] = useState<string>(fullName);
+  const { updateProfile, loading } = useUpdateProfile();
   useEffect(() => {
     setName(fullName);
   }, [fullName]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('New name:', name);
+    await updateProfile({
+      fullname: name,
+    });
     onClose();
   };
 
@@ -54,9 +58,9 @@ export default function ModalUpdateName({
             <ModalButton
               type="submit"
               className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
-              disabled={name === fullName || name.length === 0}
+              disabled={loading || name === fullName || name.length === 0}
             >
-              Lưu thay đổi
+              {loading ? 'Đang cập nhật...' : 'Lưu thay đổi'}
             </ModalButton>
           </div>
         </form>

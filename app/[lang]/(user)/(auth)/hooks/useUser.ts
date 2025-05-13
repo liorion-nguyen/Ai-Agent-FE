@@ -7,6 +7,7 @@ import useUserStore from '@/store/user';
 import { useMutation } from '@tanstack/react-query';
 export const useMe = () => {
   const { toast } = useToast();
+  const { setUser, resetUser } = useUserStore();
   const {
     mutate,
     isPending: loading,
@@ -14,9 +15,10 @@ export const useMe = () => {
   } = useMutation<GetMeResponse, APIErrorHandler>({
     mutationFn: () => authAPI.me(),
     onSuccess: (data) => {
-      useUserStore.setState({ user: data.user });
+      setUser(data.user);
     },
     onError: (err) => {
+      resetUser();
       toast({
         title: 'Lấy thông tin người dùng thất bại',
         description: err?.message.message,

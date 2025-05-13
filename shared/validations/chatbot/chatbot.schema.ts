@@ -7,6 +7,7 @@ export const updateChatbotSchema = z.object({
   language: z.enum(['Tiếng Việt', 'English']).optional(),
   theme: z.string().min(1, 'Màu sắc không được để trống').optional(),
   thumbnail: z.string().optional(),
+  model: z.string().optional(),
 });
 
 export const createChatbotSchema = z.object({

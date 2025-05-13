@@ -1,12 +1,7 @@
 import { APIErrorHandler } from '@/services/types';
 import { ACCESS_TOKEN, HTTP_CODE, REFRESH_TOKEN } from '@/shared/constants';
+import { getTokenFromCookie } from '@/shared/utils/cookie';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-
-function getTokenFromCookie(name: string) {
-  const cookies = document.cookie.split('; ');
-  const cookie = cookies.find((c) => c.startsWith(name + '='));
-  return cookie ? cookie.split('=')[1] : null;
-}
 
 export const setupInterceptors = (axiosInstance: AxiosInstance): void => {
   axiosInstance.interceptors.request.use(
@@ -43,16 +38,14 @@ export const setupInterceptors = (axiosInstance: AxiosInstance): void => {
           );
 
           const newToken = response.data.access_token;
-          // axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
           if (originalRequest.headers) {
             document.cookie = `access_token=${newToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
           }
           return axiosInstance(originalRequest);
         } catch (refreshError) {
-          console.error('Token refresh failed:', refreshError);
           document.cookie = `access_token=; path=/; max-age=0`;
           document.cookie = `refresh_token=; path=/; max-age=0`;
-          window.location.href = '/sign-in';
+          // window.location.href = '/vi/s';
         }
       }
 

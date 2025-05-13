@@ -3,11 +3,8 @@
 import { useSignOut } from '@/app/[lang]/(user)/(auth)/hooks';
 import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
 import AccountCircleIcon from '@/public/icons/account-circle-icon.svg';
-import CartIcon from '@/public/icons/cart-icon.svg';
-import HeartIcon from '@/public/icons/heart-icon.svg';
-import LogoAgent from '@/public/icons/ic_logo-agent.webp';
+import LogoAgent from '@/public/icons/ic_logo-agent.png';
 import MenuIcon from '@/public/icons/menu-icon.svg';
-import SearchIcon from '@/public/icons/search-icon.svg';
 import { ROUTES } from '@/shared/constants';
 import { navigationItems } from '@/shared/constants/navigation';
 import { useIsMobile } from '@/shared/hooks/useMobile';
@@ -82,23 +79,23 @@ const DashboardHeader = () => {
                       <div key={index} className="relative">
                         <Link
                           href={item.href}
-                          className={`px-3 md:px-5 flex items-center h-full font-medium text-[18px] md:text-[22px] tracking-wider font-road ${
+                          className={`px-3 md:px-5 flex items-center h-full text-[16px] md:text-[18px] font-medium border-b-2 border-b-transparent ${
                             item.label === activeLabel ||
                             (item.label === 'Trang chủ' && activeLabel === '')
-                              ? 'text-white border-l-[3px] border-r-[3px] border-solid border-border bg-active'
-                              : 'text-foreground hover:text-hover hover:bg-blue-100'
+                              ? 'text-foreground !border-b-purple-600 bg-purple-100'
+                              : 'text-foreground hover:border-b-purple-600 hover:bg-purple-100'
                           }`}
                         >
                           {item.label}
                           {/* {item.label === activeLabel && (
-                        <div className="absolute left-1/2 transform -translate-x-1/2 mt-7">
-                          <Img
-                            src={'/images/line_text_inactive.png'}
-                            alt={`${item.label} image`}
-                            className="w-24 h-12"
-                          />
-                        </div>
-                      )} */}
+                            <div className="absolute left-1/2 transform -translate-x-1/2 mt-7">
+                              <Img
+                                src={'/images/line_text_inactive.png'}
+                                alt={`${item.label} image`}
+                                className="w-24 h-12"
+                              />
+                            </div>
+                          )} */}
                         </Link>
                       </div>
                     ),
@@ -159,12 +156,6 @@ const DashboardHeader = () => {
                     <Img src={MenuIcon.src} alt="menu" className="w-6 h-6" />
                   </button>
                 )}
-                <button aria-label="Search" className="p-1">
-                  <Img src={SearchIcon.src} alt="Search" className="w-6 h-6" />
-                </button>
-                <button aria-label="Wishlist" className="hidden sm:block p-1">
-                  <Img src={HeartIcon.src} alt="Wishlist" className="w-6 h-6" />
-                </button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button aria-label="Account" className="p-1">
@@ -199,12 +190,6 @@ const DashboardHeader = () => {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <button aria-label="Cart" className="p-1 relative">
-                  <Img src={CartIcon.src} alt="Cart" className="w-6 h-6" />
-                  <span className="absolute -top-1 -right-1 bg-secondary text-foreground rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
-                    1
-                  </span>
-                </button>
               </div>
             )}
           </div>

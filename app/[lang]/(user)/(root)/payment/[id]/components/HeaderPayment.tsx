@@ -1,5 +1,5 @@
 import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
-import LogoAgent from '@/public/icons/ic_logo-agent.webp';
+import LogoAgent from '@/public/icons/ic_logo-agent.png';
 import { MessageCircleQuestion } from 'lucide-react';
 import Image from 'next/image';
 

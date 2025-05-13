@@ -1,18 +1,16 @@
-import useUserStore from '@/store/user';
-
 import { useGetChatbot } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/hooks/useChatbot';
 import { toast } from '@/shared/hooks';
 import useChatbotStore from '@/store/chatbot';
 import { Check, Copy } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function SectionIframe() {
   const siteURL = process.env.NEXT_PUBLIC_SERVER_URL;
-  const { chatbotId } = useParams();
+  const { chatbotId } = useParams<{ chatbotId: string }>();
   const { hydrated, chatbot } = useChatbotStore();
   const { getChatbot } = useGetChatbot();
-  const { chatbotToken } = useChatbotStore();
+  const { scriptIframe } = useChatbotStore();
   const router = useRouter();
   useEffect(() => {
     const checkPublishChatbot = async () => {
@@ -29,23 +27,44 @@ export default function SectionIframe() {
     };
     checkPublishChatbot();
     if (!chatbotId || chatbot?.id !== chatbotId) {
-      getChatbot(chatbotId as string);
+      getChatbot(chatbotId);
     }
   }, [hydrated, chatbotId, getChatbot, chatbot?.id]);
   const [copied, setCopied] = useState(false);
-  const { user } = useUserStore();
 
+  // const scriptCode = `
+  //     <script>
+  //       const domainClient = window.location.hostname;
+  //       window.ChatbotConfig = {
+  //         domain: domainClient,
+  //         siteURL: "${siteURL}",
+  //         token: "${scriptIframe?.token}",
+  //         chatbotId: "${scriptIframe?.chatbotId}",
+  //         userId: "${scriptIframe?.userId}"
+  //     };
+  //     </script>
+  //     <script src="${siteURL}/embed/embed-chatbot.js" async></script>
+  //   `.trim();
   const scriptCode = `
-      <script>
-      window.ChatbotConfig = {
-          siteURL: "${siteURL}",
-          token: "${chatbotToken?.token}",
-          chatbotId: "${chatbotId}",
-          userId: "${user?.id}"
-      };
-      </script>
-      <script src="${siteURL}/embed/embed-chatbot.js" async></script>
-    `.trim();
+  <script>
+  (async function() {
+    const domain = window.location.hostname;
+
+    try {
+      const response = await fetch("${process.env.NEXT_PUBLIC_API_URL}/chatbot-embed/init?chatbotId=${scriptIframe?.chatbotId}&userId=${scriptIframe?.userId}&token=${scriptIframe?.token}&domainClient=" + encodeURIComponent(domain), {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      const result = await response.json();
+      console.log("Init result:", result);
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  })();
+</script>`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(scriptCode).then(() => {
@@ -58,16 +77,25 @@ export default function SectionIframe() {
       setTimeout(() => setCopied(false), 2000);
     });
   };
+
+  const checkScriptIframe = useMemo(() => {
+    return (
+      scriptIframe?.token &&
+      scriptIframe?.chatbotId &&
+      scriptIframe?.userId &&
+      scriptIframe?.chatbotId === chatbotId
+    );
+  }, [scriptIframe]);
   return (
     <div>
-      {!chatbotToken ? (
+      {!checkScriptIframe ? (
         <div>
-          <p>Hãy chọn token để tích hợp chatbot vào website</p>
+          <p>Hãy chọn domain để tích hợp chatbot vào website</p>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
           <p className="text-base text-gray-600 mb-8">
-            Add the L-Edu Chatbot to your website with just a few lines of code.
+            Add the Chatbot to your website with just a few lines of code.
             Follow the instructions below to get started.
           </p>
 
@@ -121,24 +149,24 @@ export default function SectionIframe() {
                 </p>
                 <p className="text-sm text-gray-600 mb-2">Example:</p>
                 <pre className="bg-gray-50 p-4 rounded-md text-sm text-gray-700">
-                  {`<!DOCTYPE html>
-                                        <html lang="en">
-                                        <head>
-                                        <meta charset="UTF-8">
-                                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                        <title>Your Website</title>
-                                        </head>
-                                        <body>
-                                        <h1>Welcome to My Website</h1>
-                                        <!-- Add the script here -->
-                                        <script>
-                                        window.ChatbotConfig = {
-                                        siteURL: "${siteURL}"
-                                        };
-                                        </script>
-                                        <script src="${siteURL}/embed/embed-chatbot.js" async></script>
-                                        </body>
-                                        </html>`}
+                  {`< !DOCTYPE html >
+                    <html lang="en">
+                    <head>
+                      <meta charset="UTF-8">
+                      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                      <title>Your Website</title>
+                    </head>
+                    <body>
+                      <h1>Welcome to My Website</h1>
+                      <!-- Add the script here -->
+                      <script>
+                      window.ChatbotConfig = {
+                      siteURL: "${siteURL}"
+                      };
+                      </script>
+                      <script src="${siteURL}/embed/embed-chatbot.js" async></script>
+                    </body>
+                    </html>`}
                 </pre>
               </div>
 

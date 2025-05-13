@@ -1,6 +1,7 @@
 import MarkdownViewer from '@/components/ui/Markdown';
 import { toast, useZodForm } from '@/shared/hooks';
-import { MessageType } from '@/shared/types/chatbot';
+import { MessageType } from '@/shared/types';
+import { formatDateTimeMessage } from '@/shared/utils/date';
 import { purchaseSchema } from '@/shared/validations/chatbot/chatbot.schema';
 import { useState } from 'react';
 import { z } from 'zod';
@@ -67,19 +68,26 @@ export const ItemMessage = ({ message }: ItemMessageProps) => {
         {/* Nội dung tin nhắn */}
         <div className="max-w-[70%] flex flex-col gap-1">
           <span className="text-sm font-semibold text-gray-800">
-            {message.sender === 'user' ? 'You' : 'L Edu'}
+            {message.sender === 'user' ? 'You' : 'Bot'}
           </span>
 
           <MarkdownViewer content={message.content} />
 
-          {message.sender === 'bot' && !showForm && (
-            <button
-              onClick={() => setShowForm(true)}
-              className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition w-fit text-sm"
-            >
-              Bạn muốn mua sản phẩm này?
-            </button>
-          )}
+          <span
+            className={`text-sm text-gray-500 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}
+          >
+            {formatDateTimeMessage(message.createdAt)}
+          </span>
+          {message.sender === 'bot' &&
+            message.content.includes('mua sản phẩm') &&
+            !showForm && (
+              <button
+                onClick={() => setShowForm(true)}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition w-fit text-sm"
+              >
+                Bạn muốn mua sản phẩm này?
+              </button>
+            )}
         </div>
       </div>
 

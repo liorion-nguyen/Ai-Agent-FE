@@ -1,101 +1,170 @@
+import { useGetMembers } from '@/app/[lang]/(user)/(root)/dashboard/member-management/hooks/useMember';
+import { useMemberColumns } from '@/components/ui/columns/MemberColumns';
+import { PaginationControls } from '@/components/ui/custom/PaginationControl';
+import Search from '@/components/ui/Search';
+import { Spinner } from '@/components/ui/Spinner';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/Table';
+import { cn } from '@/lib/utils';
+import { useTableQuery } from '@/shared/hooks/useTableQuery';
+import { MemberList } from '@/shared/types';
+import { flexRender } from '@tanstack/react-table';
+
 const MemberTable = () => {
-  // const { members } = useMemberStore();
-  // const { getMembers, loading } = useGetMembers();
-  // useEffect(() => {
-  //     getMembers();
-  // }, []);
-  const members = [
-    {
-      fullName: 'Nguyen Quoc Chung',
-      email: 'liorion.nguyen@gmail.com',
-      role: 'Chủ sở hữu',
-      phone: '0708200334',
-      createdAt: '25/04/2025 - 10:04',
-    },
-  ];
+  const {
+    table,
+    isLoading,
+    error,
+    search,
+    setSearch,
+    setLimit,
+    setPage,
+    pageCount,
+    currentPage,
+    hasData,
+  } = useTableQuery<MemberList>(useMemberColumns(), useGetMembers, {
+    enablePagination: true,
+    enableSorting: true,
+    enableSearch: true,
+    defaultPageSize: 10,
+  });
+
+  if (error) {
+    return (
+      <div className="text-center py-10 text-red-500">
+        Error loading permissions: {error.message?.message ?? 'Unknown error'}
+      </div>
+    );
+  }
+
   return (
-    <div className="overflow-x-auto w-full">
-      <table className="min-w-full border border-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Tên
-            </th>
-            <th className="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Vai trò
-            </th>
-            <th className="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Số điện thoại
-            </th>
-            <th className="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Ngày tạo
-            </th>
-            <th className="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Hoạt động
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {members.map((member, index) => {
-            const isActive = true;
-            return (
-              <tr
-                key={index}
-                className="border-b border-gray-200 hover:bg-gray-50"
-              >
-                <td className="py-3 px-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
-                      <span className="text-gray-600">
-                        {member.fullName.charAt(0)}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {member.fullName}
-                      </p>
-                      <p className="text-xs text-gray-500">{member.email}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="py-3 px-4">
-                  <span
-                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      member.role === 'Chủ sở hữu'
-                        ? 'bg-purple-100 text-purple-800'
-                        : 'bg-gray-100 text-gray-800'
-                    }`}
+    <div className="space-y-6 md:pr-8 md:pl-8 w-full">
+      <div className="flex justify-between items-center mb-4">
+        <Search
+          value={search}
+          onChange={setSearch}
+          placeholder="Search members..."
+          className="w-64"
+        />
+      </div>
+
+      <div className="relative rounded-xl border dark:bg-gray-900 shadow-sm overflow-hidden">
+        {isLoading && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70 dark:bg-black/40 backdrop-blur-sm">
+            <Spinner size="large">
+              <span className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                Đang tải dữ liệu...
+              </span>
+            </Spinner>
+          </div>
+        )}
+        <div className="overflow-x-auto">
+          <Table className="min-w-full">
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow
+                  key={headerGroup.id}
+                  className="border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-800"
+                >
+                  {headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      onClick={header.column.getToggleSortingHandler?.()}
+                      className={cn(
+                        'px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300',
+                        header.column.getCanSort() &&
+                          'cursor-pointer select-none',
+                      )}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <span>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
+                        </span>
+                        {header.column.getCanSort() && (
+                          <span className="text-gray-500">
+                            {{
+                              asc: '↑',
+                              desc: '↓',
+                            }[header.column.getIsSorted() as string] ?? '↕'}
+                          </span>
+                        )}
+                      </div>
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody className="min-h-[400px]">
+              {isLoading ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={table.getAllColumns().length}
+                    className="text-center py-6 text-gray-500 dark:text-gray-400"
                   >
-                    {member.role}
-                  </span>
-                </td>
-                <td className="py-3 px-4 text-sm text-gray-900">
-                  {member.phone}
-                </td>
-                <td className="py-3 px-4 text-sm text-gray-900">
-                  {member.createdAt}
-                </td>
-                <td className="py-3 px-4">
-                  <span
-                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      isActive
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-800'
-                    }`}
+                    Đang tải...
+                  </TableCell>
+                </TableRow>
+              ) : hasData ? (
+                table.getRowModel().rows.map((row, index) => (
+                  <TableRow
+                    key={row.id}
+                    className={cn(
+                      'transition-colors',
+                      index % 2 === 0
+                        ? 'bg-white dark:bg-gray-900'
+                        : 'bg-gray-50 dark:bg-gray-800',
+                      'hover:bg-gray-100 dark:hover:bg-gray-700',
+                    )}
                   >
-                    <span
-                      className={`w-2 h-2 rounded-full mr-1 ${
-                        isActive ? 'bg-green-500' : 'bg-gray-500'
-                      }`}
-                    ></span>
-                    {isActive ? 'Hoạt động' : 'Không hoạt động'}
-                  </span>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className="px-4 py-3 text-sm whitespace-nowrap text-gray-900 dark:text-gray-100"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={table.getAllColumns().length}
+                    className="text-center py-6 text-gray-500 dark:text-gray-400"
+                  >
+                    Không tìm thấy thành viên nào.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+
+      {pageCount > 0 && (
+        <PaginationControls
+          currentPage={currentPage}
+          pageCount={pageCount}
+          setPage={setPage}
+          table={table}
+          setLimit={setLimit}
+          maxPagesToShow={5}
+        />
+      )}
     </div>
   );
 };

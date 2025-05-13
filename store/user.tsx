@@ -7,12 +7,14 @@ interface UserState {
   user: User | undefined;
   apiToken: string | undefined;
   workspace: Workspace | undefined;
+  hydrated: boolean;
   setUser: (newUser: User) => void;
   resetUser: () => void;
   setApiToken: (newApiToken: string) => void;
   resetApiToken: () => void;
   setWorkspace: (newWorkspace: Workspace) => void;
   resetWorkspace: () => void;
+  setHydrated: (value: boolean) => void;
 }
 
 const useUserStore = create<UserState>()(
@@ -22,6 +24,7 @@ const useUserStore = create<UserState>()(
         user: undefined,
         apiToken: undefined,
         workspace: undefined,
+        hydrated: false,
         setUser: (newUser) => set({ user: newUser }),
         setApiToken: (newApiToken: string) => set({ apiToken: newApiToken }),
         resetUser: () => set({ user: undefined }),
@@ -29,6 +32,7 @@ const useUserStore = create<UserState>()(
         setWorkspace: (newWorkspace: Workspace) =>
           set({ workspace: newWorkspace }),
         resetWorkspace: () => set({ workspace: undefined }),
+        setHydrated: (value: boolean) => set({ hydrated: value }),
       }),
       {
         name: 'user-storage',

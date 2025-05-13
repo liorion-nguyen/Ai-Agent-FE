@@ -16,8 +16,7 @@ import {
 } from 'react';
 
 const ChatbotInfoForm = forwardRef((_, ref) => {
-  const params = useParams();
-  const chatbotId = params.chatbotId || 'bot-demo';
+  const { chatbotId } = useParams<{ chatbotId: string }>();
   const { chatbot, hydrated } = useChatbotStore();
 
   const { getChatbot } = useGetChatbot();
@@ -37,15 +36,16 @@ const ChatbotInfoForm = forwardRef((_, ref) => {
       language: 'Tiếng Việt',
       theme: '#4C01C4',
       thumbnail: '',
+      model: '',
     },
   });
 
   const themeValue = watch('theme');
 
   useEffect(() => {
-    if (!hydrated) return;
+    // if (!hydrated) return;
     if (!chatbot) {
-      getChatbot(chatbotId as string);
+      getChatbot(chatbotId);
     }
     if (chatbot) {
       setValue('chatbot_name', chatbot.chatbot_name || '');
@@ -60,9 +60,11 @@ const ChatbotInfoForm = forwardRef((_, ref) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setThumbnailPreview(base64String);
-        setValue('thumbnail', base64String);
+        const base64String = reader.result;
+        if (base64String && typeof base64String === 'string') {
+          setThumbnailPreview(base64String);
+          setValue('thumbnail', base64String);
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -193,6 +195,26 @@ const ChatbotInfoForm = forwardRef((_, ref) => {
         </div>
         {errors.language && (
           <p className="text-sm text-red-500">{errors.language.message}</p>
+        )}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Model
+        </label>
+        <div className="relative">
+          <select
+            {...register('model')}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none"
+          >
+            <option value={chatbot?.model.id}>
+              {chatbot?.model.model_name}
+            </option>
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
+        </div>
+        {errors.model && (
+          <p className="text-sm text-red-500">{errors.model.message}</p>
         )}
       </div>
 

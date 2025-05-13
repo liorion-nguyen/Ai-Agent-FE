@@ -3,12 +3,13 @@ import {
   ApiTokenResponse,
   GetAllUsersResponse,
   GetUserByIdResponse,
+  UpdateProfileInParams,
 } from '@/services/types/user';
 import { API_ENDPOINTS } from '@/shared/constants';
 import { User } from '@/shared/types';
 export const userApi = {
-  updateProfile: (params: Partial<User>) =>
-    PATCH(API_ENDPOINTS.UPDATE_PROFILE, params),
+  updateProfile: (params: UpdateProfileInParams) =>
+    PATCH<User>(API_ENDPOINTS.UPDATE_PROFILE, params),
 
   deleteUser: (id: string) =>
     DELETE(API_ENDPOINTS.DELETE_USER.replace(':id', id)),

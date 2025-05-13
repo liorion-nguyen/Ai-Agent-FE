@@ -54,11 +54,6 @@ export const resourceApi = {
         ':user_id',
         params.user_id || '',
       ).replace(':chatbot_id', params.chatbot_id || ''),
-      {
-        api_token: params.api_token,
-        dataset_ids: params.dataset_ids,
-        auto_call: params.auto_call,
-        search_strategy: params.search_strategy,
-      },
+      params,
     ),
 };

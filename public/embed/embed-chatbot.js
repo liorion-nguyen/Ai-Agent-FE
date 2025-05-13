@@ -6,10 +6,11 @@
     const chatbotId = window.ChatbotConfig?.chatbotId || "";
     const userId = window.ChatbotConfig?.userId || "";
     const token = window.ChatbotConfig?.token || "";
+    const domainClient = window.ChatbotConfig?.domainClient || "";
     // Tạo iframe
     const iframe = document.createElement("iframe");
     iframe.id = "chatbot-iframe";
-    iframe.src = `${siteURL}/vi/embed?chatbotId=${chatbotId}&userId=${userId}&token=${token}`;
+    iframe.src = `${siteURL}/vi/embed?chatbotId=${chatbotId}&userId=${userId}&token=${token}&domainClient=${domainClient}`;
     iframe.title = "Chatbot";
     iframe.style.position = "fixed";
     iframe.style.bottom = "0";

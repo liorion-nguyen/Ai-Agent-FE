@@ -1,5 +1,6 @@
 'use client';
 
+import { useLimit } from '@/app/[lang]/(user)/(root)/hooks/useLimit';
 import { useSignOut } from '@/app/[lang]/admin/hooks/useAuth';
 import { useSubscription } from '@/app/[lang]/hooks/useSubscription';
 import { Progress } from '@/components/ui/Progress';
@@ -15,21 +16,25 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/Sidebar';
 import useSubscriptionStore from '@/store/subscription';
+import useUserStore from '@/store/user';
 import {
   BarChart,
   BotMessageSquare,
+  CreditCard,
   FileText,
   HelpCircle,
   Key,
   LogOut,
   MessageSquare,
+  PanelTop,
+  RemoveFormatting,
   Settings,
   User,
   Users,
 } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useLayoutEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 const items = [
   {
@@ -57,6 +62,12 @@ const items = [
     tooltip: 'Quản lý tín nhắn',
   },
   {
+    title: 'Quản lý form',
+    url: '/dashboard/form-management',
+    icon: RemoveFormatting,
+    tooltip: 'Quản lý form',
+  },
+  {
     title: 'Quản lý token',
     url: '/dashboard/token-management',
     icon: Key,
@@ -67,6 +78,18 @@ const items = [
     url: '/dashboard/member-management',
     icon: Users,
     tooltip: 'Quản lý member',
+  },
+  {
+    title: 'Quản lý domain',
+    url: '/dashboard/domain-management',
+    icon: PanelTop,
+    tooltip: 'Quản lý domain',
+  },
+  {
+    title: 'Quản lý payment',
+    url: '/dashboard/payment-management',
+    icon: CreditCard,
+    tooltip: 'Quản lý payment',
   },
   {
     title: 'Hỗ trợ yêu cầu ticket',
@@ -96,15 +119,33 @@ const items = [
 
 const SidebarNav = () => {
   const { signOut, loading } = useSignOut();
+  const { user } = useUserStore();
   const pathname = usePathname();
   const isActive = (url: string) => {
     return pathname.includes(url);
   };
-  const { subscription } = useSubscriptionStore();
+  const { subscription, remainingLimits } = useSubscriptionStore();
   const { getSubscription } = useSubscription();
-  useLayoutEffect(() => {
+  const { getRemainingLimits } = useLimit();
+  useEffect(() => {
     getSubscription();
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 30);
+    const startDate = new Date();
+    getRemainingLimits({
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+    });
   }, []);
+  const knowledgeProgress = useMemo(() => {
+    if (remainingLimits && subscription?.subscription.knowledge_limit) {
+      return (
+        subscription?.subscription.knowledge_limit -
+          remainingLimits?.knowledge || 0
+      );
+    }
+    return 0;
+  }, [remainingLimits, subscription]);
   return (
     <Sidebar
       collapsible="icon"
@@ -121,18 +162,34 @@ const SidebarNav = () => {
             className="w-10 h-10 rounded-full group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8"
           />
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-            <span className="font-semibold">Nguyen Quoc Chung</span>
+            <span className="font-semibold">{user?.fullname}</span>
             <span className="text-sm text-gray-400">
               {subscription?.subscription.name}
             </span>
           </div>
         </div>
         <div className="mt-3 group-data-[collapsible=icon]:hidden">
-          <div className="flex justify-between text-sm text-gray-400">
-            <span>Document</span>
-            <span>2 / {subscription?.subscription.knowledge_limit}</span>
-          </div>
-          <Progress value={20} className="h-2 mt-1" />
+          {remainingLimits && subscription?.subscription.knowledge_limit && (
+            <>
+              <div className="flex justify-between text-sm text-gray-400">
+                <>
+                  <span>Documents</span>
+                  <span>
+                    {knowledgeProgress} /{' '}
+                    {subscription?.subscription.knowledge_limit}
+                  </span>
+                </>
+              </div>
+              <Progress
+                value={
+                  (knowledgeProgress /
+                    subscription?.subscription.knowledge_limit) *
+                  100
+                }
+                className="h-2 mt-1"
+              />
+            </>
+          )}
         </div>
       </SidebarHeader>
 

@@ -82,6 +82,30 @@ export const useSubscription = () => {
   };
 };
 
+export const useGetSubscriptionById = () => {
+  const {
+    mutateAsync: getSubscriptionById,
+    isPending: loading,
+    error,
+  } = useMutation<Subscription, APIErrorHandler, string>({
+    mutationFn: (id) => subscriptionApi.getSubscriptionById(id),
+    onSuccess: (data) => {
+      return data;
+    },
+    onError: (err) => {
+      toast({
+        title: 'Lấy gói thất bại',
+        description: err?.message.message,
+        variant: 'destructive',
+      });
+    },
+  });
+  return {
+    getSubscriptionById,
+    loading,
+    error,
+  };
+};
 export const useSubscribeSubscription = () => {
   const { getSubscription } = useSubscription();
   const {

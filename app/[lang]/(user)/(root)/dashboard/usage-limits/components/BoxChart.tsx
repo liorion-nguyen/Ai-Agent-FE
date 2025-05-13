@@ -16,32 +16,40 @@ interface StatItem {
 }
 
 const BoxChart = () => {
-  const { subscription } = useSubscriptionStore();
+  const { subscription, remainingLimits } = useSubscriptionStore();
   const [statsData, setStatsData] = useState<StatItem[]>([]);
   useEffect(() => {
     if (subscription) {
       setStatsData([
         {
           label: 'Tài liệu',
-          value: 5,
+          value:
+            subscription.subscription.knowledge_limit -
+            (remainingLimits?.knowledge || 0),
           total: subscription.subscription.knowledge_limit,
           icon: BookText,
         },
         {
           label: 'Thành viên',
-          value: 0,
+          value:
+            subscription.subscription.member_limit -
+            (remainingLimits?.member || 0),
           total: subscription.subscription.member_limit,
           icon: User,
         },
         {
           label: 'Cuộc hội thoại',
-          value: 0,
+          value:
+            subscription.subscription.message_limit -
+            (remainingLimits?.message || 0),
           total: subscription.subscription.message_limit,
           icon: MessageSquare,
         },
         {
           label: 'Chatbot',
-          value: 1,
+          value:
+            subscription.subscription.agent_limit -
+            (remainingLimits?.agent || 0),
           total: subscription.subscription.agent_limit,
           icon: Bot,
         },

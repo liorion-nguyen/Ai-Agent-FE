@@ -24,6 +24,16 @@ export interface Chatbot {
   chatbot_resources: ChatbotResource[];
 }
 
+export interface ChatbotEmbed {
+  id: string;
+  chatbot_name: string;
+  icon_url: string | null;
+  status: string;
+  user: {
+    id: string;
+  };
+}
+
 export interface ChatbotOnboarding {
   id: string;
   description: string;
@@ -48,14 +58,6 @@ export interface ChatbotPrompt {
   prompt_name: string;
   prompt_info: string;
   description: string;
-}
-
-export interface MessageType {
-  id: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-  sender: string;
 }
 
 export interface ChatbotToken {

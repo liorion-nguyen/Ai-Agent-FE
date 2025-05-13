@@ -30,11 +30,11 @@ const ReasonsSection = () => {
     <SectionDashboardLayout className="bg-gray-50 py-16">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-4">
-          Lý do nên sử dụng AI Chatbot Freny
+          Lý do nên sử dụng AI Chatbot {process.env.NEXT_PUBLIC_NAME_APP}
         </h2>
         <p className="text-center text-gray-600 mb-12">
-          AI chatbot Freny có nhiều tính năng độc đáo giúp bạn tăng 50% chuyển
-          đổi trên Fanpage và website
+          AI chatbot {process.env.NEXT_PUBLIC_NAME_APP} có nhiều tính năng độc
+          đáo giúp bạn tăng 50% chuyển đổi trên Fanpage và website
         </p>
         <div className="flex flex-col lg:flex-row items-center gap-10">
           {/* Left Content */}
@@ -67,7 +67,7 @@ const ReasonsSection = () => {
           <div className="w-full lg:w-2/3 mt-8 md:mt-0 flex justify-center">
             <Img
               src="https://preny.ai/_next/image?url=%2Fimages%2Fimg_banner-reason.png&w=1920&q=75"
-              alt="AI Chatbot Freny Illustration"
+              alt="AI Chatbot L AI Illustration"
               className="w-full rounded-lg shadow-lg"
             />
           </div>

@@ -1,41 +1,40 @@
 'use client';
 
-import ItemMessage from '@/app/[lang]/embed/components/ItemMessage';
 import {
   useInitCheckActiveChatbot,
   useSendMessage,
 } from '@/app/[lang]/embed/hooks/useMessage';
+import ItemMessage from '@/components/ui/ItemMessage';
 import { toast } from '@/shared/hooks';
-import { MessageType } from '@/shared/types/chatbot';
+import { MessageType } from '@/shared/types';
+import useChatbotStore from '@/store/chatbot';
 import { useMessageStore } from '@/store/message';
 import { MessageCircle, MessageSquareOff, Plus, Send, X } from 'lucide-react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-
 const BoxChat = () => {
   const searchParams = useSearchParams();
   const chatbotId = searchParams.get('chatbotId');
   const userId = searchParams.get('userId');
+  const domainClient = searchParams.get('domainClient');
   const token = searchParams.get('token');
+  console.log('domainClient', domainClient);
+
   const { initCheckActiveChatbot } = useInitCheckActiveChatbot();
-  const { conversationId, hydrated } = useMessageStore();
+  const { conversationId } = useMessageStore();
   const { sendMessage } = useSendMessage();
+  const { chatbotEmbed } = useChatbotStore();
+
   useEffect(() => {
-    if (token && chatbotId && userId && !conversationId && hydrated) {
+    if (token && chatbotId && userId) {
       initCheckActiveChatbot({
         user_id: userId,
         chatbot_id: chatbotId,
         api_token: token,
       });
     }
-  }, [
-    token,
-    chatbotId,
-    userId,
-    conversationId,
-    hydrated,
-    initCheckActiveChatbot,
-  ]);
+  }, [token, chatbotId, userId, initCheckActiveChatbot]);
 
   const { messages, clearMessages, isStreaming } = useMessageStore();
   const [isOpen, setIsOpen] = useState(false);
@@ -75,6 +74,7 @@ const BoxChat = () => {
 
     try {
       await sendMessage(chatbotId, userId, inputValue, conversationId);
+      setInputValue('');
     } catch (error) {
       toast({
         title: 'Error',
@@ -89,6 +89,8 @@ const BoxChat = () => {
     clearMessages();
     setInputValue('');
   };
+
+  console.log(document.referrer);
 
   return (
     <div id="chatbot-container">
@@ -108,7 +110,7 @@ const BoxChat = () => {
           {/* Header */}
           <div className="p-4 border-b border-gray-200 flex justify-between items-center">
             <h3 className="text-lg font-semibold text-gray-800">
-              L-Edu Assistant
+              {chatbotEmbed?.chatbot_name}
             </h3>
             <div className="flex items-center gap-2">
               <button
@@ -141,7 +143,18 @@ const BoxChat = () => {
                   {isStreaming && (
                     <div className="flex items-center gap-2 text-gray-500">
                       <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                        B
+                        {chatbotEmbed?.icon_url ? (
+                          <Image
+                            src={chatbotEmbed.icon_url}
+                            alt="Chatbot Icon"
+                            width={32}
+                            height={32}
+                          />
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                            {chatbotEmbed?.chatbot_name.charAt(0)}
+                          </div>
+                        )}
                       </div>
                       <p>Typing...</p>
                     </div>

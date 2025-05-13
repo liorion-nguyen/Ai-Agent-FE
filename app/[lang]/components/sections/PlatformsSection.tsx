@@ -29,7 +29,7 @@ const PlatformsSection = () => {
     <SectionDashboardLayout className="bg-gray-50 py-16">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-4">
-          AI Chatbot Freny tích hợp đa nền tảng
+          AI Chatbot {process.env.NEXT_PUBLIC_NAME_APP} tích hợp đa nền tảng
         </h2>
         <p className="text-center text-gray-600 mb-12">
           Tích hợp AI Chatbot để đáp ứng giúp bạn tối ưu chuyển đổi trên mọi nền

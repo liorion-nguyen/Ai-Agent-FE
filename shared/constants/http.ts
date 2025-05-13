@@ -9,7 +9,7 @@ export const API_ENDPOINTS = {
   FORGOT_PASSWORD: '/auth/forgot-password',
   VERIFY_OTP: '/auth/verify-otp',
   RESET_PASSWORD: '/auth/reset-password',
-  UPDATE_PROFILE: '/users/profile',
+  UPDATE_PROFILE: '/users/profile/update',
   DELETE_USER: '/users/:id',
   API_TOKEN: '/users/profile/api-token',
   GET_ALL_USERS: '/users',
@@ -32,7 +32,8 @@ export const API_ENDPOINTS = {
   CREATE_CHATBOT_PROMPT: '/users/:user_id/prompts',
   GET_CHATBOT_TOKENS: 'users/profile/chatbot-token',
   CREATE_CHATBOT_TOKEN: 'chatbot-tokens/generate-chatbot-token',
-
+  GET_SCRIPT_IFRAME:
+    '/chatbot-embed/script?chatbotId=:chatbotId&domainId=:domainId',
   // Models
   GET_MODELS: '/chatbot-models',
 
@@ -40,8 +41,12 @@ export const API_ENDPOINTS = {
   SEND_MESSAGE_REVIEW: '/users/:user_id/chatbots/:chatbot_id/chat',
   SEND_MESSAGE: '/users/:user_id/chatbots/:chatbot_id/iframe/chat',
   INIT_CHECK_ACTIVE_CHATBOT:
-    '/chatbot-embed/init?chatbotId=:chatbot_id&userId=:user_id&token=:token',
+    '/chatbot-embed/init?chatbotId=:chatbot_id&userId=:user_id&token=:token&domainClient=:domainClient',
   CREATE_CONVERSATION: '/conversations',
+  GET_DIALOG_BOXS: '/users/:chatbot_id/dialog-boxes',
+  GET_DIALOG_BOX_MESSAGES:
+    '/users/:chatbot_id/dialog-boxes/:dialog_box_id/messages',
+
   // Resources
   GET_ALL_RESOURCES: '/users/profile/resources',
   GET_RESOURCE_BY_ID: '/users/profile/resources/:id',
@@ -58,14 +63,28 @@ export const API_ENDPOINTS = {
   // Subscriptions
   GET_SUBSCRIPTIONS: '/subscriptions',
   GET_SUBSCRIPTION: '/users/profile/subscription',
+  GET_SUBSCRIPTION_BY_ID: '/subscriptions/:id',
   SUBSCRIBE_SUBSCRIPTION: '/subscriptions/subscribe',
   UPGRADE_SUBSCRIPTION: '/subscriptions/upgrade',
   CANCEL_SUBSCRIPTION: '/subscriptions/cancel',
   RENEW_SUBSCRIPTION: '/subscriptions/renew',
-
+  GET_REMAINING_LIMITS:
+    '/users/profile/subscription/limits?endDate=:endDate&startDate=:startDate',
   // Members
-  GET_MEMBERS: 'members',
-  ADD_MEMBER: 'members/add',
+  GET_MEMBERS: 'workspaces/:workspace_id/members?user_id=:user_id',
+  ADD_MEMBER: 'workspaces/:workspace_id/members',
+  UPDATE_MEMBER: 'workspaces/:workspace_id/members',
+  DELETE_MEMBER: 'workspaces/:workspace_id/members/:user_id',
+
+  // Forms
+  GET_FORMS: 'workspaces/:workspace_id/forms?user_id=:user_id',
+
+  // Domains
+  GET_DOMAINS: 'users/profile/domains',
+  ADD_DOMAIN: 'domains',
+  UPDATE_DOMAIN: 'domains',
+  DELETE_DOMAIN: 'domains/:domain_id',
+  VERIFY_DOMAIN: 'domains/:domain_id/verify',
 };
 
 export const HTTP_CODE = {

@@ -37,5 +37,6 @@ export const uploadFileSchema = z.object({
     )
     .refine((file) => file.size <= 100 * 1024 * 1024, {
       message: 'File size must not exceed 100MB.',
-    }),
+    })
+    .optional(),
 });

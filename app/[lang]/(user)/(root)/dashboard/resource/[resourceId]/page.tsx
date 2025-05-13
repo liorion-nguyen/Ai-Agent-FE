@@ -12,14 +12,14 @@ import ModalUploadKnowledge from './components/ModalUploadKnowledge';
 
 export default function TrainingDataDetailPage() {
   const router = useRouter();
-  const { resourceId } = useParams();
+  const { resourceId } = useParams<{ resourceId: string }>();
   const { resource } = useResourceStore();
   const { getResource } = useGetResource();
   const [isOpenUploadKnowledge, setIsOpenUploadKnowledge] = useState(false);
   const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
-    getResource(resourceId as string);
+    getResource(resourceId);
     if (resource) {
       setSelectedDocument(resource.documents?.[0] || null);
     }
@@ -72,7 +72,7 @@ export default function TrainingDataDetailPage() {
           isOpen={isOpenUploadKnowledge}
           setIsOpen={setIsOpenUploadKnowledge}
           onSuccess={() => {
-            getResource(resourceId as string);
+            getResource(resourceId);
           }}
         />
       </div>
