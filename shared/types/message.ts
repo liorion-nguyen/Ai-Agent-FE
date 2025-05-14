@@ -1,15 +1,14 @@
 export interface MessageType {
   id: string;
   content: string;
-  createdAt: string;
-  updatedAt: string;
   sender: string;
+  sent_at: string;
 }
 
 export interface DialogBoxType {
-  id: string;
-  name: string;
-  thumbnail: string;
-  created_at: string;
-  updated_at: string;
+  conversation_id: string;
+  external_conversation_id: string;
+  chatbot_name: string;
+  started_at: string;
+  status: string;
 }

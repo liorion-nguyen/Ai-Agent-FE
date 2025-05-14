@@ -1,23 +1,28 @@
 'use client';
 
+import { useGetChatbots } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/hooks/useChatbot';
 import { useGetDialogBoxs } from '@/app/[lang]/(user)/(root)/dashboard/messages/hooks/useGetDialogBoxs';
 import { Progress } from '@/components/ui/Progress';
 import Search from '@/components/ui/Search';
+import { cn } from '@/lib/utils';
 import useChatbotStore from '@/store/chatbot';
 import { useMessageStore } from '@/store/message';
 import useSubscriptionStore from '@/store/subscription';
+import useUserStore from '@/store/user';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 export default function SidebarNavMessage() {
   const [selectedChatbot, setSelectedChatbot] = useState<string>('');
   const [search, setSearch] = useState('');
-  const { chatbots } = useChatbotStore();
+  const { chatbots, hydrated } = useChatbotStore();
+  const { getChatbots } = useGetChatbots();
   const { remainingLimits, subscription } = useSubscriptionStore();
   const { getDialogBoxs } = useGetDialogBoxs();
   const { dialogBoxs } = useMessageStore();
-  const { dialogId } = useParams<{ dialogId: string }>();
+  const { conversationId } = useParams<{ conversationId: string }>();
   const router = useRouter();
+  const { user } = useUserStore();
 
   const messageProgress = useMemo(() => {
     if (remainingLimits && subscription?.subscription.message_limit) {
@@ -28,17 +33,27 @@ export default function SidebarNavMessage() {
     return 0;
   }, [remainingLimits, subscription]);
 
-  const handleToMessagePage = (dialogId: string) => {
-    router.push(`/dashboard/messages/${dialogId}`);
+  const handleToMessagePage = (conversationId: string) => {
+    router.push(`/dashboard/messages/${conversationId}`);
   };
 
   useEffect(() => {
-    if (chatbots.length > 0) {
+    if (chatbots.length > 0 && selectedChatbot) {
       getDialogBoxs({
         chatbot_id: selectedChatbot,
+        user_id: user?.id || '',
       });
     }
-  }, [chatbots]);
+  }, [chatbots, selectedChatbot, user?.id]);
+
+  useEffect(() => {
+    if (!hydrated) {
+      return;
+    }
+    if (chatbots.length == 0) {
+      getChatbots();
+    }
+  }, [chatbots, hydrated]);
 
   return (
     <div className="flex flex-col gap-4 p-4 bg-white border-r border-gray-200 w-1/4 h-screen">
@@ -92,9 +107,12 @@ export default function SidebarNavMessage() {
           <div className="space-y-2">
             {dialogBoxs.map((dialogBox) => (
               <div
-                key={dialogBox.id}
-                className={`flex items-center justify-between p-2 hover:bg-gray-100 rounded-lg cursor-pointer ${dialogId === dialogBox.id ? 'bg-gray-100' : ''}`}
-                onClick={() => handleToMessagePage(dialogBox.id)}
+                key={dialogBox.conversation_id}
+                className={cn(
+                  'flex items-center justify-between p-2 hover:bg-gray-100 rounded-lg cursor-pointer',
+                  conversationId === dialogBox.conversation_id && 'bg-gray-100',
+                )}
+                onClick={() => handleToMessagePage(dialogBox.conversation_id)}
               >
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
@@ -103,7 +121,7 @@ export default function SidebarNavMessage() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-gray-900">
-                        {dialogBox.name || 'Unknown User'}
+                        {dialogBox.chatbot_name || 'Unknown User'}
                       </span>
                       <span className="text-xs text-gray-500">...</span>
                     </div>

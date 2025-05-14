@@ -27,14 +27,17 @@ export const messageApi = {
 
   getDialogBoxs: (params: GetDialogBoxsParams) =>
     GET<GetDialogBoxsResponse>(
-      API_ENDPOINTS.GET_DIALOG_BOXS.replace(':chatbot_id', params.chatbot_id),
+      API_ENDPOINTS.GET_DIALOG_BOXS.replace(':user_id', params.user_id).replace(
+        ':chatbot_id',
+        params.chatbot_id,
+      ),
     ),
 
   getDialogBoxMessages: (params: GetDialogBoxMessagesParams) =>
     GET<GetDialogBoxMessagesResponse>(
       API_ENDPOINTS.GET_DIALOG_BOX_MESSAGES.replace(
-        ':dialog_box_id',
-        params.dialog_box_id,
+        ':conversationId',
+        params.conversationId,
       ),
     ),
 };

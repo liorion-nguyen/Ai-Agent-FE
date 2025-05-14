@@ -1,6 +1,6 @@
 'use client';
 
-import HistoryBoxChat from '@/app/[lang]/(user)/(root)/dashboard/messages/[dialogId]/components/HistoryBoxChat';
+import HistoryBoxChat from '@/app/[lang]/(user)/(root)/dashboard/messages/[conversationId]/components/HistoryBoxChat';
 
 export default function MessagePage() {
   return (

@@ -34,8 +34,7 @@ export const useSendMessage = () => {
       addMessage({
         id: crypto.randomUUID(),
         content: message,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        sent_at: new Date().toISOString(),
         sender: 'user',
       });
 

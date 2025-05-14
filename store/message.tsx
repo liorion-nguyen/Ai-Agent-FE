@@ -52,7 +52,7 @@ export const useMessageStore = create<MessageState>()(
                   {
                     ...lastMessage,
                     content,
-                    updatedAt: new Date().toISOString(),
+                    sent_at: new Date().toISOString(),
                   },
                 ],
               };
@@ -63,8 +63,7 @@ export const useMessageStore = create<MessageState>()(
                 {
                   id: crypto.randomUUID(),
                   content,
-                  createdAt: new Date().toISOString(),
-                  updatedAt: new Date().toISOString(),
+                  sent_at: new Date().toISOString(),
                   sender: 'bot',
                 },
               ],

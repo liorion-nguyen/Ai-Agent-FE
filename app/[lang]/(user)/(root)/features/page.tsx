@@ -1,13 +1,12 @@
 'use client';
 
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
-import SectionDashboardLayout from '@/components/layout/section-landing-page-layout';
-import Img from '@/components/ui/Image';
+import ContentFeatures from '@/app/[lang]/(user)/(root)/features/components/ContentFeatures';
+import SidebarFeatures from '@/app/[lang]/(user)/(root)/features/components/SidebarFeatures';
 import { Separator } from '@/components/ui/Separator';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const FeaturesPage = () => {
-  const data = useMemo(
+  const featureData = useMemo(
     () => [
       {
         id: 'ngon-ngu-tra-loi-tu-nhien-nhu-nguoi-that',
@@ -74,8 +73,7 @@ const FeaturesPage = () => {
       {
         id: 'tra-loi-bang-hinh-anh',
         title: 'Trả lời bằng hình ảnh',
-        description:
-          'Trả lời bằng hình ảnh giúp doanh nghiệp tạo kịch bản chatbot chốt sales dễ training, dễ sử dụng, dễ hiểu, dễ sử dụng.',
+        description: `Trả lời bằng hình ảnh giúp doanh nghiệp tạo kịch bản chatbot chốt sales dễ training, dễ sử dụng, dễ hiểu, dễ sử dụng.`,
         images: [
           'https://preny.ai/_next/image?url=%2Fimages%2Ftinh-nang%2Fimg_feature-10.png&w=1080&q=75',
         ],
@@ -83,8 +81,7 @@ const FeaturesPage = () => {
       {
         id: 'tool-facebook-ads',
         title: 'Tool Facebook Ads',
-        description:
-          'Tool Facebook Ads giúp doanh nghiệp tạo kịch bản chatbot chốt sales dễ training, dễ sử dụng, dễ hiểu, dễ sử dụng.',
+        description: `Tool Facebook Ads giúp doanh nghiệp tạo kịch bản chatbot chốt sales dễ training, dễ sử dụng, dễ hiểu, dễ sử dụng.`,
         images: [
           'https://preny.ai/_next/image?url=%2Fimages%2Ftinh-nang%2Fimg_feature-11.png&w=1080&q=75',
           'https://preny.ai/_next/image?url=%2Fimages%2Ftinh-nang%2Fimg_feature-12.png&w=1080&q=75',
@@ -94,8 +91,7 @@ const FeaturesPage = () => {
       {
         id: 'su-dung-kien-thuc-llm-tra-loi-cau-hoi-khong',
         title: 'Sử dụng kiến thức LLM trả lời câu hỏi khó',
-        description:
-          'Sử dụng kiến thức LLM trả lời câu hỏi khó giúp doanh nghiệp tạo kịch bản chatbot chốt sales dễ training, dễ sử dụng, dễ hiểu, dễ sử dụng.',
+        description: `Sử dụng kiến thức LLM trả lời câu hỏi khó giúp doanh nghiệp tạo kịch bản chatbot chốt sales dễ training, dễ sử dụng, dễ hiểu, dễ sử dụng.`,
         images: [
           'https://preny.ai/_next/image?url=%2Fimages%2Ftinh-nang%2Fimg_feature-14.png&w=1080&q=75',
         ],
@@ -103,8 +99,7 @@ const FeaturesPage = () => {
       {
         id: 'phan-quyen-cho-sales',
         title: 'Phân quyền cho sales',
-        description:
-          'Phân quyền cho sales giúp doanh nghiệp tạo kịch bản chatbot chốt sales dễ training, dễ sử dụng, dễ hiểu, dễ sử dụng.',
+        description: `Phân quyền cho sales giúp doanh nghiệp tạo kịch bản chatbot chốt sales dễ training, dễ sử dụng, dễ hiểu, dễ sử dụng.`,
         images: [
           'https://preny.ai/_next/image?url=%2Fimages%2Ftinh-nang%2Fimg_feature-15.png&w=1080&q=75',
           'https://preny.ai/_next/image?url=%2Fimages%2Ftinh-nang%2Fimg_feature-16.png&w=1080&q=75',
@@ -113,8 +108,7 @@ const FeaturesPage = () => {
       {
         id: 'ho-tro-da-ngon-ngu',
         title: 'Hỗ trợ đa ngôn ngữ',
-        description:
-          'Hỗ trợ đa ngôn ngữ giúp doanh nghiệp tạo kịch bản chatbot chốt sales dễ training, dễ sử dụng, dễ hiểu, dễ sử dụng.',
+        description: `Hỗ trợ đa ngôn ngữ giúp doanh nghiệp tạo kịch bản chatbot chốt sales dễ training, dễ sử dụng, dễ hiểu, dễ sử dụng.`,
         images: [
           'https://preny.ai/_next/image?url=%2Fimages%2Ftinh-nang%2Fimg_feature-17.png&w=1080&q=75',
         ],
@@ -124,17 +118,16 @@ const FeaturesPage = () => {
   );
 
   const [activeSection, setActiveSection] = useState<string | null>(
-    data[0]?.id || '',
+    featureData[0]?.id || '',
   );
 
-  // Handle click to scroll to section with offset
   const handleClick = useCallback(
     (id: string, e: React.MouseEvent<HTMLAnchorElement>) => {
       e.preventDefault();
       setActiveSection(id);
       const element = document.getElementById(id);
       if (element) {
-        const headerOffset = 80; // Adjust based on your header height
+        const headerOffset = 80;
         const elementPosition =
           element.getBoundingClientRect().top + window.pageYOffset;
         const offsetPosition = elementPosition - headerOffset;
@@ -148,7 +141,6 @@ const FeaturesPage = () => {
     [],
   );
 
-  // IntersectionObserver to update active section on scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -158,107 +150,33 @@ const FeaturesPage = () => {
           }
         });
       },
-      { threshold: 0.5, rootMargin: '-80px 0px 0px 0px' }, // Adjust rootMargin based on header height
+      { threshold: 0.5, rootMargin: '-80px 0px 0px 0px' },
     );
 
-    data.forEach((item) => {
+    featureData.forEach((item) => {
       const element = document.getElementById(item.id);
       if (element) observer.observe(element);
     });
 
     return () => {
-      data.forEach((item) => {
+      featureData.forEach((item) => {
         const element = document.getElementById(item.id);
         if (element) observer.unobserve(element);
       });
     };
-  }, [data]);
+  }, [featureData]);
 
   return (
-    <DashboardLayout>
-      <SectionDashboardLayout className="pb-20">
-        <div className="flex flex-row gap-8">
-          {/* Fixed Sidebar on the Left */}
-          <div className="w-1/4 fixed top-20 h-[calc(100vh-80px)] overflow-hidden">
-            <ul className="flex flex-col gap-4 pt-5">
-              {data.map((item) => (
-                <li key={item.id}>
-                  <a
-                    href={`#${item.id}`}
-                    onClick={(e) => handleClick(item.id, e)}
-                    className={`text-sm font-medium transition-colors ${
-                      activeSection === item.id
-                        ? 'text-blue-600 border-l-4 border-blue-600 pl-2'
-                        : 'text-gray-600 hover:text-blue-500 hover:border-l-4 hover:border-blue-500 hover:pl-2'
-                    }`}
-                  >
-                    {item.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Spacer to prevent content overlap with fixed sidebar */}
-          <div className="w-1/4"></div>
-
-          {/* Vertical Separator */}
-          <Separator orientation="vertical" className="bg-gray-400 h-auto" />
-
-          {/* Scrollable Content on the Right */}
-          <div
-            className="w-3/4 pt-5 overflow-y-auto"
-            style={{ scrollBehavior: 'smooth' }}
-          >
-            <h1 className="text-3xl font-bold max-w-2xl text-center">
-              Tính năng chốt sales đặc biệt của AI Chatbot
-              {process.env.NEXT_PUBLIC_NAME_APP}
-            </h1>
-            <p className="mt-2 text-gray-600">
-              <a href="#" className="text-blue-600 hover:underline mr-2">
-                AI Chatbot
-              </a>
-              {process.env.NEXT_PUBLIC_NAME_APP} sở hữu nhiều tính năng nổi bật
-              của một AI chatbot bán hàng đa kênh hiệu quả, tăng khả năng chốt
-              đơn thành công cho mọi ngành hàng. Các tính năng của{' '}
-              {process.env.NEXT_PUBLIC_NAME_APP} sẽ giúp người dùng tăng được
-              trải nghiệm khách hàng trên các kênh bán hàng của mình, tự động
-              chăm sóc và tư vấn khách hàng theo kịch bản chốt sales chuyên
-              nghiệp.
-            </p>
-
-            {/* Content Sections */}
-            {data.map((item, index) => (
-              <div key={item.id} id={item.id} className="scroll-mt-20">
-                <h3 className="text-xl font-semibold">{item.title}</h3>
-                <p className="mt-2 text-gray-600">{item.description}</p>
-                <div className="mt-4 flex gap-4 flex-col items-center">
-                  {item.images.map((image, idx) => (
-                    <div
-                      key={idx}
-                      className="w-full h-auto rounded-lg bg-slate-300 flex justify-center items-center"
-                    >
-                      <Img
-                        src={image}
-                        alt={`${item.title}-${idx}`}
-                        className="w-1/3 h-full object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-                {/* Horizontal Separator Between Sections (Except the Last) */}
-                {index < data.length - 1 && (
-                  <Separator
-                    orientation="horizontal"
-                    className="my-8 bg-gray-400"
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </SectionDashboardLayout>
-    </DashboardLayout>
+    <div className="flex flex-row gap-8">
+      <SidebarFeatures
+        featureData={featureData}
+        activeSection={activeSection}
+        handleClick={handleClick}
+      />
+      <div className="w-1/4"></div>
+      <Separator orientation="vertical" className="bg-gray-400 h-auto" />
+      <ContentFeatures featureData={featureData} />
+    </div>
   );
 };
 
