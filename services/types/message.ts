@@ -61,21 +61,27 @@ export interface CreateConversationResponse {
 }
 
 export interface GetDialogBoxsParams {
+  user_id: string;
   chatbot_id: string;
 }
 
 export interface GetDialogBoxsResponse {
   success: boolean;
-  message: string;
   data: DialogBoxType[];
 }
 
 export interface GetDialogBoxMessagesParams {
-  dialog_box_id: string;
+  conversationId: string;
 }
 
 export interface GetDialogBoxMessagesResponse {
   success: boolean;
-  message: string;
-  data: MessageType[];
+  data: {
+    conversation_id: string;
+    external_conversation_id: string;
+    chatbot_name: string;
+    started_at: string;
+    status: string;
+    messages: MessageType[];
+  };
 }

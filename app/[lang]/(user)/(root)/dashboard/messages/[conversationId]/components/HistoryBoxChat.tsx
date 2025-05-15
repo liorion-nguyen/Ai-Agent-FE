@@ -1,4 +1,4 @@
-import { useGetDialogBoxMessages } from '@/app/[lang]/(user)/(root)/dashboard/messages/[dialogId]/hooks/useHistoryBoxChat';
+import { useGetDialogBoxMessages } from '@/app/[lang]/(user)/(root)/dashboard/messages/[conversationId]/hooks/useHistoryBoxChat';
 import ItemMessage from '@/components/ui/ItemMessage';
 import { useMessageStore } from '@/store/message';
 import { MessageCircleOff } from 'lucide-react';
@@ -7,12 +7,13 @@ import { useEffect } from 'react';
 
 export default function HistoryBoxChat() {
   const { dialogBoxMessages } = useMessageStore();
-  const { dialogId } = useParams<{ dialogId: string }>();
+  console.log(dialogBoxMessages);
+  const { conversationId } = useParams<{ conversationId: string }>();
   const { getDialogBoxMessages } = useGetDialogBoxMessages();
 
   useEffect(() => {
-    getDialogBoxMessages({ dialog_box_id: dialogId });
-  }, [dialogId]);
+    getDialogBoxMessages({ conversationId: conversationId });
+  }, [conversationId]);
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">

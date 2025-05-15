@@ -6,11 +6,13 @@
     const chatbotId = window.ChatbotConfig?.chatbotId || "";
     const userId = window.ChatbotConfig?.userId || "";
     const token = window.ChatbotConfig?.token || "";
-    const domainClient = window.ChatbotConfig?.domainClient || "";
+    const chatbot_name = window.ChatbotConfig?.chatbot_name || "";
+    const icon_url = window.ChatbotConfig?.icon_url || "";
+    const conversationId = window.ChatbotConfig?.conversationId || "";
     // Tạo iframe
     const iframe = document.createElement("iframe");
     iframe.id = "chatbot-iframe";
-    iframe.src = `${siteURL}/vi/embed?chatbotId=${chatbotId}&userId=${userId}&token=${token}&domainClient=${domainClient}`;
+    iframe.src = `${siteURL}/vi/embed?chatbotId=${chatbotId}&userId=${userId}&token=${token}&chatbot_name=${chatbot_name}&icon_url=${icon_url}&conversationId=${conversationId}`;
     iframe.title = "Chatbot";
     iframe.style.position = "fixed";
     iframe.style.bottom = "0";

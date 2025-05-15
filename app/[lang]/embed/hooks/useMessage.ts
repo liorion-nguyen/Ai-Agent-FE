@@ -25,6 +25,7 @@ export const useSendMessage = () => {
     userId: string,
     message: string,
     conversationId: string,
+    token: string,
   ) => {
     try {
       setLoading(true);
@@ -34,8 +35,7 @@ export const useSendMessage = () => {
       addMessage({
         id: crypto.randomUUID(),
         content: message,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        sent_at: new Date().toISOString(),
         sender: 'user',
       });
 
@@ -49,6 +49,7 @@ export const useSendMessage = () => {
         body: JSON.stringify({
           message,
           conversation_id: conversationId,
+          token: token,
           chatbot_id: chatbotId,
           user_id: userId,
         }),

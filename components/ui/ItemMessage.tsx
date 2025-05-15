@@ -8,11 +8,7 @@ import { z } from 'zod';
 
 type PurchaseFormValues = z.infer<typeof purchaseSchema>;
 
-interface ItemMessageProps {
-  message: MessageType;
-}
-
-export const ItemMessage = ({ message }: ItemMessageProps) => {
+export const ItemMessage = ({ message }: { message: MessageType }) => {
   const [showForm, setShowForm] = useState(false);
 
   const {
@@ -76,7 +72,7 @@ export const ItemMessage = ({ message }: ItemMessageProps) => {
           <span
             className={`text-sm text-gray-500 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}
           >
-            {formatDateTimeMessage(message.createdAt)}
+            {message.sent_at && formatDateTimeMessage(message.sent_at)}
           </span>
           {message.sender === 'bot' &&
             message.content.includes('mua sản phẩm') &&

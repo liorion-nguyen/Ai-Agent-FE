@@ -48,23 +48,50 @@ export default function SectionIframe() {
   const scriptCode = `
   <script>
   (async function() {
-    const domain = window.location.hostname;
-
     try {
-      const response = await fetch("${process.env.NEXT_PUBLIC_API_URL}/chatbot-embed/init?chatbotId=${scriptIframe?.chatbotId}&userId=${scriptIframe?.userId}&token=${scriptIframe?.token}&domainClient=" + encodeURIComponent(domain), {
+      const response1 = await fetch("${process.env.NEXT_PUBLIC_API_URL}/chatbot-embed/init?chatbotId=${scriptIframe?.chatbotId}&userId=${scriptIframe?.userId}&token=${scriptIframe?.token}", {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
         }
       });
 
-      const result = await response.json();
-      console.log("Init result:", result);
+      const response2 = await fetch("${process.env.NEXT_PUBLIC_API_URL}/conversations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: "${scriptIframe?.userId}",
+          chatbot_id: "${scriptIframe?.chatbotId}",
+        })
+      });
+
+      const result = await response1.json();
+      const result2 = await response2.json();
+
+      window.ChatbotConfig = {
+        chatbot_name: result.data?.chatbot_name,
+        icon_url: result.data?.icon_url,
+        conversationId: result2.external_conversation_id,
+        siteURL: "${siteURL}",
+        token: "${scriptIframe?.token}",
+        chatbotId: "${scriptIframe?.chatbotId}",
+        userId: "${scriptIframe?.userId}"
+      };
+
+      // Chỉ nhúng script sau khi tất cả đã sẵn sàng
+      const script = document.createElement("script");
+      script.src = "${siteURL}/embed/embed-chatbot.js";
+      script.async = true;
+      document.body.appendChild(script);
+
     } catch (err) {
       console.error("Error:", err);
     }
   })();
-</script>`;
+  </script>
+`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(scriptCode).then(() => {

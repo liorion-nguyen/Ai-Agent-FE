@@ -1,3 +1,4 @@
+import { messageApi } from '@/services/endpoints/message';
 import { APIErrorHandler } from '@/services/types';
 import {
   GetDialogBoxsParams,
@@ -15,31 +16,8 @@ export const useGetDialogBoxs = () => {
     isPending: loading,
     error,
   } = useMutation<GetDialogBoxsResponse, APIErrorHandler, GetDialogBoxsParams>({
-    mutationFn: () => {
-      // (params) => messageApi.getDialogBoxs(params)
-      return Promise.resolve({
-        success: true,
-        message: 'Success',
-        data: [
-          {
-            id: '1',
-            name: 'Dialog Box 1',
-            description: 'Description 1',
-            created_at: '2021-01-01',
-            updated_at: '2021-01-01',
-            thumbnail: '',
-          },
-          {
-            id: '2',
-            name: 'Dialog Box 2',
-            description: 'Description 2',
-            created_at: '2021-01-01',
-            updated_at: '2021-01-01',
-            thumbnail: '',
-          },
-        ],
-      });
-    },
+    mutationFn: (params: GetDialogBoxsParams) =>
+      messageApi.getDialogBoxs(params),
     onSuccess: (data) => {
       setDialogBoxs(data.data);
     },

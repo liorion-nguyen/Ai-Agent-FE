@@ -43,9 +43,10 @@ export const API_ENDPOINTS = {
   INIT_CHECK_ACTIVE_CHATBOT:
     '/chatbot-embed/init?chatbotId=:chatbot_id&userId=:user_id&token=:token&domainClient=:domainClient',
   CREATE_CONVERSATION: '/conversations',
-  GET_DIALOG_BOXS: '/users/:chatbot_id/dialog-boxes',
+  GET_DIALOG_BOXS:
+    'messages/customer-history?userId=:user_id&chatbotId=:chatbot_id',
   GET_DIALOG_BOX_MESSAGES:
-    '/users/:chatbot_id/dialog-boxes/:dialog_box_id/messages',
+    'messages/by-conversation?conversationId=:conversationId',
 
   // Resources
   GET_ALL_RESOURCES: '/users/profile/resources',
