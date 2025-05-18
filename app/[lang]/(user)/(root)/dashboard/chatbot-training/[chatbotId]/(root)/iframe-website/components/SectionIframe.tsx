@@ -1,9 +1,11 @@
 import { useGetChatbot } from '@/app/[lang]/(user)/(root)/dashboard/chatbot-training/hooks/useChatbot';
 import { toast } from '@/shared/hooks';
 import useChatbotStore from '@/store/chatbot';
+import useUserStore from '@/store/user';
 import { Check, Copy } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import { usePublishChatbot } from '../../overview/hooks/useUpdateChatbot';
 
 export default function SectionIframe() {
   const siteURL = process.env.NEXT_PUBLIC_SERVER_URL;
@@ -11,18 +13,23 @@ export default function SectionIframe() {
   const { hydrated, chatbot } = useChatbotStore();
   const { getChatbot } = useGetChatbot();
   const { scriptIframe } = useChatbotStore();
-  const router = useRouter();
+  const { user, apiToken } = useUserStore();
+  const { publishChatbot } = usePublishChatbot();
+
+  const handlePublishChatbot = async () => {
+    publishChatbot({
+      user_id: user?.id || '',
+      connector_id: chatbot?.connector_id || '',
+      api_token: apiToken || '',
+      chatbot_id: chatbot?.id || '',
+    });
+  };
+
   useEffect(() => {
     const checkPublishChatbot = async () => {
       if (!hydrated) return;
       if (chatbot?.status === 'draft') {
-        toast({
-          title: 'Chatbot chưa được xuất bản',
-          description: 'Vui lòng xuất bản chatbot trước khi tích hợp',
-          variant: 'destructive',
-        });
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        router.back();
+        await handlePublishChatbot();
       }
     };
     checkPublishChatbot();

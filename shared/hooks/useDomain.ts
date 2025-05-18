@@ -8,6 +8,7 @@ import { useToast } from '@/shared/hooks';
 import { TableQueryParams } from '@/shared/types/table';
 import useDomainStore from '@/store/domain';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 export const useGetDomain = (params?: TableQueryParams) => {
   const { setDomains } = useDomainStore();
   const { data, isLoading, error, refetch, isFetching, isError } = useQuery<
@@ -54,6 +55,7 @@ export const useGetDomain = (params?: TableQueryParams) => {
 export const useGetSelectDomain = () => {
   const { setDomains } = useDomainStore();
   const { toast } = useToast();
+  const router = useRouter();
   const {
     mutate,
     isPending: loading,
@@ -70,6 +72,7 @@ export const useGetSelectDomain = () => {
         description: err?.message.message,
         variant: 'destructive',
       });
+      router.push('/dashboard/domain-management');
     },
   });
 

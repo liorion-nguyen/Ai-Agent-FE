@@ -66,12 +66,12 @@ export const usePublishChatbot = () => {
     PublishChatbotParams
   >({
     mutationFn: (params) => chatbotApi.publishChatbot(params),
-    onSuccess: (data) => {
-      toast({
-        title: 'Tạo chatbot thành công',
-        description: data.message,
-        variant: 'default',
-      });
+    onSuccess: () => {
+      // toast({
+      //   title: 'Tạo chatbot thành công',
+      //   description: data.message,
+      //   variant: 'default',
+      // });
     },
     onError: (err) => {
       toast({

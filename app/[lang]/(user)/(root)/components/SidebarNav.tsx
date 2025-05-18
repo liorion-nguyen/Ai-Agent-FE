@@ -23,7 +23,6 @@ import {
   CreditCard,
   FileText,
   HelpCircle,
-  Key,
   LogOut,
   MessageSquare,
   PanelTop,
@@ -67,12 +66,12 @@ const items = [
     icon: RemoveFormatting,
     tooltip: 'Quản lý form',
   },
-  {
-    title: 'Quản lý token',
-    url: '/dashboard/token-management',
-    icon: Key,
-    tooltip: 'Quản lý token',
-  },
+  // {
+  //   title: 'Quản lý token',
+  //   url: '/dashboard/token-management',
+  //   icon: Key,
+  //   tooltip: 'Quản lý token',
+  // },
   {
     title: 'Quản lý member',
     url: '/dashboard/member-management',
