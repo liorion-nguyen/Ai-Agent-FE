@@ -7,7 +7,9 @@ import {
   ModalHeader,
   ModalTitle,
 } from '@/components/ui/Modal';
+import { validatePhoneNumber } from '@/shared/validations/profile/profile.schema';
 import { useEffect, useState } from 'react';
+
 interface ModalUpdatePhoneNumberProps {
   isOpen: boolean;
   onClose: () => void;
@@ -20,13 +22,35 @@ export default function ModalUpdatePhoneNumber({
   phone,
 }: ModalUpdatePhoneNumberProps) {
   const [phoneNumber, setPhoneNumber] = useState<string>(phone);
+  const [error, setError] = useState<string>('');
   const { updateProfile, loading } = useUpdateProfile();
+
   useEffect(() => {
     setPhoneNumber(phone);
+    setError('');
   }, [phone]);
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPhoneNumber(value);
+
+    if (value.length === 0) {
+      setError('Vui lòng nhập số điện thoại');
+    } else if (!validatePhoneNumber(value)) {
+      setError(
+        'Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng số điện thoại Việt Nam',
+      );
+    } else {
+      setError('');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validatePhoneNumber(phoneNumber)) {
+      setError('Số điện thoại không hợp lệ');
+      return;
+    }
     await updateProfile({
       phone: phoneNumber,
     });
@@ -48,17 +72,23 @@ export default function ModalUpdatePhoneNumber({
             <input
               type="tel"
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              onChange={handlePhoneChange}
+              className={`w-full px-4 py-2 border ${
+                error ? 'border-red-500' : 'border-gray-300'
+              } rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500`}
               placeholder="Nhập số điện thoại của bạn"
             />
+            {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
           </div>
           <div className="flex justify-end">
             <ModalButton
               type="submit"
               className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
               disabled={
-                loading || phoneNumber === phone || phoneNumber.length === 0
+                loading ||
+                phoneNumber === phone ||
+                phoneNumber.length === 0 ||
+                !!error
               }
             >
               {loading ? 'Đang cập nhật...' : 'Tiếp theo'}
