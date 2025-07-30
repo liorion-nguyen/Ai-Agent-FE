@@ -33,6 +33,7 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^12.7.4",
     "github-markdown-css": "^5.8.1",
+    "highlight.js": "^11.11.1",
     "i18next": "^24.2.3",
     "i18next-browser-languagedetector": "^8.0.4",
     "i18next-resources-to-backend": "^1.2.1",

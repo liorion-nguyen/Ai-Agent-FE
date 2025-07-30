@@ -22,7 +22,7 @@ export const useGetChatbots = () => {
   } = useMutation<ChatbotsResponse, APIErrorHandler, void>({
     mutationFn: () => chatbotApi.getAllChatbots(),
     onSuccess: (data) => {
-      setChatbots(data.chatbots);
+      setChatbots(data.data);
     },
     onError: (err) => {
       toast({
@@ -50,7 +50,7 @@ export const useGetChatbot = () => {
   } = useMutation<ChatbotResponse, APIErrorHandler, string>({
     mutationFn: (chatbotId) => chatbotApi.getChatbotById(chatbotId),
     onSuccess: (data) => {
-      setChatbot(data.chatbot);
+      setChatbot(data.data);
     },
     onError: (err) => {
       toast({
@@ -87,12 +87,12 @@ export const useCreateChatbot = () => {
         user_id: user?.id || '',
       });
 
-      await chatbotApi.createChatbotCoze({
-        ...data,
-        chatbot_id: dbResponse.id,
-        api_token: apiToken || '',
-        user_id: user?.id || '',
-      });
+      // await chatbotApi.createChatbotCoze({
+      //   ...data,
+      //   chatbot_id: dbResponse.id,
+      //   api_token: apiToken || '',
+      //   user_id: user?.id || '',
+      // });
       return dbResponse;
     },
     onSuccess: (data) => {

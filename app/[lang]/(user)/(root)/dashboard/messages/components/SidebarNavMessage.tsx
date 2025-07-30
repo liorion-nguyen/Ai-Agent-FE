@@ -38,7 +38,7 @@ export default function SidebarNavMessage() {
   };
 
   useEffect(() => {
-    if (chatbots.length > 0 && selectedChatbot) {
+    if (Array.isArray(chatbots) && chatbots.length > 0 && selectedChatbot) {
       getDialogBoxs({
         chatbot_id: selectedChatbot,
         user_id: user?.id || '',
@@ -50,7 +50,7 @@ export default function SidebarNavMessage() {
     if (!hydrated) {
       return;
     }
-    if (chatbots.length == 0) {
+    if (Array.isArray(chatbots) && chatbots.length == 0) {
       getChatbots();
     }
   }, [chatbots, hydrated]);
@@ -64,7 +64,7 @@ export default function SidebarNavMessage() {
           onChange={(e) => setSelectedChatbot(e.target.value)}
         >
           <option value="">Chọn chatbot</option>
-          {chatbots.map((chatbot) => (
+          {Array.isArray(chatbots) && chatbots.map((chatbot) => (
             <option key={chatbot.id} value={chatbot.id}>
               {chatbot.chatbot_name}
             </option>
