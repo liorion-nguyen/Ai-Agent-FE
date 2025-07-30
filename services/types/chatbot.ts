@@ -3,13 +3,13 @@ import { Chatbot, ChatbotToken } from '@/shared/types/chatbot';
 export interface ChatbotsResponse {
   success: boolean;
   message: string;
-  chatbots: Chatbot[];
+  data: Chatbot[];
 }
 
 export interface ChatbotResponse {
   success: boolean;
   message: string;
-  chatbot: Chatbot;
+  data: Chatbot;
 }
 
 export interface CreateChatbotDbInParams {

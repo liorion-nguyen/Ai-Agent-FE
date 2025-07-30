@@ -1,144 +1,45 @@
-# Hint Frontend
+![Logo](./public/icons/ic_logo-agent.png)
 
-## Getting Started
+# AI Agent - Nền Tảng Chatbot Thông Minh
 
-First, run the development server:
+## Mô Tả:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+AI Agent là một nền tảng SaaS toàn diện được thiết kế để tạo, quản lý và triển khai các chatbot AI thông minh với khả năng tương tác tiên tiến. Nền tảng cung cấp trải nghiệm người dùng tuyệt vời cho các doanh nghiệp muốn tích hợp AI vào hệ thống customer service và automation.
 
-## Structure
+AI Agent hoạt động mượt mà trên tất cả các trình duyệt web hiện đại và được tối ưu hóa cho cả thiết bị di động và máy tính để bàn.
 
-```bash
-hint-frontend/
-  ├── .github
-  │   └── workflows
-  │       └── ci.yml
-  ├── .git
-  │   └── pre-commit
-  ├── app
-  │   ├── [lang]
-  │   │   ├── (admin)
-  │   │   │   ├── dashboard
-  │   │   │   │   ├── components
-  │   │   │   │   │   └── index.tsx
-  │   │   │   │   ├── hooks
-  │   │   │   │   │   └── index.ts
-  │   │   │   │   └── page.tsx
-  │   │   │   └── layout.tsx
-  │   │   ├── (user)
-  │   │   │   └── (auth)
-  │   │   │       ├── layout.tsx
-  │   │   │       ├── sign-in
-  │   │   │       │   ├── components
-  │   │   │       │   │   └── index.tsx
-  │   │   │       │   ├── hooks
-  │   │   │       │   │   └── index.ts
-  │   │   │       │   └── page.tsx
-  │   │   │       └── sign-up
-  │   │   │           ├── components
-  │   │   │           │   └── index.tsx
-  │   │   │           ├── hooks
-  │   │   │           │   └── index.ts
-  │   │   │           └── page.tsx
-  │   │   ├── [...notFound]
-  │   │   │   └── page.tsx
-  │   │   ├── layout.tsx
-  │   │   └── page.tsx
-  │   ├── manifest.ts
-  │   └── robots.ts
-  ├── components
-  │   ├── layout
-  │   │   └── index.tsx
-  │   └── ui
-  │       ├── Button
-  │       │   └── Button.tsx
-  │       ├── Counter
-  │       │   └── Counter.tsx
-  │       ├── Header
-  │       │   └── Header.tsx
-  │       └── Loading
-  │           └── Loading.tsx
-  ├── docker
-  │   ├── entrypoint.sh
-  │   └── pm2.json
-  ├── docker-compose.yml
-  ├── Dockerfile
-  ├── i18next.config.ts
-  ├── locales
-  │   ├── en
-  │   │   └── common.json
-  │   └── vi
-  │       └── common.json
-  ├── middleware.ts
-  ├── next-env.d.ts
-  ├── next.config.mjs
-  ├── package.json
-  ├── postcss.config.mjs
-  ├── public
-  │   ├── favicon.ico
-  │   ├── file.svg
-  │   ├── globe.svg
-  │   ├── icons
-  │   ├── images
-  │   ├── next.svg
-  │   ├── vercel.svg
-  │   └── window.svg
-  ├── README.md
-  ├── services
-  │   └── api
-  │       └── index.ts
-  ├── shared
-  │   ├── constants
-  │   │   └── index.ts
-  │   ├── hooks
-  │   │   ├── index.ts
-  │   │   ├── useCard.ts
-  │   │   └── useUser.ts
-  │   ├── lib
-  │   │   ├── animations
-  │   │   │   └── index.ts
-  │   │   └── i18n
-  │   │       └── config.ts
-  │   ├── provider
-  │   │   ├── QueryProvider.tsx
-  │   │   └── TranslationsProvider.tsx
-  │   ├── styles
-  │   │   └── globals.css
-  │   ├── types
-  │   │   ├── index.ts
-  │   │   ├── order.ts
-  │   │   ├── product.ts
-  │   │   └── user.ts
-  │   ├── utils
-  │   │   ├── currency.ts
-  │   │   ├── date.ts
-  │   │   ├── index.ts
-  │   │   ├── number.ts
-  │   │   ├── string.ts
-  │   │   └── validate.ts
-  │   └── validations
-  │       ├── auth.schema.ts
-  │       ├── index.ts
-  │       ├── order.schema.ts
-  │       ├── product.schema.ts
-  │       └── user.schema.ts
-  ├── store
-  │   └── setting.tsx
-  ├── .dockerignore
-  ├── .env.example
-  ├── .eslintignore
-  ├── .eslintrc.json
-  ├── .prettierignore
-  ├── .prettierrc
-  ├── tailwind.config.ts
-  ├── tsconfig.json
-  └── yarn.lock
-```
+**Các Tính Năng Chính:**
+
+- Tạo và quản lý chatbot AI với khả năng học từ tài liệu training tùy chỉnh
+- Hệ thống conversation real-time với WebSocket để tương tác trực tiếp
+- Multi-workspace hỗ trợ quản lý nhiều dự án và team với phân quyền chi tiết
+- Tích hợp embedding widget dễ dàng vào website của khách hàng
+- Dashboard analytics chi tiết để theo dõi hiệu suất và usage
+- Hệ thống subscription linh hoạt với quản lý billing tự động
+- API tokens để tích hợp với third-party services
+
+## Công Nghệ Sử Dụng:
+
+### Frontend:
+- [Next.js 14:](https://nextjs.org/) Framework React hiện đại với App Router và TypeScript
+- [Tailwind CSS:](https://tailwindcss.com/) Framework CSS utility-first cho UI responsive
+- [Zustand:](https://zustand-demo.pmnd.rs/) Thư viện quản lý state nhẹ và hiệu quả
+- [i18next:](https://www.i18next.com/) Hệ thống đa ngôn ngữ (tiếng Việt & tiếng Anh)
+
+### Backend:
+- [NestJS:](https://nestjs.com/) Framework Node.js enterprise-grade với TypeScript
+- [TypeORM:](https://typeorm.io/) ORM mạnh mẽ cho PostgreSQL với type safety
+- [Redis:](https://redis.io/) In-memory database cho caching và session management
+- [JWT:](https://jwt.io/) Authentication với Access & Refresh tokens
+
+## Screenshots
+
+### Dashboard Quản Lý Chatbot
+![Dashboard](./public/images/des_1.png)
+
+Giao diện dashboard hiện đại cho phép quản lý chatbot, training data, conversations và analytics một cách trực quan và dễ dàng.
+
+### Landing Page & Pricing
+![Landing Page](./public/images/des_2.png)
+
+Trang chủ với thiết kế chuyên nghiệp, giới thiệu tính năng và bảng giá linh hoạt cho các gói dịch vụ khác nhau.

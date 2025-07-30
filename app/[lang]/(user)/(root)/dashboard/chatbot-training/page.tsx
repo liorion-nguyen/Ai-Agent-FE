@@ -81,7 +81,7 @@ const ChatbotTrainingPage = () => {
           Array.from({ length: 6 }).map((_, index) => (
             <Skeleton key={index} className="h-[150px] w-full" />
           ))
-        ) : chatbots.length > 0 ? (
+        ) : Array.isArray(chatbots) && chatbots.length > 0 ? (
           chatbots.map((chatbot) => (
             <ChatbotItem
               key={chatbot.chatbot_name}
